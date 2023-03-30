@@ -1,0 +1,49 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://rsp4j.io/covid/observations/>.
+@prefix shape: <http://rsp4j.io/covid/shapes/>.
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix tracing: <http://rsp4j.io/covid/tracing>.
+@prefix result: <http://rsp4j.io/covid/testResults>.
+
+shape:FacebookPostShape
+    a sh:NodeShape ;
+    sh:targetClass :FacebookPost;
+    sh:property [
+                sh:path :who;
+                sh:minCount 1;
+                ];
+    sh:property [
+                sh:path :where;
+                sh:minCount 1;
+                sh:maxCount 1;
+                ].
+shape:RFIDObservationShape
+    a sh:NodeShape ;
+    sh:targetClass :RFIDObservation;
+    sh:property [
+                sh:path :who;
+                sh:minCount 1;
+                ];
+    sh:property[
+                sh:path :where;
+                sh:minCount 1;
+                sh:maxCount 1;
+                ].
+
+shape:TestResultShape
+    a sh:NodeShape ;
+    sh:targetClass result:TestResultPost;
+    sh:property [
+                sh:path result:who;
+                sh:minCount 1;
+                sh:maxCount 1;
+                ];
+    sh:property [
+                sh:path result:hasResult;
+                sh:in (result:poitive result:negative);
+                sh:minCount 1;
+                sh:maxCount 1;
+                ].
+
