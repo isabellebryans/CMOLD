@@ -7,6 +7,10 @@
 @prefix tracing: <http://rsp4j.io/covid/tracing>.
 @prefix result: <http://rsp4j.io/covid/testResults>.
 
+# Basic shapes to ensure the data items to the streams have all the necessary properties
+# Applied to stream before windowing
+
+
 shape:FacebookPostShape
     a sh:NodeShape ;
     sh:targetClass :FacebookPost;

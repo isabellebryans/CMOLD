@@ -6,6 +6,11 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix tracing: <http://rsp4j.io/covid/tracing/>.
 
+
+# This shape is to be applied to the Observation Stream to make sure that each data item in the stream is in fact a facebook post of rfid observation
+# If it is not, then remove (how)
+
+# This is causing errors in other files, because for some reason it is being applied to all files (report.ttl)
 shape:ObservationShape
     a sh:NodeShape;
     sh:targetSubjectsOf rdf:type;
