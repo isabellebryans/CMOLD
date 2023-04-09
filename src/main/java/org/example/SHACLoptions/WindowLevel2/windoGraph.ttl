@@ -3,11 +3,10 @@
 @prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://rsp4j.io/covid/observations/>.
 
+#window of data from the observations stream
 
+#at t0
+:mark a :father .
 
-:postY a :FacebookPost .
-:postY :who :Bob .
-:postY :where :BlueRoom .
-:Bob :isIn :BlueRoom.
 
 

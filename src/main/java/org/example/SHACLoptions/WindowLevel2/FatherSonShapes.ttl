@@ -1,0 +1,22 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://www.ex.com>.
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+:fatherShape
+    a sh:NodeShape ;
+    sh:targetClass :father;
+    sh:property [
+                    sh:path :son;
+                    sh:minCount 1;
+                ].
+
+:sonShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :son;
+    sh:property [
+                sh:path rdf:type ;
+                sh:hasValue :father;
+
+                ].

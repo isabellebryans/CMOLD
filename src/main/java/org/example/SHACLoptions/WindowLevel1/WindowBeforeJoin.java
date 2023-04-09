@@ -1,4 +1,4 @@
-package org.example.SHACLoptions;
+package org.example.SHACLoptions.WindowLevel1;
 // Implement shacl at window level
 
 import org.apache.jena.graph.Graph;
@@ -8,19 +8,21 @@ import org.apache.jena.shacl.ShaclValidator;
 import org.apache.jena.shacl.Shapes;
 import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.shacl.lib.ShLib;
+import org.example.SHACLoptions.loadData;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 // on the Observation stream
 // Issue because person in more than one room at once because after R2S operator, time data is lost
 
-public class WindowLevel {
-    public static void main(String[] args) throws FileNotFoundException {
+public class WindowBeforeJoin {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         System.out.println("Hello world!");
-        Graph dataGraph = loadData.initAndLoadModelFromResource("windoGraph.ttl", Lang.TURTLE).getGraph();
-        Graph shapesGraph = loadData.initAndLoadModelFromResource("WindowShape.ttl", Lang.TURTLE).getGraph();
+        Graph dataGraph = loadData.initAndLoadModelFromFolder("org/example/SHACLoptions/WindowLevel1/Data_item_in_window.ttl", Lang.TURTLE).getGraph();
+        Graph shapesGraph = loadData.initAndLoadModelFromFolder("org/example/SHACLoptions/WindowLevel2/WindowShape.ttl", Lang.TURTLE).getGraph();
         Shapes shapes = Shapes.parse(shapesGraph);
 
         ValidationReport report = ShaclValidator.get().validate(shapes, dataGraph);

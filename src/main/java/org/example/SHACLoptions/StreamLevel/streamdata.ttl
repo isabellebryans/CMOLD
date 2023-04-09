@@ -6,10 +6,10 @@
 @prefix result: <http://rsp4j.io/covid/testResults/>.
 
 
-:postY a :FacebookPost .
-:postY :who :Bob .
-:postY :where :BlueRoom .
-:Bob :isIn :BlueRoom.
+#:postY a :FacebookPost .
+#:postY :where :BlueRoom .
+#:Bob :isIn :BlueRoom.
+
 
 tracing:postZ a tracing:ContactTracingPost .
 tracing:postZ tracing:who tracing:Carl.
