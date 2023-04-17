@@ -1,0 +1,134 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/>.
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+
+
+# Shape defines that each chess move must be made by either player 1 or player 2,
+# The piece moved is a chess piece
+:chessMoveShape
+    a sh:NodeShape;
+    sh:targetClass :chessMove;
+    sh:property [
+                    sh:path :madeBy;
+                    sh:in(:player1 :player2);
+                    sh:minCount 1;
+                    sh:maxCount 1;
+                ];
+    sh:property [
+                    sh:path :piece;
+                    sh:class :chessPiece;
+                    sh:minCount 1;
+                    sh:maxCount 1;
+                    ];
+    sh:or(
+            [ sh:property [
+                          sh:path :piece;
+                            sh:class :queen;
+                         ];
+                    sh:node :queenRules ;
+            ]
+            [ sh:property [
+                         sh:path :piece;
+                         sh:class :king;
+                         ];
+            ]
+            [ sh:property [
+                              sh:path :piece;
+                              sh:class :rook;
+                          ];
+            ]
+            [ sh:property [
+                              sh:path :piece;
+                              sh:class :rook;
+                          ];
+            ]
+            [ sh:property [
+                              sh:path :piece;
+                              sh:class :bishop;
+                          ];
+            ]
+            # etc...
+         ).
+
+
+
+# If a queen is moved, it can only be moved diagonal, or straight etc
+:queenRules
+    a :NodeShape;
+    sh:property [ sh:path :movement;
+                sh:in (:diagonal :straight);
+                sh:minCount 1;
+                sh:maxCount 1;
+                ];
+    sh:property [
+                sh:path :direction;
+                sh:in (:north :south);
+                sh:minCount 1;
+                sh:maxCount 1;
+                ];
+    sh:property [
+                sh:path :noSpaces;
+                sh:minExclusive "0"^^xs:integer;
+                sh:minCount 1;
+                sh:maxCount 1;
+                ];
+    sh:property [
+                    sh:path :to;
+                    sh:class :position;
+                    sh:qualifiedValueShape [
+                                # need to find way to see if the place was previously empty
+                                sh:path :occupied;
+                                sh:hasValue :yes; # if the position node now has two paths of :contains, the other one is dead
+                            ];
+                    # if had variable , we would be able to make a new shape to see wwwhich one iss killed                                           ];
+                    sh:qualifiedMinCount 1;
+                    # This shape checks that if the new position conatins two pieces, one of them is dead, bc it was taken by the piece who just moved into that position.
+                    sh:qualifiedValueShape [
+                                           sh:or(
+                                           [
+                                               sh:path :contains;
+                                               sh:minCount 1;
+                                                sh:maxCount 1;
+                                                ]
+                                           [
+                                               sh:path :contains;
+                                                sh:minCount 2;
+                                                sh:maxCount 2;
+                                                sh:qualifiedValueShape [
+                                                                       sh:path :state;
+                                                                        sh:hasValue :dead;
+                                                                       ];
+                                                   sh:qualifiedMinCount 1;
+                                               sh:qualifiedMaxCount 1;
+                                           ])
+                                           ];
+                    sh:qualifiedMinCount 1;
+                    sh:minCount 1;
+                    sh:maxCount 1;
+                ].
+
+
+
+# Shape says that the new position of the piece moved must be occupied and the old position not occupied
+:positionShape
+    a sh:NodeShape ;
+    sh:targetClass :chessPiece;
+    sh:property [ sh:path :newPosition;
+                sh:class :position;
+                sh:qualifiedValueShape [sh:path :occupied;
+                                        sh:hasValue :yes;
+                                       ];
+                  sh:qualifiedMinCount 1;
+                  sh:qualifiedMaxCount 1;
+                ];
+    sh:property [sh:path :oldPosition;
+                 sh:class :position;
+                 sh:qualifiedValueShape [
+                             sh:path :occupied;
+                             sh:hasValue :no;
+                         ];
+                 sh:qualifiedMinCount 1;
+                 sh:qualifiedMaxCount 1;
+                ].

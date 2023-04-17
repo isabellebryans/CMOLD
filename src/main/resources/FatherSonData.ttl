@@ -1,9 +1,23 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
-@prefix : <http://fatherSon.org/> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 
 #at t0
-
+:mark a :person.
+:matthew a :person.
 :mark a :father .
-:mark :son :matthew.
+:mark :hasSon :matthew.
+
+:mark :hasDaughter :isabelle .
+:elena :hasDaughter :isabelle.
+:elena a :mother.
+:elena a :person.
+:isabelle a :person.
+
+
+:elena :hasSon :matthew .
+:elena :hasSon :jeremy.
+
+

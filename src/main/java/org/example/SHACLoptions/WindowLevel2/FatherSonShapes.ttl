@@ -1,22 +1,40 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
-@prefix : <http://www.ex.com>.
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/>.
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 
+# All fathers and mothers either have a :hasSon path or/and :hasDaughter path
 :fatherShape
     a sh:NodeShape ;
-    sh:targetClass :father;
-    sh:property [
-                    sh:path :son;
-                    sh:minCount 1;
-                ].
+    sh:targetClass :father, :mother;
+    sh:or ( [
+                sh:path :hasSon;
+                sh:minCount 1 ;
+            ]
+            [
+                sh:path :hasDaughter;
+                sh:minCount 1;
+            ]
+          ).
 
-:sonShape
+# if a node has a son or a daughter, they must be a mother or father
+:fatherShape1
     a sh:NodeShape ;
-    sh:targetSubjectsOf :son;
-    sh:property [
+    sh:targetSubjectsOf :hasSon, :hasDaughter;
+    sh:or ( [
+                sh:path rdf:type ;
+                sh:hasValue :mother ;
+                sh:minCount 1;
+            ]
+            [
                 sh:path rdf:type ;
                 sh:hasValue :father;
+                sh:minCount 1;
+            ]
+          ).
 
-                ].
+
+
+
+

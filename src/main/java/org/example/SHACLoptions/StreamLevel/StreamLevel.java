@@ -17,8 +17,8 @@ import java.io.IOException;
 public class StreamLevel {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         System.out.println("Hello world!");
-        Graph dataGraph = loadData.initAndLoadModelFromFolder("src/main/java/org/example/SHACLoptions/StreamLevel/data_item.ttl", Lang.TURTLE).getGraph();
-        Graph shapesGraph = loadData.initAndLoadModelFromFolder("src/main/java/org/example/SHACLoptions/StreamLevel/StreamLevelShape.ttl", Lang.TURTLE).getGraph();
+        Graph dataGraph = loadData.initAndLoadModelFromResource("ChessMove.ttl", Lang.TURTLE).getGraph();
+        Graph shapesGraph = loadData.initAndLoadModelFromFolder("src/main/java/org/example/SHACLoptions/StreamLevel/chessMoveShape.ttl", Lang.TURTLE).getGraph();
         Shapes shapes = Shapes.parse(shapesGraph);
 
         ValidationReport report = ShaclValidator.get().validate(shapes, dataGraph);
