@@ -5,6 +5,9 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 
 
+
+
+
 # Shape defines that each chess move must be made by either player 1 or player 2,
 # The piece moved is a chess piece
 :chessMoveShape
@@ -22,7 +25,7 @@
                     sh:minCount 1;
                     sh:maxCount 1;
                     ];
-    sh:or(
+    sh:xone(
             [ sh:property [
                           sh:path :piece;
                             sh:class :queen;
@@ -41,12 +44,17 @@
             ]
             [ sh:property [
                               sh:path :piece;
-                              sh:class :rook;
+                              sh:class :bishop;
                           ];
             ]
             [ sh:property [
                               sh:path :piece;
-                              sh:class :bishop;
+                              sh:class :knight;
+                          ];
+            ]
+            [ sh:property [
+                              sh:path :piece;
+                              sh:class :pawn;
                           ];
             ]
             # etc...
@@ -71,6 +79,7 @@
     sh:property [
                 sh:path :noSpaces;
                 sh:minExclusive "0"^^xs:integer;
+                sh:message "Number of spaces moved is wrong.";
                 sh:minCount 1;
                 sh:maxCount 1;
                 ];
@@ -84,7 +93,7 @@
                             ];
                     # if had variable , we would be able to make a new shape to see wwwhich one iss killed                                           ];
                     sh:qualifiedMinCount 1;
-                    # This shape checks that if the new position conatins two pieces, one of them is dead, bc it was taken by the piece who just moved into that position.
+                    # This shape checks that if the new position contains two pieces, one of them is dead, bc it was taken by the piece who just moved into that position.
                     sh:qualifiedValueShape [
                                            sh:or(
                                            [
@@ -132,3 +141,5 @@
                  sh:qualifiedMinCount 1;
                  sh:qualifiedMaxCount 1;
                 ].
+
+:propshape a sh:PropertyShape .

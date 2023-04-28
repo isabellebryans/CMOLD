@@ -1,0 +1,22 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex: <http://example.com/ns#> .
+
+ex:John
+    a ex:Person ;
+    ex:birthDate "1980-01-01"^^xsd:date ;
+    ex:deathDate "2040-12-31"^^xsd:date ;
+    ex:age "60"^^xsd:integer .
+
+ex:Mary
+    a ex:Person ;
+    ex:birthDate "1975-05-10"^^xsd:date ;
+    ex:deathDate "2040-12-31"^^xsd:date ;
+    ex:age "65"^^xsd:integer .
+
+ex:Bob
+    a ex:Person ;
+    ex:birthDate "1990-03-15"^^xsd:date ;
+    ex:deathDate "2022-01-01"^^xsd:date ;
+    ex:age "22"^^xsd:integer .

@@ -22,7 +22,7 @@
 
 :queen1 a :chessPiece;
         a :queen;
-        :belongsTo :player1;
+        :belongsTo :player2;
         :newPosition :a2;
         :oldPosition :a1.
 
