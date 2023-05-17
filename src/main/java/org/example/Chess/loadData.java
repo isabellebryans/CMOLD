@@ -1,4 +1,4 @@
-package org.example.SHACLoptions;
+package org.example.Chess;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
