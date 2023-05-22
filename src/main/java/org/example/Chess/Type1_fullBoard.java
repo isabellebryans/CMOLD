@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class Type1_board {
+public class Type1_fullBoard {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         System.out.println("Hello world!");
 

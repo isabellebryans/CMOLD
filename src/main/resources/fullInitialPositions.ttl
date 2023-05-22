@@ -16,7 +16,6 @@ ns1:P15 ns1:isIn ns1:g2 .
 
 ns1:P16 ns1:isIn ns1:h2 .
 
-#should be e8
 ns1:P17 ns1:isIn ns1:e8 .
 
 ns1:P18 ns1:isIn ns1:d8 .
