@@ -14,9 +14,10 @@ import java.io.IOException;
 public class Type1_board {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         System.out.println("Hello world!");
-        Graph dataGraph = loadData.initAndLoadModelFromResource("ChessMove.ttl", Lang.TURTLE).getGraph();
+
+        Graph dataGraph = loadData.initAndLoadModelFromResource("fullChessBoard.ttl", Lang.TURTLE).union(loadData.initAndLoadModelFromResource("fullInitialPositions.ttl", Lang.TURTLE)).getGraph();
         //Graph shapesGraph = loadData.initAndLoadModelFromResource("tempExShape.ttl", Lang.TURTLE).getGraph();
-        Graph shapesGraph = loadData.initAndLoadModelFromFolder("src/main/java/org/example/SHACLoptions/StreamLevel/chessMoveShape.ttl", Lang.TURTLE).getGraph();
+        Graph shapesGraph = loadData.initAndLoadModelFromFolder("src/main/java/org/example/Chess/oneBoardShapes.ttl", Lang.TURTLE).getGraph();
         Shapes shapes = Shapes.parse(shapesGraph);
 
         ValidationReport report = ShaclValidator.get().validate(shapes, dataGraph);

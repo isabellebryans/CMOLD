@@ -1,4 +1,146 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/chess/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+
+# At most one chess piece on each tile
+# :contains must be equal to :isIn
+:atMostOne
+    a sh:NodeShape ;
+    sh:targetClass :tiles;
+    sh:property [
+                sh:path :contains;
+                sh:maxCount 1;
+                sh:class :ChessPiece;
+                sh:message "Tile"].
+
+
+:PieceShape
+    a sh:NodeShape ;
+    sh:targetClass :ChessPiece ;
+    sh:property [
+          sh:path :colour ;
+          sh:in (:black :white);
+            sh:minCount 1;
+            sh:maxCount 1;
+      ] .
+
+# Kings never captured, always on the board
+# 2 Kings cannot be beside eachother
+:KingsColour
+    a sh:NodeShape ;
+    sh:targetClass :King;
+    sh:property [
+                sh:path :isIn;
+                sh:class :tile;
+                sh:minCount 1;
+            sh:message "King not on board";
+                ];
+    sh:property [
+                sh:path :isIn;
+                sh:not[
+                          sh:message "King";
+                      sh:or(
+                              [sh:property [
+                                           sh:path :right;
+                                           # could change to sh:node
+                                            sh:qualifiedValueShape [
+                                                                   sh:path :contains;
+                                                                   sh:class :King;];
+                                            sh:qualifiedMinCount 1;
+                                           ];
+                              ]
+                              [sh:property [
+                                           sh:path :left;
+                                          sh:qualifiedValueShape [
+                                                                  sh:path :contains;
+                                                                  sh:class :King;];
+                                            sh:qualifiedMinCount 1;
+                                            ];
+                              ]
+                              [sh:property [
+                                               sh:path :above;
+                                               sh:qualifiedValueShape [
+                                                           sh:path :contains;
+                                                           sh:class :King;];
+                                               sh:qualifiedMinCount 1;
+                                           ];
+                              ]
+                              [sh:property [
+                                               sh:path :below;
+                                               sh:qualifiedValueShape [
+                                                           sh:path :contains;
+                                                           sh:class :King;];
+                                               sh:qualifiedMinCount 1;
+                                           ];
+                              ]
+                              [sh:property [
+                                               sh:path :tl;
+                                               sh:qualifiedValueShape [
+                                                           sh:path :contains;
+                                                           sh:class :King;];
+                                               sh:qualifiedMinCount 1;
+                                           ];
+                              ]
+                              [sh:property [
+                                               sh:path :tr;
+                                               sh:qualifiedValueShape [
+                                                           sh:path :contains;
+                                                           sh:class :King;];
+                                               sh:qualifiedMinCount 1;
+                                           ];
+                              ]
+                              [sh:property [
+                                               sh:path :bl;
+                                               sh:qualifiedValueShape [
+                                                           sh:path :contains;
+                                                           sh:class :King;];
+                                               sh:qualifiedMinCount 1;
+                                           ];
+                              ]
+                              [sh:property [
+                                               sh:path :br;
+                                               sh:qualifiedValueShape [
+                                                           sh:path :contains;
+                                                           sh:class :King;];
+                                               sh:qualifiedMinCount 1;
+                                           ];
+                              ]
+                           )
+                      ]
+                ].
+
+## difficult bc shacl core constraints target each node individually, hard to see overall count
+## doesn't work even with shacl sparql
+## need to define which pieces are kings
+## need to be able to access the king pieces through the :King object
+## this returns true for any number of kings
+:TwoKings
+    a sh:NodeShape;
+    sh:targetClass :ChessPiece;
+    sh:sparql [
+                  a          sh:SPARQLConstraint ;
+                  sh:message "Player can only move a piece that belongs to them";
+                  sh:prefixes [
+                                 sh:declare [
+                                                sh:prefix    "ex" ;
+                                                sh:namespace "http://example.org/"^^xs:anyURI ;
+                                            ];
+                                 sh:declare [
+                                                sh:prefix    "rdf" ;
+                                                sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ;
+                                            ]
+                             ] ;
+                  sh:select """
+      SELECT $this
+      WHERE {
+        $this rdf:type ex:King .
+      }
+      GROUP BY $this
+      HAVING(COUNT($this) != 2)
+    """ ;
+              ]
+.
+
 
