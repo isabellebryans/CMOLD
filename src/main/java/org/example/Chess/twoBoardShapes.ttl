@@ -20,18 +20,74 @@
                     sh:message "Tile contains more than one chess piece"].
 
 
-
+# Pawn Move Validation
+# Option 1: Pawn has not moved
+# Option 2: Pawn has moved one space forward
+# Option 3: Pawn has moved one space forward diagonally and has captured a piece
+# Option 4: Pawn has been captured
 :PawnMove
     a sh:NodeShape ;
     sh:targetClass :Pawn;
+    sh:message "Invalid pawn move";
     sh:or(
             [
+                    # Option 1: Pawn hasn't moved
             sh:path :isIn_t1 ;
             sh:equals :isIn_t2 ; ]
             [
-                sh:path (:isIn_t2 :below );
-                    sh:equals :isIn_t1;
+                    # Option 2: Pawn has moved one space in front and did not capture any piece
+                    sh:property [
+                        sh:path (:isIn_t1 :above );
+                        sh:equals :isIn_t2;
+                                ];
+                    sh:property [
+                                sh:path :isIn_t2;
+                                sh:property [
+                                            sh:path [sh:inversePath :isIn_t1];
+                                            sh:maxCount 0;
+                                            ]
+                                ];
+            ]
 
+            [
+                # Option 3: Pawn has moved one space in front diagonally and captured a piece
+                sh:or(
+                        [
+                            sh:property [
+                                            sh:path (:isIn_t1 :tr );
+                                            sh:class :tile;
+                                            sh:equals :isIn_t2;
+                                        ];
+                        ]
+                        [
+                            sh:property [
+                                            sh:path (:isIn_t1 :tl );
+                                            sh:class :tile;
+                                            sh:equals :isIn_t2;
+                                        ];
+                        ]
+                     );
+                sh:property [
+                            sh:path :isIn_t2;
+                            sh:property [
+                                        sh:path [sh:inversePath :isIn_t1];
+                                    sh:minCount 1;
+                                    ]
+                            ]
+            ]
+            [
+                # Option 4: Pawn is captured
+                sh:property [
+                                sh:path :isIn_t2;
+                                sh:hasValue :out;
+                            ];
+                sh:property [
+                            sh:path :isIn_t1;
+                            sh:property [
+                                        sh:path [sh:inversePath :isIn_t2];
+                                        sh:minCount 1;
+                                        ]
+                            ]
             ]
          )
     .

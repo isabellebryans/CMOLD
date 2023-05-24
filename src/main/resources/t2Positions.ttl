@@ -4,9 +4,9 @@ ns1:P1 ns1:isIn_t2 ns1:e1 .
 
 ns1:P10 ns1:isIn_t2 ns1:b2 .
 
-ns1:P11 ns1:isIn_t2 ns1:c2 .
+ns1:P11 ns1:isIn_t2 ns1:out .
 
-ns1:P12 ns1:isIn_t2 ns1:d3 .
+ns1:P12 ns1:isIn_t2 ns1:e3 .
 
 ns1:P13 ns1:isIn_t2 ns1:e2 .
 
