@@ -4,14 +4,62 @@
 @prefix : <http://example.org/chess/>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 
-# At most one chess piece on each tile
-# :contains must be equal to :isIn
+# At most one chess piece on each tile at t1 and t2
 :atMostOne
     a sh:NodeShape ;
     sh:targetClass :tile;
     sh:property [
-          sh:path :contains;
+          sh:path [sh:inversePath :isIn_t1];
           sh:maxCount 1;
           sh:class :ChessPiece;
-          sh:message "Tile contains more than one piece"].
+          sh:message "Tile contains more than one chess piece"];
+    sh:property [
+                    sh:path [sh:inversePath :isIn_t2];
+                    sh:maxCount 1;
+                    sh:class :ChessPiece;
+                    sh:message "Tile contains more than one chess piece"].
+
+
+
+:PawnMove
+    a sh:NodeShape ;
+    sh:targetClass :Pawn;
+    sh:or(
+            [
+            sh:path :isIn_t1 ;
+            sh:equals :isIn_t2 ; ]
+            [
+                sh:path (:isIn_t2 :below );
+                    sh:equals :isIn_t1;
+
+            ]
+         )
+    .
+
+
+# Or statement:
+# 1. isIn_t1 and isIn_t2 is same tile
+# 2. isIn_t2 to the left is the tile of isIn_t2
+# 3. right, above, below
+:RookMove
+    a sh:NodeShape ;
+    sh:targetClass :Rook;
+    sh:or(
+            [
+            sh:path :isIn_t1 ;
+            sh:equals :isIn_t2;
+            ]
+            [
+            sh:path :isIn_t1;
+                    sh:node[
+                           sh:property [
+                                       sh:path :right;
+                                       sh:node[
+                                              sh:property [
+                                                          sh:path [sh:inversePath :isIn_t2];
+                                                          sh:equals sh:isIn_t1;
+                                                          ]]]
+                           ]
+            ]
+         ).
 
