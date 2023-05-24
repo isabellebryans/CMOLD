@@ -4,7 +4,7 @@ ns1:P1 ns1:isIn_t1 ns1:e1 .
 
 ns1:P10 ns1:isIn_t1 ns1:b2 .
 
-ns1:P11 ns1:isIn_t1 ns1:e3 .
+ns1:P11 ns1:isIn_t1 ns1:c2 .
 
 ns1:P12 ns1:isIn_t1 ns1:d2 .
 

@@ -43,8 +43,6 @@ for i in range(16):
             current_position = URIRef(ns[cols[i-8] + "2"])
 
 
-    if current_piece == ns.P12:
-        current_position = URIRef(ns["d3"])
     g.add((current_piece, ns.isIn_t2, current_position))
     g.add((current_position, ns.contains, current_piece))
 

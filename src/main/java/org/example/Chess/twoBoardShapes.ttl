@@ -19,6 +19,27 @@
                     sh:class :ChessPiece;
                     sh:message "Tile contains more than one chess piece"].
 
+# Every chess piece is either on a tile or out
+# Stops players from moving a piece to a tile that doesn't exist (off the chess board)
+:pieceShape
+    a sh:NodeShape ;
+    sh:targetClass :ChessPiece;
+    sh:message "Piece is not in a position";
+    sh:property [
+                sh:path :isIn_t1;
+                sh:or(
+                        [ sh:class :tile ]
+                        [ sh:hasValue :out ]
+                     )
+                ];
+    sh:property [
+                sh:path :isIn_t2;
+                sh:or(
+                        [ sh:class :tile ]
+                        [ sh:hasValue :out ]
+                     )
+                ].
+
 
 # Pawn Move Validation
 # Option 1: Pawn has not moved
@@ -71,7 +92,10 @@
                             sh:path :isIn_t2;
                             sh:property [
                                         sh:path [sh:inversePath :isIn_t1];
-                                    sh:minCount 1;
+                                        sh:minCount 1;
+                                        sh:property [
+                                                        sh:path :isIn_t2;
+                                                        sh:hasValue :out;]
                                     ]
                             ]
             ]
@@ -93,29 +117,164 @@
     .
 
 
-# Or statement:
-# 1. isIn_t1 and isIn_t2 is same tile
-# 2. isIn_t2 to the left is the tile of isIn_t2
-# 3. right, above, below
+# Rook Move Validation
+# Option 1: Rook has not moved
+# Option 2: Rook has moved forward, backward, right or left
+#           (Optional: Can have captured a piece or not)
+# Option 3: Rook has been captured
 :RookMove
     a sh:NodeShape ;
-    sh:targetClass :Rook;
+    sh:targetClass :Rook, :Queen;
+    sh:message "Invalid rook/queen move";
     sh:or(
             [
+                    # Option 1: Rook has not moved
             sh:path :isIn_t1 ;
             sh:equals :isIn_t2;
             ]
             [
-            sh:path :isIn_t1;
-                    sh:node[
-                           sh:property [
-                                       sh:path :right;
-                                       sh:node[
-                                              sh:property [
-                                                          sh:path [sh:inversePath :isIn_t2];
-                                                          sh:equals sh:isIn_t1;
-                                                          ]]]
-                           ]
+                    # Option 2: Rook has moved forward, backward, right or left
+                sh:or(
+                        [
+                            sh:property [
+                                            sh:path (:isIn_t1 :above );
+                                            sh:equals :isIn_t2;
+                                        ];
+                        ]
+                        [
+                            sh:property [
+                                            sh:path (:isIn_t1 :below );
+                                            sh:equals :isIn_t2;
+                                        ];
+                        ]
+                        [
+                            sh:property [
+                                            sh:path (:isIn_t1 :right );
+                                            sh:equals :isIn_t2;
+                                        ];
+                        ]
+                        [
+                            sh:property [
+                                            sh:path (:isIn_t1 :left );
+                                            sh:equals :isIn_t2;
+                                        ];
+                        ]
+
+                     );
+                    # Has the option to have captured a piece or not
+                sh:property [
+                    sh:path :isIn_t2;
+                        sh:or(
+                                [
+                                        # There was no piece captured
+                                        # This works
+                                        sh:path [sh:inversePath :isIn_t1];
+                                        sh:maxCount 0;
+                                ]
+                                [
+                                        # There was a piece captured
+                                        # this works
+                                        sh:property [
+                                                        sh:path[sh:inversePath :isIn_t1];
+                                                        sh:minCount 1;
+                                                        sh:property [
+                                                                    sh:path :isIn_t2;
+                                                                    sh:hasValue :out;]
+                                                    ]
+                                        ]
+                             )
+                ]
+            ]
+            [
+                # Option 3: Rook is captured
+                sh:property [
+                                sh:path :isIn_t2;
+                                sh:hasValue :out;
+                            ];
+                sh:property [
+                                sh:path :isIn_t1;
+                                sh:property [
+                                            sh:path [sh:inversePath :isIn_t2];
+                                            sh:minCount 1;
+                                        ]
+                            ]
             ]
          ).
 
+
+# King Move Validation
+# Option 1: King has not moved
+# Option 2: King has moved forward, backward, right or left
+#           (Optional: Can have captured a piece or not)
+:KingMove
+    a sh:NodeShape ;
+    sh:targetClass :King;
+    sh:message "Invalid king move";
+    sh:or(
+          [
+              # Option 1: King has not moved
+              sh:path :isIn_t1 ;
+              sh:equals :isIn_t2;
+          ]
+          [
+              # Option 2: King has moved forward, backward, right or left
+              sh:or(
+                       [
+                           sh:property [
+                                           sh:path (:isIn_t1 :above );
+                                           sh:equals :isIn_t2;
+                                       ];
+                       ]
+                       [
+                           sh:property [
+                                           sh:path (:isIn_t1 :below );
+                                           sh:equals :isIn_t2;
+                                       ];
+                       ]
+                       [
+                           sh:property [
+                                           sh:path (:isIn_t1 :right );
+                                           sh:equals :isIn_t2;
+                                       ];
+                       ]
+                       [
+                           sh:property [
+                                           sh:path (:isIn_t1 :left );
+                                           sh:equals :isIn_t2;
+                                       ];
+                       ]
+
+                   );
+              # Has the option to have captured a piece or not
+              sh:property [
+                       sh:path :isIn_t2;
+                       sh:or(
+                                   [
+                                       # There was no piece captured
+                                       # This works
+                                       sh:path [sh:inversePath :isIn_t1];
+                                       sh:maxCount 0;
+                                   ]
+                                   [
+                                       # There was a piece captured
+                                       # this works
+                                       sh:property [
+                                                       sh:path[sh:inversePath :isIn_t1];
+                                                       sh:minCount 1;
+                                                       sh:property [
+                                                                  sh:path :isIn_t2;
+                                                                  sh:hasValue :out;]
+                                                   ]
+                                   ]
+                               )
+                   ]
+          ]
+      ).
+
+
+
+# Knight move validation
+# Option 1: Moved
+:KnightMove
+    a sh:NodeShape ;
+    sh:targetClass :Knight.
