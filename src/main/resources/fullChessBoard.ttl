@@ -1,808 +1,808 @@
-@prefix ns1: <http://example.org/chess/> .
+@prefix : <http://example.org/chess/> .
 
 
 
-ns1:P1 a ns1:ChessPiece,
-        ns1:King ;
-    ns1:colour ns1:white .
+:P1 a :ChessPiece,
+      :King ;
+    :colour :white .
 
-ns1:P10 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:white .
+:P10 a :ChessPiece,
+       :Pawn ;
+     :colour :white .
 
-ns1:P11 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:white .
+:P11 a :ChessPiece,
+       :Pawn ;
+     :colour :white .
 
-ns1:P12 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:white .
+:P12 a :ChessPiece,
+       :Pawn ;
+     :colour :white .
 
-ns1:P13 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:white .
+:P13 a :ChessPiece,
+       :Pawn ;
+     :colour :white .
 
-ns1:P14 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:white .
+:P14 a :ChessPiece,
+       :Pawn ;
+     :colour :white .
 
-ns1:P15 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:white .
+:P15 a :ChessPiece,
+       :Pawn ;
+     :colour :white .
 
-ns1:P16 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:white .
+:P16 a :ChessPiece,
+       :Pawn ;
+     :colour :white .
 
-ns1:P17 a ns1:ChessPiece,
-        ns1:King ;
-    ns1:colour ns1:black .
+:P17 a :ChessPiece,
+       :King ;
+     :colour :black .
 
-ns1:P18 a ns1:ChessPiece,
-        ns1:Queen ;
-    ns1:colour ns1:black .
+:P18 a :ChessPiece,
+       :Queen ;
+     :colour :black .
 
-ns1:P19 a ns1:Bishop,
-        ns1:ChessPiece ;
-    ns1:colour ns1:black .
+:P19 a :Bishop,
+       :ChessPiece ;
+     :colour :black .
 
-ns1:P2 a ns1:ChessPiece,
-        ns1:Queen ;
-    ns1:colour ns1:white .
-
-ns1:P20 a ns1:Bishop,
-        ns1:ChessPiece ;
-    ns1:colour ns1:black .
-
-ns1:P21 a ns1:ChessPiece,
-        ns1:Knight ;
-    ns1:colour ns1:black .
-
-ns1:P22 a ns1:ChessPiece,
-        ns1:Knight ;
-    ns1:colour ns1:black .
-
-ns1:P23 a ns1:ChessPiece,
-        ns1:Rook ;
-    ns1:colour ns1:black .
-
-ns1:P24 a ns1:ChessPiece,
-        ns1:Rook ;
-    ns1:colour ns1:black .
-
-ns1:P25 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:black .
-
-ns1:P26 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:black .
-
-ns1:P27 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:black .
-
-ns1:P28 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:black .
-
-ns1:P29 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:black .
-
-ns1:P3 a ns1:Bishop,
-        ns1:ChessPiece ;
-    ns1:colour ns1:white .
-
-ns1:P30 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:black .
-
-ns1:P31 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:black .
-
-ns1:P32 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:black .
-
-ns1:P4 a ns1:Bishop,
-        ns1:ChessPiece ;
-    ns1:colour ns1:white .
-
-ns1:P5 a ns1:ChessPiece,
-        ns1:Knight ;
-    ns1:colour ns1:white .
-
-ns1:P6 a ns1:ChessPiece,
-        ns1:Knight ;
-    ns1:colour ns1:white .
-
-ns1:P7 a ns1:ChessPiece,
-        ns1:Rook ;
-    ns1:colour ns1:white .
-
-ns1:P8 a ns1:ChessPiece,
-        ns1:Rook ;
-    ns1:colour ns1:white .
-
-ns1:P9 a ns1:ChessPiece,
-        ns1:Pawn ;
-    ns1:colour ns1:white .
-
-ns1:a1 a ns1:tile ;
-    ns1:above ns1:a2 ;
-    ns1:column ns1:a ;
-    ns1:right ns1:b1 ;
-    ns1:row ns1:1 ;
-    ns1:tr ns1:b2 .
-
-ns1:a8 a ns1:tile ;
-    ns1:below ns1:a7 ;
-    ns1:br ns1:b7 ;
-    ns1:column ns1:a ;
-    ns1:right ns1:b8 ;
-    ns1:row ns1:8 .
-
-ns1:h1 a ns1:tile ;
-    ns1:above ns1:h2 ;
-    ns1:column ns1:h ;
-    ns1:left ns1:g1 ;
-    ns1:row ns1:1 ;
-    ns1:tl ns1:g2 .
-
-ns1:h8 a ns1:tile ;
-    ns1:below ns1:h7 ;
-    ns1:bl ns1:g7 ;
-    ns1:column ns1:h ;
-    ns1:left ns1:g8 ;
-    ns1:row ns1:8 .
-
-ns1:a2 a ns1:tile ;
-    ns1:above ns1:a3 ;
-    ns1:below ns1:a1 ;
-    ns1:br ns1:b1 ;
-    ns1:column ns1:a ;
-    ns1:right ns1:b2 ;
-    ns1:row ns1:2 ;
-    ns1:tr ns1:b3 .
-
-ns1:a3 a ns1:tile ;
-    ns1:above ns1:a4 ;
-    ns1:below ns1:a2 ;
-    ns1:br ns1:b2 ;
-    ns1:column ns1:a ;
-    ns1:right ns1:b3 ;
-    ns1:row ns1:3 ;
-    ns1:tr ns1:b4 .
-
-ns1:a4 a ns1:tile ;
-    ns1:above ns1:a5 ;
-    ns1:below ns1:a3 ;
-    ns1:br ns1:b3 ;
-    ns1:column ns1:a ;
-    ns1:right ns1:b4 ;
-    ns1:row ns1:4 ;
-    ns1:tr ns1:b5 .
-
-ns1:a5 a ns1:tile ;
-    ns1:above ns1:a6 ;
-    ns1:below ns1:a4 ;
-    ns1:br ns1:b4 ;
-    ns1:column ns1:a ;
-    ns1:right ns1:b5 ;
-    ns1:row ns1:5 ;
-    ns1:tr ns1:b6 .
-
-ns1:a6 a ns1:tile ;
-    ns1:above ns1:a7 ;
-    ns1:below ns1:a5 ;
-    ns1:br ns1:b5 ;
-    ns1:column ns1:a ;
-    ns1:right ns1:b6 ;
-    ns1:row ns1:6 ;
-    ns1:tr ns1:b7 .
-
-ns1:a7 a ns1:tile ;
-    ns1:above ns1:a8 ;
-    ns1:below ns1:a6 ;
-    ns1:br ns1:b6 ;
-    ns1:column ns1:a ;
-    ns1:right ns1:b7 ;
-    ns1:row ns1:7 ;
-    ns1:tr ns1:b8 .
-
-ns1:b1 a ns1:tile ;
-    ns1:above ns1:b2 ;
-    ns1:column ns1:b ;
-    ns1:left ns1:a1 ;
-    ns1:right ns1:c1 ;
-    ns1:row ns1:1 ;
-    ns1:tl ns1:a2 ;
-    ns1:tr ns1:c2 .
-
-ns1:b8 a ns1:tile ;
-    ns1:below ns1:b7 ;
-    ns1:bl ns1:a7 ;
-    ns1:br ns1:c7 ;
-    ns1:column ns1:b ;
-    ns1:left ns1:a8 ;
-    ns1:right ns1:c8 ;
-    ns1:row ns1:8 .
-
-ns1:c1 a ns1:tile ;
-    ns1:above ns1:c2 ;
-    ns1:column ns1:c ;
-    ns1:left ns1:b1 ;
-    ns1:right ns1:d1 ;
-    ns1:row ns1:1 ;
-    ns1:tl ns1:b2 ;
-    ns1:tr ns1:d2 .
-
-ns1:c8 a ns1:tile ;
-    ns1:below ns1:c7 ;
-    ns1:bl ns1:b7 ;
-    ns1:br ns1:d7 ;
-    ns1:column ns1:c ;
-    ns1:left ns1:b8 ;
-    ns1:right ns1:d8 ;
-    ns1:row ns1:8 .
-
-ns1:d1 a ns1:tile ;
-    ns1:above ns1:d2 ;
-    ns1:column ns1:d ;
-    ns1:left ns1:c1 ;
-    ns1:right ns1:e1 ;
-    ns1:row ns1:1 ;
-    ns1:tl ns1:c2 ;
-    ns1:tr ns1:e2 .
-
-ns1:d8 a ns1:tile ;
-    ns1:below ns1:d7 ;
-    ns1:bl ns1:c7 ;
-    ns1:br ns1:e7 ;
-    ns1:column ns1:d ;
-    ns1:left ns1:c8 ;
-    ns1:right ns1:e8 ;
-    ns1:row ns1:8 .
-
-ns1:e1 a ns1:tile ;
-    ns1:above ns1:e2 ;
-    ns1:column ns1:e ;
-    ns1:left ns1:d1 ;
-    ns1:right ns1:f1 ;
-    ns1:row ns1:1 ;
-    ns1:tl ns1:d2 ;
-    ns1:tr ns1:f2 .
-
-ns1:e8 a ns1:tile ;
-    ns1:below ns1:e7 ;
-    ns1:bl ns1:d7 ;
-    ns1:br ns1:f7 ;
-    ns1:column ns1:e ;
-    ns1:left ns1:d8 ;
-    ns1:right ns1:f8 ;
-    ns1:row ns1:8 .
-
-ns1:f1 a ns1:tile ;
-    ns1:above ns1:f2 ;
-    ns1:column ns1:f ;
-    ns1:left ns1:e1 ;
-    ns1:right ns1:g1 ;
-    ns1:row ns1:1 ;
-    ns1:tl ns1:e2 ;
-    ns1:tr ns1:g2 .
-
-ns1:f8 a ns1:tile ;
-    ns1:below ns1:f7 ;
-    ns1:bl ns1:e7 ;
-    ns1:br ns1:g7 ;
-    ns1:column ns1:f ;
-    ns1:left ns1:e8 ;
-    ns1:right ns1:g8 ;
-    ns1:row ns1:8 .
-
-ns1:g1 a ns1:tile ;
-    ns1:above ns1:g2 ;
-    ns1:column ns1:g ;
-    ns1:left ns1:f1 ;
-    ns1:right ns1:h1 ;
-    ns1:row ns1:1 ;
-    ns1:tl ns1:f2 ;
-    ns1:tr ns1:h2 .
-
-ns1:g8 a ns1:tile ;
-    ns1:below ns1:g7 ;
-    ns1:bl ns1:f7 ;
-    ns1:br ns1:h7 ;
-    ns1:column ns1:g ;
-    ns1:left ns1:f8 ;
-    ns1:right ns1:h8 ;
-    ns1:row ns1:8 .
-
-ns1:h2 a ns1:tile ;
-    ns1:above ns1:h3 ;
-    ns1:below ns1:h1 ;
-    ns1:bl ns1:g1 ;
-    ns1:column ns1:h ;
-    ns1:left ns1:g2 ;
-    ns1:row ns1:2 ;
-    ns1:tl ns1:g3 .
-
-ns1:h3 a ns1:tile ;
-    ns1:above ns1:h4 ;
-    ns1:below ns1:h2 ;
-    ns1:bl ns1:g2 ;
-    ns1:column ns1:h ;
-    ns1:left ns1:g3 ;
-    ns1:row ns1:3 ;
-    ns1:tl ns1:g4 .
-
-ns1:h4 a ns1:tile ;
-    ns1:above ns1:h5 ;
-    ns1:below ns1:h3 ;
-    ns1:bl ns1:g3 ;
-    ns1:column ns1:h ;
-    ns1:left ns1:g4 ;
-    ns1:row ns1:4 ;
-    ns1:tl ns1:g5 .
-
-ns1:h5 a ns1:tile ;
-    ns1:above ns1:h6 ;
-    ns1:below ns1:h4 ;
-    ns1:bl ns1:g4 ;
-    ns1:column ns1:h ;
-    ns1:left ns1:g5 ;
-    ns1:row ns1:5 ;
-    ns1:tl ns1:g6 .
-
-ns1:h6 a ns1:tile ;
-    ns1:above ns1:h7 ;
-    ns1:below ns1:h5 ;
-    ns1:bl ns1:g5 ;
-    ns1:column ns1:h ;
-    ns1:left ns1:g6 ;
-    ns1:row ns1:6 ;
-    ns1:tl ns1:g7 .
-
-ns1:h7 a ns1:tile ;
-    ns1:above ns1:h8 ;
-    ns1:below ns1:h6 ;
-    ns1:bl ns1:g6 ;
-    ns1:column ns1:h ;
-    ns1:left ns1:g7 ;
-    ns1:row ns1:7 ;
-    ns1:tl ns1:g8 .
-
-ns1:b2 a ns1:tile ;
-    ns1:above ns1:b3 ;
-    ns1:below ns1:b1 ;
-    ns1:bl ns1:a1 ;
-    ns1:br ns1:c1 ;
-    ns1:column ns1:b ;
-    ns1:left ns1:a2 ;
-    ns1:right ns1:c2 ;
-    ns1:row ns1:2 ;
-    ns1:tl ns1:a3 ;
-    ns1:tr ns1:c3 .
-
-ns1:b3 a ns1:tile ;
-    ns1:above ns1:b4 ;
-    ns1:below ns1:b2 ;
-    ns1:bl ns1:a2 ;
-    ns1:br ns1:c2 ;
-    ns1:column ns1:b ;
-    ns1:left ns1:a3 ;
-    ns1:right ns1:c3 ;
-    ns1:row ns1:3 ;
-    ns1:tl ns1:a4 ;
-    ns1:tr ns1:c4 .
-
-ns1:b4 a ns1:tile ;
-    ns1:above ns1:b5 ;
-    ns1:below ns1:b3 ;
-    ns1:bl ns1:a3 ;
-    ns1:br ns1:c3 ;
-    ns1:column ns1:b ;
-    ns1:left ns1:a4 ;
-    ns1:right ns1:c4 ;
-    ns1:row ns1:4 ;
-    ns1:tl ns1:a5 ;
-    ns1:tr ns1:c5 .
-
-ns1:b5 a ns1:tile ;
-    ns1:above ns1:b6 ;
-    ns1:below ns1:b4 ;
-    ns1:bl ns1:a4 ;
-    ns1:br ns1:c4 ;
-    ns1:column ns1:b ;
-    ns1:left ns1:a5 ;
-    ns1:right ns1:c5 ;
-    ns1:row ns1:5 ;
-    ns1:tl ns1:a6 ;
-    ns1:tr ns1:c6 .
-
-ns1:b6 a ns1:tile ;
-    ns1:above ns1:b7 ;
-    ns1:below ns1:b5 ;
-    ns1:bl ns1:a5 ;
-    ns1:br ns1:c5 ;
-    ns1:column ns1:b ;
-    ns1:left ns1:a6 ;
-    ns1:right ns1:c6 ;
-    ns1:row ns1:6 ;
-    ns1:tl ns1:a7 ;
-    ns1:tr ns1:c7 .
-
-ns1:b7 a ns1:tile ;
-    ns1:above ns1:b8 ;
-    ns1:below ns1:b6 ;
-    ns1:bl ns1:a6 ;
-    ns1:br ns1:c6 ;
-    ns1:column ns1:b ;
-    ns1:left ns1:a7 ;
-    ns1:right ns1:c7 ;
-    ns1:row ns1:7 ;
-    ns1:tl ns1:a8 ;
-    ns1:tr ns1:c8 .
-
-ns1:c2 a ns1:tile ;
-    ns1:above ns1:c3 ;
-    ns1:below ns1:c1 ;
-    ns1:bl ns1:b1 ;
-    ns1:br ns1:d1 ;
-    ns1:column ns1:c ;
-    ns1:left ns1:b2 ;
-    ns1:right ns1:d2 ;
-    ns1:row ns1:2 ;
-    ns1:tl ns1:b3 ;
-    ns1:tr ns1:d3 .
-
-ns1:c3 a ns1:tile ;
-    ns1:above ns1:c4 ;
-    ns1:below ns1:c2 ;
-    ns1:bl ns1:b2 ;
-    ns1:br ns1:d2 ;
-    ns1:column ns1:c ;
-    ns1:left ns1:b3 ;
-    ns1:right ns1:d3 ;
-    ns1:row ns1:3 ;
-    ns1:tl ns1:b4 ;
-    ns1:tr ns1:d4 .
-
-ns1:c4 a ns1:tile ;
-    ns1:above ns1:c5 ;
-    ns1:below ns1:c3 ;
-    ns1:bl ns1:b3 ;
-    ns1:br ns1:d3 ;
-    ns1:column ns1:c ;
-    ns1:left ns1:b4 ;
-    ns1:right ns1:d4 ;
-    ns1:row ns1:4 ;
-    ns1:tl ns1:b5 ;
-    ns1:tr ns1:d5 .
-
-ns1:c5 a ns1:tile ;
-    ns1:above ns1:c6 ;
-    ns1:below ns1:c4 ;
-    ns1:bl ns1:b4 ;
-    ns1:br ns1:d4 ;
-    ns1:column ns1:c ;
-    ns1:left ns1:b5 ;
-    ns1:right ns1:d5 ;
-    ns1:row ns1:5 ;
-    ns1:tl ns1:b6 ;
-    ns1:tr ns1:d6 .
-
-ns1:c6 a ns1:tile ;
-    ns1:above ns1:c7 ;
-    ns1:below ns1:c5 ;
-    ns1:bl ns1:b5 ;
-    ns1:br ns1:d5 ;
-    ns1:column ns1:c ;
-    ns1:left ns1:b6 ;
-    ns1:right ns1:d6 ;
-    ns1:row ns1:6 ;
-    ns1:tl ns1:b7 ;
-    ns1:tr ns1:d7 .
-
-ns1:c7 a ns1:tile ;
-    ns1:above ns1:c8 ;
-    ns1:below ns1:c6 ;
-    ns1:bl ns1:b6 ;
-    ns1:br ns1:d6 ;
-    ns1:column ns1:c ;
-    ns1:left ns1:b7 ;
-    ns1:right ns1:d7 ;
-    ns1:row ns1:7 ;
-    ns1:tl ns1:b8 ;
-    ns1:tr ns1:d8 .
-
-ns1:d2 a ns1:tile ;
-    ns1:above ns1:d3 ;
-    ns1:below ns1:d1 ;
-    ns1:bl ns1:c1 ;
-    ns1:br ns1:e1 ;
-    ns1:column ns1:d ;
-    ns1:left ns1:c2 ;
-    ns1:right ns1:e2 ;
-    ns1:row ns1:2 ;
-    ns1:tl ns1:c3 ;
-    ns1:tr ns1:e3 .
-
-ns1:d3 a ns1:tile ;
-    ns1:above ns1:d4 ;
-    ns1:below ns1:d2 ;
-    ns1:bl ns1:c2 ;
-    ns1:br ns1:e2 ;
-    ns1:column ns1:d ;
-    ns1:left ns1:c3 ;
-    ns1:right ns1:e3 ;
-    ns1:row ns1:3 ;
-    ns1:tl ns1:c4 ;
-    ns1:tr ns1:e4 .
-
-ns1:d4 a ns1:tile ;
-    ns1:above ns1:d5 ;
-    ns1:below ns1:d3 ;
-    ns1:bl ns1:c3 ;
-    ns1:br ns1:e3 ;
-    ns1:column ns1:d ;
-    ns1:left ns1:c4 ;
-    ns1:right ns1:e4 ;
-    ns1:row ns1:4 ;
-    ns1:tl ns1:c5 ;
-    ns1:tr ns1:e5 .
-
-ns1:d5 a ns1:tile ;
-    ns1:above ns1:d6 ;
-    ns1:below ns1:d4 ;
-    ns1:bl ns1:c4 ;
-    ns1:br ns1:e4 ;
-    ns1:column ns1:d ;
-    ns1:left ns1:c5 ;
-    ns1:right ns1:e5 ;
-    ns1:row ns1:5 ;
-    ns1:tl ns1:c6 ;
-    ns1:tr ns1:e6 .
-
-ns1:d6 a ns1:tile ;
-    ns1:above ns1:d7 ;
-    ns1:below ns1:d5 ;
-    ns1:bl ns1:c5 ;
-    ns1:br ns1:e5 ;
-    ns1:column ns1:d ;
-    ns1:left ns1:c6 ;
-    ns1:right ns1:e6 ;
-    ns1:row ns1:6 ;
-    ns1:tl ns1:c7 ;
-    ns1:tr ns1:e7 .
-
-ns1:d7 a ns1:tile ;
-    ns1:above ns1:d8 ;
-    ns1:below ns1:d6 ;
-    ns1:bl ns1:c6 ;
-    ns1:br ns1:e6 ;
-    ns1:column ns1:d ;
-    ns1:left ns1:c7 ;
-    ns1:right ns1:e7 ;
-    ns1:row ns1:7 ;
-    ns1:tl ns1:c8 ;
-    ns1:tr ns1:e8 .
-
-ns1:e2 a ns1:tile ;
-    ns1:above ns1:e3 ;
-    ns1:below ns1:e1 ;
-    ns1:bl ns1:d1 ;
-    ns1:br ns1:f1 ;
-    ns1:column ns1:e ;
-    ns1:left ns1:d2 ;
-    ns1:right ns1:f2 ;
-    ns1:row ns1:2 ;
-    ns1:tl ns1:d3 ;
-    ns1:tr ns1:f3 .
-
-ns1:e3 a ns1:tile ;
-    ns1:above ns1:e4 ;
-    ns1:below ns1:e2 ;
-    ns1:bl ns1:d2 ;
-    ns1:br ns1:f2 ;
-    ns1:column ns1:e ;
-    ns1:left ns1:d3 ;
-    ns1:right ns1:f3 ;
-    ns1:row ns1:3 ;
-    ns1:tl ns1:d4 ;
-    ns1:tr ns1:f4 .
-
-ns1:e4 a ns1:tile ;
-    ns1:above ns1:e5 ;
-    ns1:below ns1:e3 ;
-    ns1:bl ns1:d3 ;
-    ns1:br ns1:f3 ;
-    ns1:column ns1:e ;
-    ns1:left ns1:d4 ;
-    ns1:right ns1:f4 ;
-    ns1:row ns1:4 ;
-    ns1:tl ns1:d5 ;
-    ns1:tr ns1:f5 .
-
-ns1:e5 a ns1:tile ;
-    ns1:above ns1:e6 ;
-    ns1:below ns1:e4 ;
-    ns1:bl ns1:d4 ;
-    ns1:br ns1:f4 ;
-    ns1:column ns1:e ;
-    ns1:left ns1:d5 ;
-    ns1:right ns1:f5 ;
-    ns1:row ns1:5 ;
-    ns1:tl ns1:d6 ;
-    ns1:tr ns1:f6 .
-
-ns1:e6 a ns1:tile ;
-    ns1:above ns1:e7 ;
-    ns1:below ns1:e5 ;
-    ns1:bl ns1:d5 ;
-    ns1:br ns1:f5 ;
-    ns1:column ns1:e ;
-    ns1:left ns1:d6 ;
-    ns1:right ns1:f6 ;
-    ns1:row ns1:6 ;
-    ns1:tl ns1:d7 ;
-    ns1:tr ns1:f7 .
-
-ns1:e7 a ns1:tile ;
-    ns1:above ns1:e8 ;
-    ns1:below ns1:e6 ;
-    ns1:bl ns1:d6 ;
-    ns1:br ns1:f6 ;
-    ns1:column ns1:e ;
-    ns1:left ns1:d7 ;
-    ns1:right ns1:f7 ;
-    ns1:row ns1:7 ;
-    ns1:tl ns1:d8 ;
-    ns1:tr ns1:f8 .
-
-ns1:f2 a ns1:tile ;
-    ns1:above ns1:f3 ;
-    ns1:below ns1:f1 ;
-    ns1:bl ns1:e1 ;
-    ns1:br ns1:g1 ;
-    ns1:column ns1:f ;
-    ns1:left ns1:e2 ;
-    ns1:right ns1:g2 ;
-    ns1:row ns1:2 ;
-    ns1:tl ns1:e3 ;
-    ns1:tr ns1:g3 .
-
-ns1:f3 a ns1:tile ;
-    ns1:above ns1:f4 ;
-    ns1:below ns1:f2 ;
-    ns1:bl ns1:e2 ;
-    ns1:br ns1:g2 ;
-    ns1:column ns1:f ;
-    ns1:left ns1:e3 ;
-    ns1:right ns1:g3 ;
-    ns1:row ns1:3 ;
-    ns1:tl ns1:e4 ;
-    ns1:tr ns1:g4 .
-
-ns1:f4 a ns1:tile ;
-    ns1:above ns1:f5 ;
-    ns1:below ns1:f3 ;
-    ns1:bl ns1:e3 ;
-    ns1:br ns1:g3 ;
-    ns1:column ns1:f ;
-    ns1:left ns1:e4 ;
-    ns1:right ns1:g4 ;
-    ns1:row ns1:4 ;
-    ns1:tl ns1:e5 ;
-    ns1:tr ns1:g5 .
-
-ns1:f5 a ns1:tile ;
-    ns1:above ns1:f6 ;
-    ns1:below ns1:f4 ;
-    ns1:bl ns1:e4 ;
-    ns1:br ns1:g4 ;
-    ns1:column ns1:f ;
-    ns1:left ns1:e5 ;
-    ns1:right ns1:g5 ;
-    ns1:row ns1:5 ;
-    ns1:tl ns1:e6 ;
-    ns1:tr ns1:g6 .
-
-ns1:f6 a ns1:tile ;
-    ns1:above ns1:f7 ;
-    ns1:below ns1:f5 ;
-    ns1:bl ns1:e5 ;
-    ns1:br ns1:g5 ;
-    ns1:column ns1:f ;
-    ns1:left ns1:e6 ;
-    ns1:right ns1:g6 ;
-    ns1:row ns1:6 ;
-    ns1:tl ns1:e7 ;
-    ns1:tr ns1:g7 .
-
-ns1:f7 a ns1:tile ;
-    ns1:above ns1:f8 ;
-    ns1:below ns1:f6 ;
-    ns1:bl ns1:e6 ;
-    ns1:br ns1:g6 ;
-    ns1:column ns1:f ;
-    ns1:left ns1:e7 ;
-    ns1:right ns1:g7 ;
-    ns1:row ns1:7 ;
-    ns1:tl ns1:e8 ;
-    ns1:tr ns1:g8 .
-
-ns1:g2 a ns1:tile ;
-    ns1:above ns1:g3 ;
-    ns1:below ns1:g1 ;
-    ns1:bl ns1:f1 ;
-    ns1:br ns1:h1 ;
-    ns1:column ns1:g ;
-    ns1:left ns1:f2 ;
-    ns1:right ns1:h2 ;
-    ns1:row ns1:2 ;
-    ns1:tl ns1:f3 ;
-    ns1:tr ns1:h3 .
-
-ns1:g3 a ns1:tile ;
-    ns1:above ns1:g4 ;
-    ns1:below ns1:g2 ;
-    ns1:bl ns1:f2 ;
-    ns1:br ns1:h2 ;
-    ns1:column ns1:g ;
-    ns1:left ns1:f3 ;
-    ns1:right ns1:h3 ;
-    ns1:row ns1:3 ;
-    ns1:tl ns1:f4 ;
-    ns1:tr ns1:h4 .
-
-ns1:g4 a ns1:tile ;
-    ns1:above ns1:g5 ;
-    ns1:below ns1:g3 ;
-    ns1:bl ns1:f3 ;
-    ns1:br ns1:h3 ;
-    ns1:column ns1:g ;
-    ns1:left ns1:f4 ;
-    ns1:right ns1:h4 ;
-    ns1:row ns1:4 ;
-    ns1:tl ns1:f5 ;
-    ns1:tr ns1:h5 .
-
-ns1:g5 a ns1:tile ;
-    ns1:above ns1:g6 ;
-    ns1:below ns1:g4 ;
-    ns1:bl ns1:f4 ;
-    ns1:br ns1:h4 ;
-    ns1:column ns1:g ;
-    ns1:left ns1:f5 ;
-    ns1:right ns1:h5 ;
-    ns1:row ns1:5 ;
-    ns1:tl ns1:f6 ;
-    ns1:tr ns1:h6 .
-
-ns1:g6 a ns1:tile ;
-    ns1:above ns1:g7 ;
-    ns1:below ns1:g5 ;
-    ns1:bl ns1:f5 ;
-    ns1:br ns1:h5 ;
-    ns1:column ns1:g ;
-    ns1:left ns1:f6 ;
-    ns1:right ns1:h6 ;
-    ns1:row ns1:6 ;
-    ns1:tl ns1:f7 ;
-    ns1:tr ns1:h7 .
-
-ns1:g7 a ns1:tile ;
-    ns1:above ns1:g8 ;
-    ns1:below ns1:g6 ;
-    ns1:bl ns1:f6 ;
-    ns1:br ns1:h6 ;
-    ns1:column ns1:g ;
-    ns1:left ns1:f7 ;
-    ns1:right ns1:h7 ;
-    ns1:row ns1:7 ;
-    ns1:tl ns1:f8 ;
-    ns1:tr ns1:h8 .
+:P2 a :ChessPiece,
+      :Queen ;
+    :colour :white .
+
+:P20 a :Bishop,
+       :ChessPiece ;
+     :colour :black .
+
+:P21 a :ChessPiece,
+       :Knight ;
+     :colour :black .
+
+:P22 a :ChessPiece,
+       :Knight ;
+     :colour :black .
+
+:P23 a :ChessPiece,
+       :Rook ;
+     :colour :black .
+
+:P24 a :ChessPiece,
+       :Rook ;
+     :colour :black .
+
+:P25 a :ChessPiece,
+       :Pawn ;
+     :colour :black .
+
+:P26 a :ChessPiece,
+       :Pawn ;
+     :colour :black .
+
+:P27 a :ChessPiece,
+       :Pawn ;
+     :colour :black .
+
+:P28 a :ChessPiece,
+       :Pawn ;
+     :colour :black .
+
+:P29 a :ChessPiece,
+       :Pawn ;
+     :colour :black .
+
+:P3 a :Bishop,
+      :ChessPiece ;
+    :colour :white .
+
+:P30 a :ChessPiece,
+       :Pawn ;
+     :colour :black .
+
+:P31 a :ChessPiece,
+       :Pawn ;
+     :colour :black .
+
+:P32 a :ChessPiece,
+       :Pawn ;
+     :colour :black .
+
+:P4 a :Bishop,
+      :ChessPiece ;
+    :colour :white .
+
+:P5 a :ChessPiece,
+      :Knight ;
+    :colour :white .
+
+:P6 a :ChessPiece,
+      :Knight ;
+    :colour :white .
+
+:P7 a :ChessPiece,
+      :Rook ;
+    :colour :white .
+
+:P8 a :ChessPiece,
+      :Rook ;
+    :colour :white .
+
+:P9 a :ChessPiece,
+      :Pawn ;
+    :colour :white .
+
+:a1 a :tile ;
+    :above :a2 ;
+    :column :a ;
+    :right :b1 ;
+    :row :1 ;
+    :tr :b2 .
+
+:a8 a :tile ;
+    :below :a7 ;
+    :br :b7 ;
+    :column :a ;
+    :right :b8 ;
+    :row :8 .
+
+:h1 a :tile ;
+    :above :h2 ;
+    :column :h ;
+    :left :g1 ;
+    :row :1 ;
+    :tl :g2 .
+
+:h8 a :tile ;
+    :below :h7 ;
+    :bl :g7 ;
+    :column :h ;
+    :left :g8 ;
+    :row :8 .
+
+:a2 a :tile ;
+    :above :a3 ;
+    :below :a1 ;
+    :br :b1 ;
+    :column :a ;
+    :right :b2 ;
+    :row :2 ;
+    :tr :b3 .
+
+:a3 a :tile ;
+    :above :a4 ;
+    :below :a2 ;
+    :br :b2 ;
+    :column :a ;
+    :right :b3 ;
+    :row :3 ;
+    :tr :b4 .
+
+:a4 a :tile ;
+    :above :a5 ;
+    :below :a3 ;
+    :br :b3 ;
+    :column :a ;
+    :right :b4 ;
+    :row :4 ;
+    :tr :b5 .
+
+:a5 a :tile ;
+    :above :a6 ;
+    :below :a4 ;
+    :br :b4 ;
+    :column :a ;
+    :right :b5 ;
+    :row :5 ;
+    :tr :b6 .
+
+:a6 a :tile ;
+    :above :a7 ;
+    :below :a5 ;
+    :br :b5 ;
+    :column :a ;
+    :right :b6 ;
+    :row :6 ;
+    :tr :b7 .
+
+:a7 a :tile ;
+    :above :a8 ;
+    :below :a6 ;
+    :br :b6 ;
+    :column :a ;
+    :right :b7 ;
+    :row :7 ;
+    :tr :b8 .
+
+:b1 a :tile ;
+    :above :b2 ;
+    :column :b ;
+    :left :a1 ;
+    :right :c1 ;
+    :row :1 ;
+    :tl :a2 ;
+    :tr :c2 .
+
+:b8 a :tile ;
+    :below :b7 ;
+    :bl :a7 ;
+    :br :c7 ;
+    :column :b ;
+    :left :a8 ;
+    :right :c8 ;
+    :row :8 .
+
+:c1 a :tile ;
+    :above :c2 ;
+    :column :c ;
+    :left :b1 ;
+    :right :d1 ;
+    :row :1 ;
+    :tl :b2 ;
+    :tr :d2 .
+
+:c8 a :tile ;
+    :below :c7 ;
+    :bl :b7 ;
+    :br :d7 ;
+    :column :c ;
+    :left :b8 ;
+    :right :d8 ;
+    :row :8 .
+
+:d1 a :tile ;
+    :above :d2 ;
+    :column :d ;
+    :left :c1 ;
+    :right :e1 ;
+    :row :1 ;
+    :tl :c2 ;
+    :tr :e2 .
+
+:d8 a :tile ;
+    :below :d7 ;
+    :bl :c7 ;
+    :br :e7 ;
+    :column :d ;
+    :left :c8 ;
+    :right :e8 ;
+    :row :8 .
+
+:e1 a :tile ;
+    :above :e2 ;
+    :column :e ;
+    :left :d1 ;
+    :right :f1 ;
+    :row :1 ;
+    :tl :d2 ;
+    :tr :f2 .
+
+:e8 a :tile ;
+    :below :e7 ;
+    :bl :d7 ;
+    :br :f7 ;
+    :column :e ;
+    :left :d8 ;
+    :right :f8 ;
+    :row :8 .
+
+:f1 a :tile ;
+    :above :f2 ;
+    :column :f ;
+    :left :e1 ;
+    :right :g1 ;
+    :row :1 ;
+    :tl :e2 ;
+    :tr :g2 .
+
+:f8 a :tile ;
+    :below :f7 ;
+    :bl :e7 ;
+    :br :g7 ;
+    :column :f ;
+    :left :e8 ;
+    :right :g8 ;
+    :row :8 .
+
+:g1 a :tile ;
+    :above :g2 ;
+    :column :g ;
+    :left :f1 ;
+    :right :h1 ;
+    :row :1 ;
+    :tl :f2 ;
+    :tr :h2 .
+
+:g8 a :tile ;
+    :below :g7 ;
+    :bl :f7 ;
+    :br :h7 ;
+    :column :g ;
+    :left :f8 ;
+    :right :h8 ;
+    :row :8 .
+
+:h2 a :tile ;
+    :above :h3 ;
+    :below :h1 ;
+    :bl :g1 ;
+    :column :h ;
+    :left :g2 ;
+    :row :2 ;
+    :tl :g3 .
+
+:h3 a :tile ;
+    :above :h4 ;
+    :below :h2 ;
+    :bl :g2 ;
+    :column :h ;
+    :left :g3 ;
+    :row :3 ;
+    :tl :g4 .
+
+:h4 a :tile ;
+    :above :h5 ;
+    :below :h3 ;
+    :bl :g3 ;
+    :column :h ;
+    :left :g4 ;
+    :row :4 ;
+    :tl :g5 .
+
+:h5 a :tile ;
+    :above :h6 ;
+    :below :h4 ;
+    :bl :g4 ;
+    :column :h ;
+    :left :g5 ;
+    :row :5 ;
+    :tl :g6 .
+
+:h6 a :tile ;
+    :above :h7 ;
+    :below :h5 ;
+    :bl :g5 ;
+    :column :h ;
+    :left :g6 ;
+    :row :6 ;
+    :tl :g7 .
+
+:h7 a :tile ;
+    :above :h8 ;
+    :below :h6 ;
+    :bl :g6 ;
+    :column :h ;
+    :left :g7 ;
+    :row :7 ;
+    :tl :g8 .
+
+:b2 a :tile ;
+    :above :b3 ;
+    :below :b1 ;
+    :bl :a1 ;
+    :br :c1 ;
+    :column :b ;
+    :left :a2 ;
+    :right :c2 ;
+    :row :2 ;
+    :tl :a3 ;
+    :tr :c3 .
+
+:b3 a :tile ;
+    :above :b4 ;
+    :below :b2 ;
+    :bl :a2 ;
+    :br :c2 ;
+    :column :b ;
+    :left :a3 ;
+    :right :c3 ;
+    :row :3 ;
+    :tl :a4 ;
+    :tr :c4 .
+
+:b4 a :tile ;
+    :above :b5 ;
+    :below :b3 ;
+    :bl :a3 ;
+    :br :c3 ;
+    :column :b ;
+    :left :a4 ;
+    :right :c4 ;
+    :row :4 ;
+    :tl :a5 ;
+    :tr :c5 .
+
+:b5 a :tile ;
+    :above :b6 ;
+    :below :b4 ;
+    :bl :a4 ;
+    :br :c4 ;
+    :column :b ;
+    :left :a5 ;
+    :right :c5 ;
+    :row :5 ;
+    :tl :a6 ;
+    :tr :c6 .
+
+:b6 a :tile ;
+    :above :b7 ;
+    :below :b5 ;
+    :bl :a5 ;
+    :br :c5 ;
+    :column :b ;
+    :left :a6 ;
+    :right :c6 ;
+    :row :6 ;
+    :tl :a7 ;
+    :tr :c7 .
+
+:b7 a :tile ;
+    :above :b8 ;
+    :below :b6 ;
+    :bl :a6 ;
+    :br :c6 ;
+    :column :b ;
+    :left :a7 ;
+    :right :c7 ;
+    :row :7 ;
+    :tl :a8 ;
+    :tr :c8 .
+
+:c2 a :tile ;
+    :above :c3 ;
+    :below :c1 ;
+    :bl :b1 ;
+    :br :d1 ;
+    :column :c ;
+    :left :b2 ;
+    :right :d2 ;
+    :row :2 ;
+    :tl :b3 ;
+    :tr :d3 .
+
+:c3 a :tile ;
+    :above :c4 ;
+    :below :c2 ;
+    :bl :b2 ;
+    :br :d2 ;
+    :column :c ;
+    :left :b3 ;
+    :right :d3 ;
+    :row :3 ;
+    :tl :b4 ;
+    :tr :d4 .
+
+:c4 a :tile ;
+    :above :c5 ;
+    :below :c3 ;
+    :bl :b3 ;
+    :br :d3 ;
+    :column :c ;
+    :left :b4 ;
+    :right :d4 ;
+    :row :4 ;
+    :tl :b5 ;
+    :tr :d5 .
+
+:c5 a :tile ;
+    :above :c6 ;
+    :below :c4 ;
+    :bl :b4 ;
+    :br :d4 ;
+    :column :c ;
+    :left :b5 ;
+    :right :d5 ;
+    :row :5 ;
+    :tl :b6 ;
+    :tr :d6 .
+
+:c6 a :tile ;
+    :above :c7 ;
+    :below :c5 ;
+    :bl :b5 ;
+    :br :d5 ;
+    :column :c ;
+    :left :b6 ;
+    :right :d6 ;
+    :row :6 ;
+    :tl :b7 ;
+    :tr :d7 .
+
+:c7 a :tile ;
+    :above :c8 ;
+    :below :c6 ;
+    :bl :b6 ;
+    :br :d6 ;
+    :column :c ;
+    :left :b7 ;
+    :right :d7 ;
+    :row :7 ;
+    :tl :b8 ;
+    :tr :d8 .
+
+:d2 a :tile ;
+    :above :d3 ;
+    :below :d1 ;
+    :bl :c1 ;
+    :br :e1 ;
+    :column :d ;
+    :left :c2 ;
+    :right :e2 ;
+    :row :2 ;
+    :tl :c3 ;
+    :tr :e3 .
+
+:d3 a :tile ;
+    :above :d4 ;
+    :below :d2 ;
+    :bl :c2 ;
+    :br :e2 ;
+    :column :d ;
+    :left :c3 ;
+    :right :e3 ;
+    :row :3 ;
+    :tl :c4 ;
+    :tr :e4 .
+
+:d4 a :tile ;
+    :above :d5 ;
+    :below :d3 ;
+    :bl :c3 ;
+    :br :e3 ;
+    :column :d ;
+    :left :c4 ;
+    :right :e4 ;
+    :row :4 ;
+    :tl :c5 ;
+    :tr :e5 .
+
+:d5 a :tile ;
+    :above :d6 ;
+    :below :d4 ;
+    :bl :c4 ;
+    :br :e4 ;
+    :column :d ;
+    :left :c5 ;
+    :right :e5 ;
+    :row :5 ;
+    :tl :c6 ;
+    :tr :e6 .
+
+:d6 a :tile ;
+    :above :d7 ;
+    :below :d5 ;
+    :bl :c5 ;
+    :br :e5 ;
+    :column :d ;
+    :left :c6 ;
+    :right :e6 ;
+    :row :6 ;
+    :tl :c7 ;
+    :tr :e7 .
+
+:d7 a :tile ;
+    :above :d8 ;
+    :below :d6 ;
+    :bl :c6 ;
+    :br :e6 ;
+    :column :d ;
+    :left :c7 ;
+    :right :e7 ;
+    :row :7 ;
+    :tl :c8 ;
+    :tr :e8 .
+
+:e2 a :tile ;
+    :above :e3 ;
+    :below :e1 ;
+    :bl :d1 ;
+    :br :f1 ;
+    :column :e ;
+    :left :d2 ;
+    :right :f2 ;
+    :row :2 ;
+    :tl :d3 ;
+    :tr :f3 .
+
+:e3 a :tile ;
+    :above :e4 ;
+    :below :e2 ;
+    :bl :d2 ;
+    :br :f2 ;
+    :column :e ;
+    :left :d3 ;
+    :right :f3 ;
+    :row :3 ;
+    :tl :d4 ;
+    :tr :f4 .
+
+:e4 a :tile ;
+    :above :e5 ;
+    :below :e3 ;
+    :bl :d3 ;
+    :br :f3 ;
+    :column :e ;
+    :left :d4 ;
+    :right :f4 ;
+    :row :4 ;
+    :tl :d5 ;
+    :tr :f5 .
+
+:e5 a :tile ;
+    :above :e6 ;
+    :below :e4 ;
+    :bl :d4 ;
+    :br :f4 ;
+    :column :e ;
+    :left :d5 ;
+    :right :f5 ;
+    :row :5 ;
+    :tl :d6 ;
+    :tr :f6 .
+
+:e6 a :tile ;
+    :above :e7 ;
+    :below :e5 ;
+    :bl :d5 ;
+    :br :f5 ;
+    :column :e ;
+    :left :d6 ;
+    :right :f6 ;
+    :row :6 ;
+    :tl :d7 ;
+    :tr :f7 .
+
+:e7 a :tile ;
+    :above :e8 ;
+    :below :e6 ;
+    :bl :d6 ;
+    :br :f6 ;
+    :column :e ;
+    :left :d7 ;
+    :right :f7 ;
+    :row :7 ;
+    :tl :d8 ;
+    :tr :f8 .
+
+:f2 a :tile ;
+    :above :f3 ;
+    :below :f1 ;
+    :bl :e1 ;
+    :br :g1 ;
+    :column :f ;
+    :left :e2 ;
+    :right :g2 ;
+    :row :2 ;
+    :tl :e3 ;
+    :tr :g3 .
+
+:f3 a :tile ;
+    :above :f4 ;
+    :below :f2 ;
+    :bl :e2 ;
+    :br :g2 ;
+    :column :f ;
+    :left :e3 ;
+    :right :g3 ;
+    :row :3 ;
+    :tl :e4 ;
+    :tr :g4 .
+
+:f4 a :tile ;
+    :above :f5 ;
+    :below :f3 ;
+    :bl :e3 ;
+    :br :g3 ;
+    :column :f ;
+    :left :e4 ;
+    :right :g4 ;
+    :row :4 ;
+    :tl :e5 ;
+    :tr :g5 .
+
+:f5 a :tile ;
+    :above :f6 ;
+    :below :f4 ;
+    :bl :e4 ;
+    :br :g4 ;
+    :column :f ;
+    :left :e5 ;
+    :right :g5 ;
+    :row :5 ;
+    :tl :e6 ;
+    :tr :g6 .
+
+:f6 a :tile ;
+    :above :f7 ;
+    :below :f5 ;
+    :bl :e5 ;
+    :br :g5 ;
+    :column :f ;
+    :left :e6 ;
+    :right :g6 ;
+    :row :6 ;
+    :tl :e7 ;
+    :tr :g7 .
+
+:f7 a :tile ;
+    :above :f8 ;
+    :below :f6 ;
+    :bl :e6 ;
+    :br :g6 ;
+    :column :f ;
+    :left :e7 ;
+    :right :g7 ;
+    :row :7 ;
+    :tl :e8 ;
+    :tr :g8 .
+
+:g2 a :tile ;
+    :above :g3 ;
+    :below :g1 ;
+    :bl :f1 ;
+    :br :h1 ;
+    :column :g ;
+    :left :f2 ;
+    :right :h2 ;
+    :row :2 ;
+    :tl :f3 ;
+    :tr :h3 .
+
+:g3 a :tile ;
+    :above :g4 ;
+    :below :g2 ;
+    :bl :f2 ;
+    :br :h2 ;
+    :column :g ;
+    :left :f3 ;
+    :right :h3 ;
+    :row :3 ;
+    :tl :f4 ;
+    :tr :h4 .
+
+:g4 a :tile ;
+    :above :g5 ;
+    :below :g3 ;
+    :bl :f3 ;
+    :br :h3 ;
+    :column :g ;
+    :left :f4 ;
+    :right :h4 ;
+    :row :4 ;
+    :tl :f5 ;
+    :tr :h5 .
+
+:g5 a :tile ;
+    :above :g6 ;
+    :below :g4 ;
+    :bl :f4 ;
+    :br :h4 ;
+    :column :g ;
+    :left :f5 ;
+    :right :h5 ;
+    :row :5 ;
+    :tl :f6 ;
+    :tr :h6 .
+
+:g6 a :tile ;
+    :above :g7 ;
+    :below :g5 ;
+    :bl :f5 ;
+    :br :h5 ;
+    :column :g ;
+    :left :f6 ;
+    :right :h6 ;
+    :row :6 ;
+    :tl :f7 ;
+    :tr :h7 .
+
+:g7 a :tile ;
+    :above :g8 ;
+    :below :g6 ;
+    :bl :f6 ;
+    :br :h6 ;
+    :column :g ;
+    :left :f7 ;
+    :right :h7 ;
+    :row :7 ;
+    :tl :f8 ;
+    :tr :h8 .
 

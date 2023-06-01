@@ -46,7 +46,7 @@
             [
             # Queen was moved
             sh:class :Queen;
-            sh:node :QueenShape;
+            sh:node :MoveRule ;
             ]
             [
             # King was moved
@@ -55,6 +55,59 @@
             #sh:node :KingShape;
             ]
           ).
+
+:MoveRule a sh:NodeShape ;
+          sh:targetSubjectsOf :to ;
+          sh:sparql [
+                a sh:SPARQLConstraint ;
+                sh:message "Invalid move: overtaking is not allowed." ;
+                sh:prefixes [
+                      sh:declare [
+                                     sh:prefix "ex" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ;
+                                 ];
+                      sh:declare [
+                                     sh:prefix "rdf" ;
+                                     sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ;
+                                 ]
+                  ] ;
+                sh:select """
+      SELECT $this ?current ?target ?intermediate
+      WHERE {
+        $this ex:isIn ?current ;
+              ex:to ?target .
+        ?piece2 rdf:type ex:ChessPiece.
+        ?piece2 ex:isIn ?tile.
+        ?current ex:right+ ?intermediate .
+        ?intermediate ex:right* ?target .
+        FILTER ($this != ?piece2 && ?tile = ?intermediate)
+      }
+    """
+            ];
+          sh:sparql [
+                a sh:SPARQLConstraint ;
+                sh:message "Invalid move: not on same row." ;
+                sh:prefixes [
+                      sh:declare [
+                                     sh:prefix "ex" ;
+                                     sh:namespace "http://example.org/"^^xs:anyURI ;
+                                 ];
+                      sh:declare [
+                                     sh:prefix "rdf" ;
+                                     sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ;
+                                 ]
+                  ] ;
+                sh:select """
+      SELECT $this
+      WHERE {
+        $this ex:isIn ?current ;
+              ex:to ?target .
+        ?current ex:row ?row1.
+        ?target ex:row ?row2.
+        FILTER (?row1 != ?row2)
+      }
+    """
+            ].
 
 :QueenShape
     a sh:NodeShape ;
