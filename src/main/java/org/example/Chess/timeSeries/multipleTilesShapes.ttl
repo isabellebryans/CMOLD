@@ -1,0 +1,113 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/chess/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+
+
+# Rook Move Validation
+# Option 1: Rook has not moved
+# Option 2: Rook has moved forward, backward, right or left
+#           (Optional: Can have captured a piece or not)
+# Option 3: Rook has been captured
+:RookMove
+    a sh:NodeShape ;
+    sh:targetClass :Rook;
+    sh:message "Invalid rook move";
+    sh:or(
+          [
+              # Option 1: Rook has not moved
+              sh:property :PieceNotMoved ;
+          ]
+          [
+              # Option 2: Rook has moved forward, backward, right or left
+              sh:node :RookHasMoved;
+              # Has the option to have captured a piece or not
+              sh:property :CapturedPiece ;
+          ]
+          [
+              # Option 3: Rook is captured
+              sh:node :hasBeenCaptured ;
+          ]
+      ).
+
+:hasBeenCaptured
+    a sh:NodeShape ;
+    sh:property [
+                    sh:path :isIn_t2;
+                    sh:hasValue :out;
+                ];
+    sh:property [
+                    sh:path :isIn_t1;
+                    sh:property [
+                                sh:path [sh:inversePath :isIn_t2];
+                                sh:minCount 1;
+                            ]
+                ].
+
+:PieceNotMoved
+    a sh:PropertyShape ;
+    sh:path :isIn_t1;
+    sh:equals :isIn_t2.
+
+# Piece can either have captured a piece or not
+:CapturedPiece
+    a sh:PropertyShape ;
+            sh:path :isIn_t2;
+                       sh:or(
+                                   [
+                                       # There was no piece captured
+                                       # This works
+                                       sh:path [sh:inversePath :isIn_t1];
+                                       sh:maxCount 0;
+                                   ]
+                                   [
+                                       # There was a piece captured
+                                       # this works
+                                       sh:property [
+                                                       sh:path[sh:inversePath :isIn_t1];
+                                                       sh:minCount 1;
+                                                       sh:property [
+                                                                  sh:path :isIn_t2;
+                                                                  sh:hasValue :out;]
+                                                   ]
+                                   ]
+                               ).
+
+
+:RookHasMoved
+    a sh:NodeShape ;
+    # Option 2: Rook has moved forward, backward, right or left
+    sh:parameter [
+                 sh:path :isIn_t2;
+                sh:description "The current position of piece.";
+                sh:class :tile;
+                 ];
+    sh:or(
+             [# row1 == row2 + column1 > column2
+                 sh:property [
+                                 sh:path (:isIn_t1  :above);
+                                 sh:equals :isIn_t2;
+
+                             ];
+             ]
+             [
+                 sh:property [
+                                 sh:path (:isIn_t1 :below );
+                                 sh:equals :isIn_t2;
+                             ];
+             ]
+             [
+                 sh:property [
+                                 sh:path (:isIn_t1 :right );
+                                 sh:equals :isIn_t2;
+                             ];
+             ]
+             [
+                 sh:property [
+                                 sh:path (:isIn_t1 :left );
+                                 sh:equals :isIn_t2;
+                             ];
+             ]
+         ).
+

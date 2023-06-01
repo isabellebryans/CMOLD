@@ -1,0 +1,235 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+
+# Knowing board status + pieces
+# knowing pieces info
+# knowing board status
+# Knowing new piece
+#
+
+# Can validate:
+# The piece moved must be moved into a position that is empty, or not
+# The move must be a legal move depending on piece moved
+
+# Can't validate
+# - Piece captured is indeed captured, can only see this in the next window bc there'll be two pieces in one tile
+# - If a black piece is moved, then it must capture a white piece
+# - only one piece moved at one time stamp
+
+# General move
+:GeneralMoveShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :to;
+    sh:property [
+                sh:path :to;
+                sh:class :position ; ];
+    sh:xone (
+            [
+            # Pawn was moved
+            sh:class :Pawn;
+            ]
+            [
+            # Rook was moved
+            sh:class :Rook;
+            ]
+            [
+            # Knight was moved
+            sh:class :Knight;
+            ]
+            [
+            # Bishop was moved
+            sh:class :Bishop;
+            ]
+            [
+            # Queen was moved
+            sh:class :Queen;
+            sh:node :QueenShape;
+            ]
+            [
+            # King was moved
+            sh:class :King;
+            sh:node :MovedAdjacentTo ;
+            #sh:node :KingShape;
+            ]
+          ).
+
+:QueenShape
+    a sh:NodeShape ;
+    sh:or(
+            [ sh:node :hasBeenCaptured ]
+            [sh:node :MovedAdjacentTo ]
+            [ sh:node :MovedUpDownRightLeft  ]
+         ).
+
+:MovedUpDownRightLeft
+     a sh:NodeShape ;
+     sh:xone(
+             [# Moved right x spaces
+              sh:sparql [
+                            a sh:SPARQLConstraint ;
+                            sh:message "Invalid move: overtaking is not allowed." ;
+                            sh:prefixes [
+                                  sh:declare [
+                                                 sh:prefix "ex" ;
+                                                 sh:namespace "http://example.org/chess/"^^xs:anyURI ;
+                                             ];
+                                  sh:declare [
+                                                 sh:prefix "rdf" ;
+                                                 sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ;
+                                             ]
+                            ] ;
+                            sh:select """
+                              SELECT $this ?current ?target ?intermediate
+                              WHERE {
+                                $this ex:isIn ?current ;
+                                      ex:to ?target .
+                                ?piece2 rdf:type ex:ChessPiece.
+                                ?piece2 ex:isIn ?tile.
+                                ?current ex:right+ ?intermediate .
+                                ?intermediate ex:right* ?target .
+                                FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                              }
+                            """
+                        ]
+             ]
+             [ # Moved up x spaces
+               sh:sparql [
+                             a sh:SPARQLConstraint ;
+                             sh:message "Invalid move: overtaking is not allowed." ;
+                             sh:prefixes [
+                                   sh:declare [
+                                                  sh:prefix "ex" ;
+                                                  sh:namespace "http://example.org/chess/"^^xs:anyURI ;
+                                              ];
+                                   sh:declare [
+                                                  sh:prefix "rdf" ;
+                                                  sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ;
+                                              ]
+                               ] ;
+                             sh:select """
+                              SELECT $this ?current ?target ?intermediate
+                              WHERE {
+                                $this ex:isIn ?current ;
+                                      ex:to ?target .
+                                ?piece2 rdf:type ex:ChessPiece.
+                                ?piece2 ex:isIn ?tile.
+                                ?current ex:above+ ?intermediate .
+                                ?intermediate ex:above* ?target .
+                                FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                              }
+                            """
+                         ]
+             ]
+             [# Moved down x spaces
+              sh:sparql [
+                            a sh:SPARQLConstraint ;
+                            sh:message "Invalid move: overtaking is not allowed." ;
+                            sh:prefixes [
+                                  sh:declare [
+                                                 sh:prefix "ex" ;
+                                                 sh:namespace "http://example.org/chess/"^^xs:anyURI ;
+                                             ];
+                                  sh:declare [
+                                                 sh:prefix "rdf" ;
+                                                 sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ;
+                                             ]
+                              ] ;
+                            sh:select """
+                              SELECT $this ?current ?target ?intermediate
+                              WHERE {
+                                $this ex:isIn ?current ;
+                                      ex:to ?target .
+                                ?piece2 rdf:type ex:ChessPiece.
+                                ?piece2 ex:isIn ?tile.
+                                ?current ex:below+ ?intermediate .
+                                ?intermediate ex:below* ?target .
+                                FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                              }
+                            """
+                        ]
+             ]
+             [# Moved below x spaces
+              sh:sparql [
+                            a sh:SPARQLConstraint ;
+                            sh:message "Invalid move: overtaking is not allowed." ;
+                            sh:prefixes [
+                                  sh:declare [
+                                                 sh:prefix "ex" ;
+                                                 sh:namespace "http://example.org/chess/"^^xs:anyURI ;
+                                             ];
+                                  sh:declare [
+                                                 sh:prefix "rdf" ;
+                                                 sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ;
+                                             ]
+                              ] ;
+                            sh:select """
+                              SELECT $this ?current ?target ?intermediate
+                              WHERE {
+                                $this ex:isIn ?current ;
+                                      ex:to ?target .
+                                ?piece2 rdf:type ex:ChessPiece.
+                                ?piece2 ex:isIn ?tile.
+                                ?current ex:right+ ?intermediate .
+                                ?intermediate ex:right* ?target .
+                                FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                              }
+                            """
+                        ]
+             ]
+          ).
+
+
+:MovedAdjacentTo
+    a sh:NodeShape ;
+    sh:or(
+            [
+                sh:path (:isIn :above );
+                sh:equals :to;
+            ]
+            [
+                sh:path (:isIn :below );
+                sh:equals :to;
+            ]
+            [
+                sh:path (:isIn :left );
+                sh:equals :to;
+            ]
+            [
+                sh:path (:isIn :right );
+                sh:equals :to;
+            ]
+            [
+                sh:path (:isIn :tl );
+                sh:equals :to;
+            ]
+            [
+                sh:path (:isIn :tr );
+                sh:equals :to;
+            ]
+            [
+                sh:path (:isIn :bl );
+                sh:equals :to;
+            ]
+            [
+                sh:path (:isIn :br );
+                sh:equals :to;
+            ]
+         ).
+
+
+:hasBeenCaptured
+    a sh:NodeShape ;
+    sh:property [
+          sh:path :to;
+          sh:hasValue :out;
+      ];
+    sh:property [
+          sh:path :isIn;
+          sh:property [
+                      sh:path [sh:inversePath :to];
+                      sh:minCount 1;
+                  ]
+      ].

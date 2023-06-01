@@ -66,42 +66,56 @@ ns1:P9 a ns1:ChessPiece,
 
 ns1:a1 a ns1:tile ;
     ns1:above ns1:a2 ;
+    ns1:column ns1:a ;
     ns1:right ns1:b1 ;
+    ns1:row ns1:1 ;
     ns1:tr ns1:b2 .
 
 ns1:a4 a ns1:tile ;
     ns1:below ns1:a3 ;
     ns1:br ns1:b3 ;
-    ns1:right ns1:b4 .
+    ns1:column ns1:a ;
+    ns1:right ns1:b4 ;
+    ns1:row ns1:4 .
 
 ns1:h1 a ns1:tile ;
     ns1:above ns1:h2 ;
+    ns1:column ns1:h ;
     ns1:left ns1:g1 ;
+    ns1:row ns1:1 ;
     ns1:tl ns1:g2 .
 
 ns1:h4 a ns1:tile ;
     ns1:below ns1:h3 ;
     ns1:bl ns1:g3 ;
-    ns1:left ns1:g4 .
+    ns1:column ns1:h ;
+    ns1:left ns1:g4 ;
+    ns1:row ns1:4 .
 
 ns1:a2 a ns1:tile ;
     ns1:above ns1:a3 ;
     ns1:below ns1:a1 ;
     ns1:br ns1:b1 ;
+    ns1:column ns1:a ;
     ns1:right ns1:b2 ;
+    ns1:row ns1:2 ;
     ns1:tr ns1:b3 .
 
 ns1:a3 a ns1:tile ;
     ns1:above ns1:a4 ;
     ns1:below ns1:a2 ;
     ns1:br ns1:b2 ;
+    ns1:column ns1:a ;
     ns1:right ns1:b3 ;
+    ns1:row ns1:3 ;
     ns1:tr ns1:b4 .
 
 ns1:b1 a ns1:tile ;
     ns1:above ns1:b2 ;
+    ns1:column ns1:b ;
     ns1:left ns1:a1 ;
     ns1:right ns1:c1 ;
+    ns1:row ns1:1 ;
     ns1:tl ns1:a2 ;
     ns1:tr ns1:c2 .
 
@@ -109,13 +123,17 @@ ns1:b4 a ns1:tile ;
     ns1:below ns1:b3 ;
     ns1:bl ns1:a3 ;
     ns1:br ns1:c3 ;
+    ns1:column ns1:b ;
     ns1:left ns1:a4 ;
-    ns1:right ns1:c4 .
+    ns1:right ns1:c4 ;
+    ns1:row ns1:4 .
 
 ns1:c1 a ns1:tile ;
     ns1:above ns1:c2 ;
+    ns1:column ns1:c ;
     ns1:left ns1:b1 ;
     ns1:right ns1:d1 ;
+    ns1:row ns1:1 ;
     ns1:tl ns1:b2 ;
     ns1:tr ns1:d2 .
 
@@ -123,13 +141,17 @@ ns1:c4 a ns1:tile ;
     ns1:below ns1:c3 ;
     ns1:bl ns1:b3 ;
     ns1:br ns1:d3 ;
+    ns1:column ns1:c ;
     ns1:left ns1:b4 ;
-    ns1:right ns1:d4 .
+    ns1:right ns1:d4 ;
+    ns1:row ns1:4 .
 
 ns1:d1 a ns1:tile ;
     ns1:above ns1:d2 ;
+    ns1:column ns1:d ;
     ns1:left ns1:c1 ;
     ns1:right ns1:e1 ;
+    ns1:row ns1:1 ;
     ns1:tl ns1:c2 ;
     ns1:tr ns1:e2 .
 
@@ -137,13 +159,17 @@ ns1:d4 a ns1:tile ;
     ns1:below ns1:d3 ;
     ns1:bl ns1:c3 ;
     ns1:br ns1:e3 ;
+    ns1:column ns1:d ;
     ns1:left ns1:c4 ;
-    ns1:right ns1:e4 .
+    ns1:right ns1:e4 ;
+    ns1:row ns1:4 .
 
 ns1:e1 a ns1:tile ;
     ns1:above ns1:e2 ;
+    ns1:column ns1:e ;
     ns1:left ns1:d1 ;
     ns1:right ns1:f1 ;
+    ns1:row ns1:1 ;
     ns1:tl ns1:d2 ;
     ns1:tr ns1:f2 .
 
@@ -151,13 +177,17 @@ ns1:e4 a ns1:tile ;
     ns1:below ns1:e3 ;
     ns1:bl ns1:d3 ;
     ns1:br ns1:f3 ;
+    ns1:column ns1:e ;
     ns1:left ns1:d4 ;
-    ns1:right ns1:f4 .
+    ns1:right ns1:f4 ;
+    ns1:row ns1:4 .
 
 ns1:f1 a ns1:tile ;
     ns1:above ns1:f2 ;
+    ns1:column ns1:f ;
     ns1:left ns1:e1 ;
     ns1:right ns1:g1 ;
+    ns1:row ns1:1 ;
     ns1:tl ns1:e2 ;
     ns1:tr ns1:g2 .
 
@@ -165,13 +195,17 @@ ns1:f4 a ns1:tile ;
     ns1:below ns1:f3 ;
     ns1:bl ns1:e3 ;
     ns1:br ns1:g3 ;
+    ns1:column ns1:f ;
     ns1:left ns1:e4 ;
-    ns1:right ns1:g4 .
+    ns1:right ns1:g4 ;
+    ns1:row ns1:4 .
 
 ns1:g1 a ns1:tile ;
     ns1:above ns1:g2 ;
+    ns1:column ns1:g ;
     ns1:left ns1:f1 ;
     ns1:right ns1:h1 ;
+    ns1:row ns1:1 ;
     ns1:tl ns1:f2 ;
     ns1:tr ns1:h2 .
 
@@ -179,21 +213,27 @@ ns1:g4 a ns1:tile ;
     ns1:below ns1:g3 ;
     ns1:bl ns1:f3 ;
     ns1:br ns1:h3 ;
+    ns1:column ns1:g ;
     ns1:left ns1:f4 ;
-    ns1:right ns1:h4 .
+    ns1:right ns1:h4 ;
+    ns1:row ns1:4 .
 
 ns1:h2 a ns1:tile ;
     ns1:above ns1:h3 ;
     ns1:below ns1:h1 ;
     ns1:bl ns1:g1 ;
+    ns1:column ns1:h ;
     ns1:left ns1:g2 ;
+    ns1:row ns1:2 ;
     ns1:tl ns1:g3 .
 
 ns1:h3 a ns1:tile ;
     ns1:above ns1:h4 ;
     ns1:below ns1:h2 ;
     ns1:bl ns1:g2 ;
+    ns1:column ns1:h ;
     ns1:left ns1:g3 ;
+    ns1:row ns1:3 ;
     ns1:tl ns1:g4 .
 
 ns1:b2 a ns1:tile ;
@@ -201,8 +241,10 @@ ns1:b2 a ns1:tile ;
     ns1:below ns1:b1 ;
     ns1:bl ns1:a1 ;
     ns1:br ns1:c1 ;
+    ns1:column ns1:b ;
     ns1:left ns1:a2 ;
     ns1:right ns1:c2 ;
+    ns1:row ns1:2 ;
     ns1:tl ns1:a3 ;
     ns1:tr ns1:c3 .
 
@@ -211,8 +253,10 @@ ns1:b3 a ns1:tile ;
     ns1:below ns1:b2 ;
     ns1:bl ns1:a2 ;
     ns1:br ns1:c2 ;
+    ns1:column ns1:b ;
     ns1:left ns1:a3 ;
     ns1:right ns1:c3 ;
+    ns1:row ns1:3 ;
     ns1:tl ns1:a4 ;
     ns1:tr ns1:c4 .
 
@@ -221,8 +265,10 @@ ns1:c2 a ns1:tile ;
     ns1:below ns1:c1 ;
     ns1:bl ns1:b1 ;
     ns1:br ns1:d1 ;
+    ns1:column ns1:c ;
     ns1:left ns1:b2 ;
     ns1:right ns1:d2 ;
+    ns1:row ns1:2 ;
     ns1:tl ns1:b3 ;
     ns1:tr ns1:d3 .
 
@@ -231,8 +277,10 @@ ns1:c3 a ns1:tile ;
     ns1:below ns1:c2 ;
     ns1:bl ns1:b2 ;
     ns1:br ns1:d2 ;
+    ns1:column ns1:c ;
     ns1:left ns1:b3 ;
     ns1:right ns1:d3 ;
+    ns1:row ns1:3 ;
     ns1:tl ns1:b4 ;
     ns1:tr ns1:d4 .
 
@@ -241,8 +289,10 @@ ns1:d2 a ns1:tile ;
     ns1:below ns1:d1 ;
     ns1:bl ns1:c1 ;
     ns1:br ns1:e1 ;
+    ns1:column ns1:d ;
     ns1:left ns1:c2 ;
     ns1:right ns1:e2 ;
+    ns1:row ns1:2 ;
     ns1:tl ns1:c3 ;
     ns1:tr ns1:e3 .
 
@@ -251,8 +301,10 @@ ns1:d3 a ns1:tile ;
     ns1:below ns1:d2 ;
     ns1:bl ns1:c2 ;
     ns1:br ns1:e2 ;
+    ns1:column ns1:d ;
     ns1:left ns1:c3 ;
     ns1:right ns1:e3 ;
+    ns1:row ns1:3 ;
     ns1:tl ns1:c4 ;
     ns1:tr ns1:e4 .
 
@@ -261,8 +313,10 @@ ns1:e2 a ns1:tile ;
     ns1:below ns1:e1 ;
     ns1:bl ns1:d1 ;
     ns1:br ns1:f1 ;
+    ns1:column ns1:e ;
     ns1:left ns1:d2 ;
     ns1:right ns1:f2 ;
+    ns1:row ns1:2 ;
     ns1:tl ns1:d3 ;
     ns1:tr ns1:f3 .
 
@@ -271,8 +325,10 @@ ns1:e3 a ns1:tile ;
     ns1:below ns1:e2 ;
     ns1:bl ns1:d2 ;
     ns1:br ns1:f2 ;
+    ns1:column ns1:e ;
     ns1:left ns1:d3 ;
     ns1:right ns1:f3 ;
+    ns1:row ns1:3 ;
     ns1:tl ns1:d4 ;
     ns1:tr ns1:f4 .
 
@@ -281,8 +337,10 @@ ns1:f2 a ns1:tile ;
     ns1:below ns1:f1 ;
     ns1:bl ns1:e1 ;
     ns1:br ns1:g1 ;
+    ns1:column ns1:f ;
     ns1:left ns1:e2 ;
     ns1:right ns1:g2 ;
+    ns1:row ns1:2 ;
     ns1:tl ns1:e3 ;
     ns1:tr ns1:g3 .
 
@@ -291,8 +349,10 @@ ns1:f3 a ns1:tile ;
     ns1:below ns1:f2 ;
     ns1:bl ns1:e2 ;
     ns1:br ns1:g2 ;
+    ns1:column ns1:f ;
     ns1:left ns1:e3 ;
     ns1:right ns1:g3 ;
+    ns1:row ns1:3 ;
     ns1:tl ns1:e4 ;
     ns1:tr ns1:g4 .
 
@@ -301,8 +361,10 @@ ns1:g2 a ns1:tile ;
     ns1:below ns1:g1 ;
     ns1:bl ns1:f1 ;
     ns1:br ns1:h1 ;
+    ns1:column ns1:g ;
     ns1:left ns1:f2 ;
     ns1:right ns1:h2 ;
+    ns1:row ns1:2 ;
     ns1:tl ns1:f3 ;
     ns1:tr ns1:h3 .
 
@@ -311,8 +373,10 @@ ns1:g3 a ns1:tile ;
     ns1:below ns1:g2 ;
     ns1:bl ns1:f2 ;
     ns1:br ns1:h2 ;
+    ns1:column ns1:g ;
     ns1:left ns1:f3 ;
     ns1:right ns1:h3 ;
+    ns1:row ns1:3 ;
     ns1:tl ns1:f4 ;
     ns1:tr ns1:h4 .
 

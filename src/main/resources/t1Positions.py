@@ -43,8 +43,7 @@ for i in range(16):
             current_position = URIRef(ns[cols[i-8] + "2"])
 
     g.add((current_piece, ns.isIn_t1, current_position))
-    g.add((current_position, ns.contains, current_piece))
 
 
 print(g.serialize(format="turtle"))
-g.serialize(destination="t1Positions.ttl")
+g.serialize(destination="t1PositionsHalf.ttl")

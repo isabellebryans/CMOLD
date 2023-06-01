@@ -46,9 +46,13 @@ cols = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
 #Loop through the rows and columns to make nodess and edges between them
 for row in rows:
+    row_uri = URIRef(ns[row])
     for col in cols:
         node_uri = URIRef(ns[col+row])
+        col_uri = URIRef(ns[col])
         g.add((node_uri, RDF.type, ns.tile))
+        g.add((node_uri, ns.row, row_uri))
+        g.add((node_uri, ns.column, col_uri))
 
 
 for row in rows:

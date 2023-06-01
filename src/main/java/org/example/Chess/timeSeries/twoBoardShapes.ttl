@@ -8,7 +8,9 @@
 # Still to implement:
 # - if white piece captures a piece, it must be black
 # - queen, bishop, rook can move as many spaces as long as there are no pieces in the way
-# - Only one piece moved at a time ( or two if one was captured )
+# - Only one piece moved at a time ( or two if one was captured ) -> can't do this
+# - Pawn can move more than one space first move
+# - Pawn can transfer into a different piece when it reaches otherside
 
 # At most one chess piece on each tile at t1 and t2
 :atMostOne
@@ -24,6 +26,9 @@
                     sh:maxCount 1;
                     sh:class :ChessPiece;
                     sh:message "Tile contains more than one chess piece"].
+
+
+
 
 # Every chess piece is either on a tile or out
 # Stops players from moving a piece to a tile that doesn't exist (off the chess board)
@@ -59,10 +64,7 @@
     sh:targetClass :Pawn;
     sh:message "Invalid pawn move";
     sh:or(
-            [
-                    # Option 1: Pawn hasn't moved
-            sh:path :isIn_t1 ;
-            sh:equals :isIn_t2 ; ]
+            [sh:property :PieceNotMoved ]
             [
                     # Option 2: Pawn has moved one space in front and did not capture any piece
                     sh:property [
@@ -109,17 +111,7 @@
             ]
             [
                 # Option 4: Pawn is captured
-                sh:property [
-                                sh:path :isIn_t2;
-                                sh:hasValue :out;
-                            ];
-                sh:property [
-                            sh:path :isIn_t1;
-                            sh:property [
-                                        sh:path [sh:inversePath :isIn_t2];
-                                        sh:minCount 1;
-                                        ]
-                            ]
+            sh:node :hasBeenCaptured ;
             ]
          )
     .
@@ -136,9 +128,7 @@
     sh:message "Invalid rook/queen move";
     sh:or(
             [
-                    # Option 1: Rook has not moved
-            sh:path :isIn_t1 ;
-            sh:equals :isIn_t2;
+                  sh:property :PieceNotMoved ;
             ]
             [
                     # Option 2: Rook has moved forward, backward, right or left
@@ -170,42 +160,29 @@
 
                      );
                     # Has the option to have captured a piece or not
-                sh:property [
-                    sh:path :isIn_t2;
-                        sh:or(
-                                [
-                                        # There was no piece captured
-                                        # This works
-                                        sh:path [sh:inversePath :isIn_t1];
-                                        sh:maxCount 0;
-                                ]
-                                [
-                                        # There was a piece captured
-                                        # this works
-                                        sh:property [
-                                                        sh:path[sh:inversePath :isIn_t1];
-                                                        sh:minCount 1;
-                                                        sh:property [
-                                                                    sh:path :isIn_t2;
-                                                                    sh:hasValue :out;]
-                                                    ]
-                                        ]
-                             )
-                ]
+                    sh:or(
+                             [
+                                 # There was no piece captured
+                                 # This works
+                                 sh:path [sh:inversePath :isIn_t1];
+                                 sh:maxCount 0;
+                             ]
+                             [
+                                 # There was a piece captured
+                                 # this works
+                                 sh:property [
+                                                 sh:path[sh:inversePath :isIn_t1];
+                                                 sh:minCount 1;
+                                                 sh:property [
+                                                            sh:path :isIn_t2;
+                                                            sh:hasValue :out;]
+                                             ]
+                             ]
+                         )
             ]
             [
                 # Option 3: Rook is captured
-                sh:property [
-                                sh:path :isIn_t2;
-                                sh:hasValue :out;
-                            ];
-                sh:property [
-                                sh:path :isIn_t1;
-                                sh:property [
-                                            sh:path [sh:inversePath :isIn_t2];
-                                            sh:minCount 1;
-                                        ]
-                            ]
+                sh:node :hasBeenCaptured ;
             ]
          ).
 
@@ -255,28 +232,25 @@
 
                    );
               # Has the option to have captured a piece or not
-              sh:property [
-                       sh:path :isIn_t2;
-                       sh:or(
-                                   [
-                                       # There was no piece captured
-                                       # This works
-                                       sh:path [sh:inversePath :isIn_t1];
-                                       sh:maxCount 0;
-                                   ]
-                                   [
-                                       # There was a piece captured
-                                       # this works
-                                       sh:property [
-                                                       sh:path[sh:inversePath :isIn_t1];
-                                                       sh:minCount 1;
-                                                       sh:property [
-                                                                  sh:path :isIn_t2;
-                                                                  sh:hasValue :out;]
-                                                   ]
-                                   ]
-                               )
-                   ]
+              sh:or(
+                       [
+                           # There was no piece captured
+                           # This works
+                           sh:path [sh:inversePath :isIn_t1];
+                           sh:maxCount 0;
+                       ]
+                       [
+                           # There was a piece captured
+                           # this works
+                           sh:property [
+                                           sh:path[sh:inversePath :isIn_t1];
+                                           sh:minCount 1;
+                                           sh:property [
+                                                      sh:path :isIn_t2;
+                                                      sh:hasValue :out;]
+                                       ]
+                       ]
+                   )
           ]
           [
               # Option 3: Bishop is captured
@@ -340,27 +314,16 @@
                    );
               # Has the option to have captured a piece or not
               sh:property [
-                       sh:path :isIn_t2;
-                       sh:or(
-                                   [
-                                       # There was no piece captured
-                                       # This works
-                                       sh:path [sh:inversePath :isIn_t1];
-                                       sh:maxCount 0;
-                                   ]
-                                   [
-                                       # There was a piece captured
-                                       # this works
-                                       sh:property [
-                                                       sh:path[sh:inversePath :isIn_t1];
-                                                       sh:minCount 1;
-                                                       sh:property [
-                                                                  sh:path :isIn_t2;
-                                                                  sh:hasValue :out;]
-                                                   ]
-                                   ]
-                               )
-                   ]
+                              sh:path :isIn_t2;
+                              sh:hasValue :out;
+                          ];
+              sh:property [
+                              sh:path :isIn_t1;
+                              sh:property [
+                                          sh:path [sh:inversePath :isIn_t2];
+                                          sh:minCount 1;
+                                      ]
+                          ]
           ]
       ).
 
@@ -418,29 +381,27 @@
                             sh:equals :isIn_t2;
                         ]
                      );
+
                     # Has the option to have captured a piece or not
-                    sh:property [
-                                sh:path :isIn_t2;
-                                sh:or(
-                                            [
-                                                # There was no piece captured
-                                                # This works
-                                                sh:path [sh:inversePath :isIn_t1];
-                                                sh:maxCount 0;
-                                            ]
-                                            [
-                                                # There was a piece captured
-                                                # this works
-                                                sh:property [
-                                                                sh:path[sh:inversePath :isIn_t1];
-                                                                sh:minCount 1;
-                                                                sh:property [
-                                                                           sh:path :isIn_t2;
-                                                                           sh:hasValue :out;]
-                                                            ]
-                                            ]
-                                        )
-                            ]
+                sh:or(
+                         [
+                             # There was no piece captured
+                             # This works
+                             sh:path [sh:inversePath :isIn_t1];
+                             sh:maxCount 0;
+                         ]
+                         [
+                             # There was a piece captured
+                             # this works
+                             sh:property [
+                                             sh:path[sh:inversePath :isIn_t1];
+                                             sh:minCount 1;
+                                             sh:property [
+                                                        sh:path :isIn_t2;
+                                                        sh:hasValue :out;]
+                                         ]
+                         ]
+                     )
 
             ]
             [
@@ -458,3 +419,48 @@
                             ]
             ]
     ).
+
+
+
+:PieceNotMoved
+    a sh:PropertyShape ;
+    sh:path :isIn_t1;
+    sh:equals :isIn_t2.
+
+# Piece can either have captured a piece or not
+:CapturedPiece
+    a sh:PropertyShape ;
+    sh:path :isIn_t2;
+    sh:or(
+          [
+              # There was no piece captured
+              # This works
+              sh:path [sh:inversePath :isIn_t1];
+              sh:maxCount 0;
+          ]
+          [
+              # There was a piece captured
+              # this works
+              sh:property [
+                              sh:path[sh:inversePath :isIn_t1];
+                              sh:minCount 1;
+                              sh:property [
+                                         sh:path :isIn_t2;
+                                         sh:hasValue :out;]
+                          ]
+          ]
+      ).
+
+:hasBeenCaptured
+    a sh:NodeShape ;
+    sh:property [
+          sh:path :isIn_t2;
+          sh:hasValue :out;
+      ];
+    sh:property [
+          sh:path :isIn_t1;
+          sh:property [
+                      sh:path [sh:inversePath :isIn_t2];
+                      sh:minCount 1;
+                  ]
+      ].

@@ -4,6 +4,13 @@
 @prefix : <http://example.org/chess/>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 
+
+# To do:
+# - Check / mate
+# - pawn not on other side
+# - bishops always on the same colour
+# - each tile has a column and row
+#
 # At most one chess piece on each tile
 # :contains must be equal to :isIn
 :atMostOne
@@ -38,6 +45,7 @@
     sh:targetNode :ChessPiece;
     sh:property [
                     sh:path [sh:inversePath rdf:type ];
+                    sh:message "wrong number of chess pieces on the board";
                     sh:minCount 32;
                     sh:maxCount 32;
                     sh:qualifiedValueShape [
