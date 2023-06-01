@@ -2,7 +2,7 @@
 # This graph doesn't change
 # STATIC
 import rdflib
-from rdflib import URIRef, Namespace
+from rdflib import URIRef, Namespace, Literal
 from rdflib.namespace import RDF
 
 g = rdflib.Graph()
@@ -39,8 +39,8 @@ bl = ns.bl
 #   :bl :c1.
 
 # Rows and columns of the chess board
-rows = ["1", "2", "3", "4", "5", "6", "7", "8"]
-cols = ["a", "b", "c", "d", "e", "f", "g", "h"]
+rows = [Literal("1"), Literal("2"), Literal("3"), Literal("4"), Literal("5"), Literal("6"), Literal("7"), Literal("8")]
+cols = [Literal("a"), Literal("b"), Literal("c"), Literal("d"), Literal("e"), Literal("f"), Literal("g"), Literal("h")]
 
 
 #Loop through the rows and columns to make nodess and edges between them
@@ -50,8 +50,9 @@ for row in rows:
         node_uri = URIRef(ns[col+row])
         col_uri = URIRef(ns[col])
         g.add((node_uri, RDF.type, ns.tile))
-        g.add((node_uri, ns.row, row_uri))
-        g.add((node_uri, ns.column, col_uri))
+        g.add((node_uri, ns.row, row))
+        g.add((node_uri, ns.column, col))
+        g.add((node_uri, ns.colNo, rows[cols.index(col)]))
 
 
 
