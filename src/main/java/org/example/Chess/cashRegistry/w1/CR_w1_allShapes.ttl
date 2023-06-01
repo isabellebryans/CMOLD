@@ -23,6 +23,7 @@
 :GeneralMoveShape
     a sh:NodeShape ;
     sh:targetSubjectsOf :to;
+    sh:message "Invalid move";
     sh:property [
                 sh:path :to;
                 sh:class :position ; ];
@@ -65,8 +66,10 @@
             [ sh:node :MoveSideways ]
          ).
 
+
 :MoveUpDown
     a sh:NodeShape ;
+    # Shacl sparql constraint checks if the column of new pos is same as old pos
     sh:sparql [ a           sh:SPARQLConstraint ;
                 sh:message  "Invalid move: not on same column." ;
                 sh:prefixes [ sh:declare [ sh:prefix    "" ;
@@ -84,6 +87,7 @@
         FILTER (?col1 != ?col2)
       }
     """ ];
+    # Now check if there are any other pieces in the way
      sh:sparql [ a           sh:SPARQLConstraint ;
                           sh:message  "Invalid move: overtaking is not allowed." ;
                           sh:prefixes [ sh:declare [ sh:prefix    "" ;
@@ -103,7 +107,6 @@
         FILTER ($this != ?piece2 && ?tile = ?intermediate)
       }
     """ ];
-
     sh:sparql [
                               a           sh:SPARQLConstraint ;
                               sh:message  "Invalid move: overtaking is not allowed." ;
@@ -126,9 +129,36 @@
     """
             ] .
 
+:MoveDiagonal
+    a sh:NodeShape ;
+    sh:sparql [
+                  a sh:SPARQLConstraint ;
+                  sh:message  "Invalid move: not on same row." ;
+                  sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                             sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                                sh:declare [ sh:prefix "rdf" ;
+                                             sh:namespace
+                                                       "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                  sh:select """
+        SELECT $this
+        WHERE {
+            $this :isIn ?current ;
+                  :to ?target .
+            ?current :row ?row1 ;
+                     :column ?col1 .
+            ?target :row ?row2 ;
+                    :column ?col2 .
+            BIND(ABS(xsd:integer(?row1) - xsd:integer(?row2)) AS ?rowDiff)
+            BIND(ABS(xsd:integer(xsd:char(?col1)) - xsd:integer(xsd:char(?col2))) AS ?colDiff)
+            FILTER (?rowDiff = ?colDiff)
+        }
+    """ ].
+
+
 :MoveSideways
     a sh:NodeShape ;
-    sh:sparql [ a           sh:SPARQLConstraint ;
+    sh:sparql [
+                  a sh:SPARQLConstraint ;
                 sh:message  "Invalid move: not on same row." ;
                 sh:prefixes [ sh:declare [ sh:prefix    "" ;
                                            sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
@@ -145,48 +175,46 @@
         FILTER (?row1 != ?row2)
       }
     """ ];
-    sh:or ( [ sh:sparql [ a           sh:SPARQLConstraint ;
-                          sh:message  "Invalid move: overtaking is not allowed." ;
-                          sh:prefixes [ sh:declare [ sh:prefix    "" ;
-                                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
-                                        sh:declare [ sh:prefix "rdf" ;
-                                                     sh:namespace
-                                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
-                          sh:select   """
-      SELECT $this ?current ?target ?intermediate
-      WHERE {
-        $this :isIn ?current ;
-              :to ?target .
-        ?piece2 rdf:type :ChessPiece.
-        ?piece2 :isIn ?tile.
-        ?current :right+ ?intermediate .
-        ?intermediate :right* ?target .
-        FILTER ($this != ?piece2 && ?tile = ?intermediate)
-      }
-    """ ]
-            ]
-            [
-                sh:sparql [
-                              a           sh:SPARQLConstraint ;
-                              sh:message  "Invalid move: overtaking is not allowed." ;
-                              sh:prefixes [ sh:declare [ sh:prefix    "" ;
-                                                         sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
-                                            sh:declare [ sh:prefix "rdf" ;
-                                                         sh:namespace
-                                                                   "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
-                              sh:select   """
-      SELECT $this ?current ?target ?intermediate
-      WHERE {
-        $this :isIn ?current ;
-              :to ?target .
-        ?piece2 rdf:type :ChessPiece.
-        ?piece2 :isIn ?tile.
-        ?current :left+ ?intermediate .
-        ?intermediate :left* ?target .
-        FILTER ($this != ?piece2 && ?tile = ?intermediate)
-      }
-    """ ]
-            ] ).
+    sh:sparql [
+          a sh:SPARQLConstraint ;
+          sh:message  "Invalid move: overtaking is not allowed." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                  SELECT $this ?current ?target ?intermediate
+                  WHERE {
+                    $this :isIn ?current ;
+                          :to ?target .
+                    ?piece2 rdf:type :ChessPiece.
+                    ?piece2 :isIn ?tile.
+                    ?current :right+ ?intermediate .
+                    ?intermediate :right* ?target .
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                  }
+            """ ];
+    sh:sparql [
+          a           sh:SPARQLConstraint ;
+          sh:message  "Invalid move: overtaking is not allowed." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                  SELECT $this ?current ?target ?intermediate
+                  WHERE {
+                    $this :isIn ?current ;
+                          :to ?target .
+                    ?piece2 rdf:type :ChessPiece.
+                    ?piece2 :isIn ?tile.
+                    ?current :left+ ?intermediate .
+                    ?intermediate :left* ?target .
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                  }
+            """ ].
 
 :MovedUpDownRightLeft
      a sh:NodeShape ;
