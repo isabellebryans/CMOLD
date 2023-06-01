@@ -7,20 +7,31 @@
 
 :MoveRule a sh:NodeShape ;
           sh:targetSubjectsOf :to ;
-          sh:sparql [
-                a sh:SPARQLConstraint ;
-                sh:message "Invalid move: overtaking is not allowed." ;
-                sh:prefixes [
-                      sh:declare [
-                                     sh:prefix "ex" ;
-                                     sh:namespace "http://example.org/"^^xs:anyURI ;
-                                 ];
-                      sh:declare [
-                                     sh:prefix "rdf" ;
-                                     sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ;
-                                 ]
-                  ] ;
-                sh:select """
+          sh:sparql [ a           sh:SPARQLConstraint ;
+                      sh:message  "Invalid move: not on same row." ;
+                      sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                                 sh:namespace "http://example.org/"^^xs:anyURI ; ] ;
+                                    sh:declare [ sh:prefix "rdf" ;
+                                                 sh:namespace
+                                                           "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                      sh:select   """
+      SELECT $this
+      WHERE {
+        $this :isIn ?current ;
+              :to ?target .
+        ?current :row ?row1.
+        ?target :row ?row2.
+        FILTER (?row1 != ?row2)
+      }
+    """ ];
+          sh:or ( [ sh:sparql [ a           sh:SPARQLConstraint ;
+                                  sh:message  "Invalid move: overtaking is not allowed." ;
+                                  sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                                             sh:namespace "http://example.org/"^^xs:anyURI ; ] ;
+                                                sh:declare [ sh:prefix "rdf" ;
+                                                             sh:namespace
+                                                                       "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                                  sh:select   """
       SELECT $this ?current ?target ?intermediate
       WHERE {
         $this :isIn ?current ;
@@ -31,30 +42,28 @@
         ?intermediate :right* ?target .
         FILTER ($this != ?piece2 && ?tile = ?intermediate)
       }
-    """
-            ];
-          sh:sparql [
-                a sh:SPARQLConstraint ;
-                sh:message "Invalid move: not on same row." ;
-                sh:prefixes [
-                      sh:declare [
-                                     sh:prefix "ex" ;
-                                     sh:namespace "http://example.org/"^^xs:anyURI ;
-                                 ];
-                      sh:declare [
-                                     sh:prefix "rdf" ;
-                                     sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ;
-                                 ]
-                  ] ;
-                sh:select """
-      SELECT $this
+    """ ]
+                    ]
+                    [
+                        sh:sparql [
+                                      a           sh:SPARQLConstraint ;
+                                    sh:message  "Invalid move: overtaking is not allowed." ;
+                                    sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                                               sh:namespace "http://example.org/"^^xs:anyURI ; ] ;
+                                                  sh:declare [ sh:prefix "rdf" ;
+                                                               sh:namespace
+                                                                         "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                                    sh:select   """
+      SELECT $this ?current ?target ?intermediate
       WHERE {
         $this :isIn ?current ;
               :to ?target .
-        ?current :row ?row1.
-        ?target :row ?row2.
-        FILTER (?row1 != ?row2)
+        ?piece2 rdf:type :ChessPiece.
+        ?piece2 :isIn ?tile.
+        ?current :left+ ?intermediate .
+        ?intermediate :left* ?target .
+        FILTER ($this != ?piece2 && ?tile = ?intermediate)
       }
-    """
-            ].
+    """ ]
+                    ] ).
 
