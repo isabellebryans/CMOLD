@@ -111,7 +111,7 @@
         ?piece2 :isIn ?tile.
         ?current :above+ ?intermediate .
         ?intermediate :above* ?target .
-        FILTER ($this != ?piece2 && ?tile = ?intermediate)
+        FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
       }
     """ ];
     sh:sparql [
@@ -131,7 +131,7 @@
         ?piece2 :isIn ?tile.
         ?current :below+ ?intermediate .
         ?intermediate :below* ?target .
-        FILTER ($this != ?piece2 && ?tile = ?intermediate)
+        FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
       }
     """
             ] .
@@ -181,7 +181,7 @@
                     ?piece2 :isIn ?tile.
                     ?current :tr+ ?intermediate .
                     ?intermediate :tr* ?target .
-                    FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
                   }
             """ ];
     sh:sparql [
@@ -201,7 +201,7 @@
                     ?piece2 :isIn ?tile.
                     ?current :tl+ ?intermediate .
                     ?intermediate :tl* ?target .
-                    FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
                   }
             """ ];
     sh:sparql [
@@ -221,7 +221,7 @@
                     ?piece2 :isIn ?tile.
                     ?current :br+ ?intermediate .
                     ?intermediate :br* ?target .
-                    FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
                   }
             """ ];
     sh:sparql [
@@ -241,7 +241,7 @@
                     ?piece2 :isIn ?tile.
                     ?current :bl+ ?intermediate .
                     ?intermediate :bl* ?target .
-                    FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
                   }
             """ ].
 
@@ -283,7 +283,7 @@
                     ?piece2 :isIn ?tile.
                     ?current :right+ ?intermediate .
                     ?intermediate :right* ?target .
-                    FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
                   }
             """ ];
     sh:sparql [
@@ -303,7 +303,7 @@
                     ?piece2 :isIn ?tile.
                     ?current :left+ ?intermediate .
                     ?intermediate :left* ?target .
-                    FILTER ($this != ?piece2 && ?tile = ?intermediate)
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
                   }
             """ ].
 
@@ -359,3 +359,33 @@
                       sh:minCount 1;
                   ]
       ].
+
+:KnightMove
+    a sh:NodeShape ;
+    sh:targetClass :Knight;
+    sh:message "Invalid knight move";
+    sh:or (
+          [
+              # Option 1: Knight has not moved
+              sh:path :occupiesPosition  ;
+              sh:equals :occupiesPosition_t1  ;
+          ]
+          [
+              sh:path (sh:alternativePath (:occupiesPosition  :tr :above) (:occupiesPosition :tr :right) (:occupiesPosition  :tl :above) (:occupiesPosition  :tl :left) (:occupiesPosition  :bl :below) (:occupiesPosition  :bl :left) (:occupiesPosition  :br :below) (:occupiesPosition  :br :right));
+              sh:equals :occupiesPosition_t1 ;
+          ]
+          [
+              # Option 3: Knight is captured
+              sh:property [
+                              sh:path :occupiesPosition_t1 ;
+                              sh:hasValue :out;
+                          ];
+              sh:property [
+                              sh:path :occupiesPosition ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition_t1 ];
+                                          sh:minCount 1;
+                                      ]
+                          ]
+          ]
+      ).

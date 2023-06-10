@@ -4,7 +4,7 @@ ns1:P1 ns1:occupiesPosition_t1 ns1:e1 .
 
 ns1:P10 ns1:occupiesPosition_t1 ns1:b2 .
 
-ns1:P11 ns1:occupiesPosition_t1 ns1:out .
+ns1:P11 ns1:occupiesPosition_t1 ns1:c2 .
 
 ns1:P12 ns1:occupiesPosition_t1 ns1:d2 .
 
@@ -12,7 +12,7 @@ ns1:P13 ns1:occupiesPosition_t1 ns1:e2 .
 
 ns1:P14 ns1:occupiesPosition_t1 ns1:f2 .
 
-ns1:P15 ns1:occupiesPosition_t1 ns1:h3 .
+ns1:P15 ns1:occupiesPosition_t1 ns1:g2 .
 
 ns1:P16 ns1:occupiesPosition_t1 ns1:h2 .
 
@@ -54,7 +54,7 @@ ns1:P32 ns1:occupiesPosition_t1 ns1:h7 .
 
 ns1:P4 ns1:occupiesPosition_t1 ns1:f1 .
 
-ns1:P5 ns1:occupiesPosition_t1 ns1:b1 .
+ns1:P5 ns1:occupiesPosition_t1 ns1:c3 .
 
 ns1:P6 ns1:occupiesPosition_t1 ns1:g1 .
 

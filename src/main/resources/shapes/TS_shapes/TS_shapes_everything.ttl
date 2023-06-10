@@ -3,14 +3,14 @@
 @prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/chess/>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix shape: <http://example.org/chess/shapes/>.
+@prefix shape: <http://example.org/chess/TS-shapes/>.
 
 # Still to implement:
 # - if white piece captures a piece, it must be black
-# - queen, bishop, rook can move as many spaces as long as there are no pieces in the way
+# - queen, bishop, rook can move as many spaces as long as there are no pieces in the way -> done
 # - Only one piece moved at a time ( or two if one was captured ) -> can't do this
 # - Pawn can move more than one space first move
-# - Pawn can transfer into a different piece when it reaches otherside
+# - Pawn can promote into a different piece when it reaches other side
 
 ## Extends shape:atMostOne for :occupiesPosition_t1
 shape:atMostOne_t1
@@ -28,12 +28,12 @@ shape:atMostOne_t1
 # Option 2: Pawn has moved one space forward
 # Option 3: Pawn has moved one space forward diagonally and has captured a piece
 # Option 4: Pawn has been captured
-:PawnMove
+shape:PawnMove
     a sh:NodeShape ;
     sh:targetClass :Pawn;
     sh:message "Invalid pawn move";
     sh:or(
-          [sh:property :PieceNotMoved ]
+          [sh:property shape:PieceNotMoved ]
           [
               # Option 2: Pawn has moved one space in front and did not capture any piece
               sh:property [
@@ -80,42 +80,454 @@ shape:atMostOne_t1
           ]
           [
               # Option 4: Pawn is captured
-              sh:node :hasBeenCaptured ;
+              sh:node shape:hasBeenCaptured ;
           ]
       )
 .
 
+# Knight move validation
+# Option 1: Move tl, then above or left
+# Option 2: Move tr, then above or right
+# Option 3: Move br, the below or right
+# Option 4: Move bl, then below or left
+#           (Optionally capture piece)
+# Option 5: Be captured
+shape:KnightMove
+    a sh:NodeShape ;
+    sh:targetClass :Knight;
+    sh:message "Invalid knight move";
+    sh:or (
+          [ sh:property shape:PieceNotMoved; ]
+          [
+              sh:or(
+                       [
+                           sh:path (:occupiesPosition  :tr :above);
+                           sh:equals :occupiesPosition_t1 ;
+                       ]
+                       [
+                           sh:path (:occupiesPosition  :tr :right);
+                           sh:equals :occupiesPosition_t1 ;
+                       ]
+                       [
+                           sh:path (:occupiesPosition  :tl :above);
+                           sh:equals :occupiesPosition_t1 ;
+                       ]
+                       [
+                           sh:path (:occupiesPosition  :tl :left);
+                           sh:equals :occupiesPosition_t1 ;
+                       ]
+                       [
+                           sh:path (:occupiesPosition  :bl :below);
+                           sh:equals :occupiesPosition_t1 ;
+                       ]
+                       [
+                           sh:path (:occupiesPosition  :bl :left);
+                           sh:equals :occupiesPosition_t1 ;
+                       ]
+                       [
+                           sh:path (:occupiesPosition  :br :below);
+                           sh:equals :occupiesPosition_t1 ;
+                       ]
+                       [
+                           sh:path (:occupiesPosition  :br :right);
+                           sh:equals :occupiesPosition_t1 ;
+                       ]
+                   );
+                  sh:node shape:CapturedPiece ;
+          ]
+          [ sh:node shape:hasBeenCaptured; ]
+      ).
 
-:PieceNotMoved
+# King Move Validation
+# Option 1: King has not moved
+# Option 2: King has moved forward, backward, right, left or diagonally one space
+#           (Optional: Can have captured a piece or not)
+shape:KingMove
+    a sh:NodeShape ;
+    sh:targetClass :King;
+    sh:message "Invalid king move";
+    sh:or(
+          [
+                  # Option 1: King has not moved
+              sh:property shape:PieceNotMoved ;
+          ]
+          [
+              # Option 2: King has moved forward, backward, right, left or diagonally one space
+              sh:or(
+                      [ sh:node shape:MoveAdjStraight ]
+                      [ sh:node shape:MoveAdjDiagonal ]
+                   );
+              # Has the option to have captured a piece or not
+              sh:node shape:CapturedPiece ;
+          ]
+      ).
+
+shape:RookShape
+    a sh:NodeShape ;
+    sh:targetClass :Rook;
+    sh:message "Invalid rook move";
+    sh:or(
+            [ sh:property shape:PieceNotMoved; ]
+
+            [ sh:node shape:hasBeenCaptured; ]
+
+            [
+                sh:or(
+                    [ sh:node shape:MoveAdjStraight ]
+                    [ sh:node shape:MoveSideways ]
+                    [ sh:node shape:MoveUpDown ]
+                );
+                sh:node shape:CapturedPiece ;
+            ]
+      ).
+
+shape:BishopShape
+    a sh:NodeShape ;
+    sh:targetClass :Bishop ;
+    sh:message "Invalid bishop move";
+    sh:or(
+          [ sh:property shape:PieceNotMoved; ]
+
+          [ sh:node shape:hasBeenCaptured; ]
+
+          [
+              sh:or(
+                     [ sh:node shape:MoveAdjDiagonal  ]
+                     [ sh:node shape:MoveDiagonal ]
+                   );
+              sh:node shape:CapturedPiece ;
+          ]
+      ).
+
+shape:QueenShape
+    a sh:NodeShape ;
+    sh:targetClass :Queen ;
+    sh:message "Invalid queen move";
+    sh:or(
+          [ sh:property shape:PieceNotMoved; ]
+
+          [ sh:node shape:hasBeenCaptured; ]
+
+          [
+              sh:or(
+                       [ sh:node shape:MoveAdjStraight  ]
+                       [ sh:node shape:MoveAdjDiagonal  ]
+                       [ sh:node shape:MoveUpDown  ]
+                       [ sh:node shape:MoveSideways  ]
+                       [ sh:node shape:MoveDiagonal ]
+                   );
+              sh:node shape:CapturedPiece ;
+          ]
+      ).
+
+shape:MoveDiagonal
+    a sh:NodeShape ;
+    sh:sparql [
+          a sh:SPARQLConstraint ;
+          sh:message  "Invalid move: not on same row." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ];
+                        sh:declare [ sh:prefix "xs" ;
+                                     sh:namespace
+                                               "http://www.w3.org/2001/XMLSchema#"^^xs:anyURI ; ]] ;
+          sh:select """
+        SELECT $this
+        WHERE {
+            $this :occupiesPosition ?current ;
+                  :occupiesPosition_t1 ?target .
+            ?current :row ?row1 ;
+                     :colNo ?col1 .
+            ?target :row ?row2 ;
+                    :colNo ?col2 .
+
+
+            FILTER ((xs:integer(?row1) - xs:integer(?row2)) != (xs:integer(?col1) - xs:integer(?col2)))
+        }
+    """ ];
+    sh:sparql [
+          a sh:SPARQLConstraint ;
+          sh:message  "Invalid move: overtaking is not allowed." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                  SELECT $this ?current ?target ?intermediate
+                  WHERE {
+                    $this :occupiesPosition ?current ;
+                          :occupiesPosition_t1 ?target .
+                    ?piece2 rdf:type :ChessPiece.
+                    ?piece2 :occupiesPosition ?tile.
+                    ?current :tr+ ?intermediate .
+                    ?intermediate :tr* ?target .
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
+                  }
+            """ ];
+    sh:sparql [
+          a           sh:SPARQLConstraint ;
+          sh:message  "Invalid move: overtaking is not allowed." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                  SELECT $this ?current ?target ?intermediate
+                  WHERE {
+                    $this :occupiesPosition ?current ;
+                          :occupiesPosition_t1 ?target .
+                    ?piece2 rdf:type :ChessPiece.
+                    ?piece2 :occupiesPosition ?tile.
+                    ?current :tl+ ?intermediate .
+                    ?intermediate :tl* ?target .
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
+                  }
+            """ ];
+    sh:sparql [
+          a           sh:SPARQLConstraint ;
+          sh:message  "Invalid move: overtaking is not allowed." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                  SELECT $this ?current ?target ?intermediate
+                  WHERE {
+                    $this :occupiesPosition ?current ;
+                          :occupiesPosition_t1 ?target .
+                    ?piece2 rdf:type :ChessPiece.
+                    ?piece2 :occupiesPosition ?tile.
+                    ?current :br+ ?intermediate .
+                    ?intermediate :br* ?target .
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
+                  }
+            """ ];
+    sh:sparql [
+          a           sh:SPARQLConstraint ;
+          sh:message  "Invalid move: overtaking is not allowed." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                  SELECT $this ?current ?target ?intermediate
+                  WHERE {
+                    $this :occupiesPosition ?current ;
+                          :occupiesPosition_t1 ?target .
+                    ?piece2 rdf:type :ChessPiece.
+                    ?piece2 :occupiesPosition ?tile.
+                    ?current :bl+ ?intermediate .
+                    ?intermediate :bl* ?target .
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
+                  }
+            """ ].
+
+
+# This shape validates that the piece moved right or left, multiple spaces, without overtaking a piece, and its destination is a valid tile
+shape:MoveSideways
+    a sh:NodeShape ;
+    sh:sparql [
+          a sh:SPARQLConstraint ;
+          sh:message  "Invalid move: not on same row." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+      SELECT $this
+      WHERE {
+        $this :occupiesPosition ?current ;
+              :occupiesPosition_t1 ?target .
+        ?current :row ?row1.
+        ?target :row ?row2.
+        FILTER (?row1 != ?row2)
+      }
+    """ ];
+    sh:sparql [
+          a sh:SPARQLConstraint ;
+          sh:message  "Invalid move: overtaking is not allowed." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                  SELECT $this ?current ?target ?intermediate
+                  WHERE {
+                    $this :occupiesPosition ?current ;
+                          :occupiesPosition_t1 ?target .
+                    ?piece2 rdf:type :ChessPiece.
+                    ?piece2 :occupiesPosition ?tile.
+                    ?current :right+ ?intermediate .
+                    ?intermediate :right* ?target .
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
+                  }
+            """ ];
+    sh:sparql [
+          a           sh:SPARQLConstraint ;
+          sh:message  "Invalid move: overtaking is not allowed." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                  SELECT $this ?current ?target ?intermediate
+                  WHERE {
+                    $this :occupiesPosition ?current ;
+                          :occupiesPosition_t1 ?target .
+                    ?piece2 rdf:type :ChessPiece.
+                    ?piece2 :occupiesPosition ?tile.
+                    ?current :left+ ?intermediate .
+                    ?intermediate :left* ?target .
+                    FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target )
+                  }
+            """ ].
+
+# This shape validates that the piece moved up or down, multiple spaces, without overtaking a piece, and its destination is a valid tile
+shape:MoveUpDown
+    a sh:NodeShape ;
+    # Shacl sparql constraint checks if the column of new pos is same as old pos
+    sh:sparql [ a           sh:SPARQLConstraint ;
+                sh:message  "Invalid move: not on same column." ;
+                sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                           sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                              sh:declare [ sh:prefix "rdf" ;
+                                           sh:namespace
+                                                     "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                sh:select   """
+      SELECT $this
+      WHERE {
+        $this :occupiesPosition ?current ;
+              :occupiesPosition_t1 ?target .
+        ?current :column ?col1.
+        ?target :column ?col2.
+        FILTER (?col1 != ?col2)
+      }
+    """ ];
+    # Now check if there are any other pieces in the way
+    sh:sparql [ a           sh:SPARQLConstraint ;
+                sh:message  "Invalid move: overtaking is not allowed." ;
+                sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                           sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                              sh:declare [ sh:prefix "rdf" ;
+                                           sh:namespace
+                                                     "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                sh:select   """
+      SELECT $this ?current ?target ?intermediate
+      WHERE {
+        $this :occupiesPosition ?current ;
+              :occupiesPosition_t1 ?target .
+        ?piece2 rdf:type :ChessPiece.
+        ?piece2 :occupiesPosition ?tile.
+        ?current :above+ ?intermediate .
+        ?intermediate :above* ?target .
+        FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
+      }
+    """ ];
+    sh:sparql [
+          a           sh:SPARQLConstraint ;
+          sh:message  "Invalid move: overtaking is not allowed." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+      SELECT $this ?current ?target ?intermediate
+      WHERE {
+        $this :occupiesPosition ?current ;
+              :occupiesPosition_t1 ?target .
+        ?piece2 rdf:type :ChessPiece.
+        ?piece2 :occupiesPosition ?tile.
+        ?current :below+ ?intermediate .
+        ?intermediate :below* ?target .
+        FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
+      }
+    """
+      ] .
+
+
+# Piece has moved one space to a tile directly adjacent to its previous position
+shape:MoveAdjStraight
+    a sh:NodeShape ;
+    sh:or(
+             [
+                 sh:path (:occupiesPosition :above );
+                 sh:equals :occupiesPosition_t1 ;
+             ]
+             [
+                 sh:path (:occupiesPosition :below );
+                 sh:equals :occupiesPosition_t1 ;
+             ]
+             [
+                 sh:path (:occupiesPosition :left );
+                 sh:equals :occupiesPosition_t1 ;
+             ]
+             [
+                 sh:path (:occupiesPosition :right );
+                 sh:equals :occupiesPosition_t1 ;
+             ]
+         ).
+
+shape:MoveAdjDiagonal
+    a sh:NodeShape ;
+    sh:or(
+             [
+                 sh:path (:occupiesPosition :tl );
+                 sh:equals :occupiesPosition_t1 ;
+             ]
+             [
+                 sh:path (:occupiesPosition :tr );
+                 sh:equals :occupiesPosition_t1 ;
+             ]
+             [
+                 sh:path (:occupiesPosition :bl );
+                 sh:equals :occupiesPosition_t1 ;
+             ]
+             [
+                 sh:path (:occupiesPosition :br );
+                 sh:equals :occupiesPosition_t1 ;
+             ]
+         ) .
+
+
+shape:PieceNotMoved
     a sh:PropertyShape ;
     sh:path :occupiesPosition ;
     sh:equals :occupiesPosition_t1 .
 
 # Piece can either have captured a piece or not
-:CapturedPiece
-    a sh:PropertyShape ;
-    sh:path :occupiesPosition_t1 ;
+shape:CapturedPiece
+    a sh:NodeShape  ;
     sh:or(
-          [
-              # There was no piece captured
-              # This works
-              sh:path [sh:inversePath :occupiesPosition ];
-              sh:maxCount 0;
-          ]
-          [
-              # There was a piece captured
-              # this works
-              sh:property [
-                              sh:path[sh:inversePath :occupiesPosition ];
-                              sh:minCount 1;
-                              sh:property [
-                                         sh:path :occupiesPosition_t1 ;
-                                         sh:hasValue :out;]
-                          ]
-          ]
-      ).
+             [
+                 # There was no piece captured
+                 # This works
+                 sh:path [sh:inversePath :occupiesPosition_t1];
+                 sh:maxCount 0;
+             ]
+             [
+                 # There was a piece captured
+                 # this works
+                 sh:property [
+                                 sh:path[sh:inversePath :occupiesPosition_t1];
+                                 sh:minCount 1;
+                                 sh:property [
+                                            sh:path :occupiesPosition_t1 ;
+                                            sh:hasValue :out;]
+                             ]
+             ]
+         ).
 
-:hasBeenCaptured
+shape:hasBeenCaptured
     a sh:NodeShape ;
     sh:property [
           sh:path :occupiesPosition_t1 ;
