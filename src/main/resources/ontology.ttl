@@ -3,10 +3,11 @@
 @prefix : <http://example.org/chess/> .
 
 :adjacentTo a owl:ObjectProperty  .
+
 :above a owl:ObjectProperty ;
-          rdfs:subPropertyOf  :adjacentTo .
+       rdfs:subPropertyOf  :adjacentTo .
 :below a owl:ObjectProperty ;
-          rdfs:subPropertyOf :adjacentTo .
+       rdfs:subPropertyOf :adjacentTo .
 :right a owl:ObjectProperty ;
           rdfs:subPropertyOf :adjacentTo .
 :left a owl:ObjectProperty ;
@@ -21,15 +22,22 @@
        rdfs:subPropertyOf :adjacentTo .
 
 
-:isIn a owl:ObjectProperty .
-:to a owl:ObjectProperty .
+:occupiesPosition a owl:ObjectProperty .
+:occupiesPosition_t1 a owl:ObjectProperty .
+
+:movesTo a owl:ObjectProperty .
+
+
 :position a owl:Class .
+
 :tile a owl:Class ;
       rdfs:subClassOf :position .
 :out a owl:Class ;
       rdfs:subClassOf :position .
 
+
 :ChessPiece a owl:Class .
+
 :Bishop a owl:Class ;
     rdfs:subClassOf :ChessPiece .
 :Pawn a owl:Class ;
@@ -42,3 +50,13 @@
         rdfs:subClassOf :ChessPiece .
 :King a owl:Class ;
         rdfs:subClassOf :ChessPiece .
+
+
+:Colour a owl:Class .
+:white a :Colour .
+:black a :Colour .
+
+
+:hasColour a owl:ObjectProperty ;
+           rdfs:domain :ChessPiece ;
+           rdfs:range :Colour .

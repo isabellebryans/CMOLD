@@ -43,6 +43,7 @@
             [
             # Bishop was moved
             sh:class :Bishop;
+
             ]
             [
             # Queen was moved

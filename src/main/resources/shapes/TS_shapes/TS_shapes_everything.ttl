@@ -1,0 +1,131 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/chess/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix shape: <http://example.org/chess/shapes/>.
+
+# Still to implement:
+# - if white piece captures a piece, it must be black
+# - queen, bishop, rook can move as many spaces as long as there are no pieces in the way
+# - Only one piece moved at a time ( or two if one was captured ) -> can't do this
+# - Pawn can move more than one space first move
+# - Pawn can transfer into a different piece when it reaches otherside
+
+## Extends shape:atMostOne for :occupiesPosition_t1
+shape:atMostOne_t1
+    a sh:NodeShape ;
+    sh:targetClass :tile;
+    sh:property [
+                sh:path [sh:inversePath :occupiesPosition_t1 ];
+                sh:maxCount 1;
+                sh:class :ChessPiece ;
+                sh:message "two chess pieces occupy same tile at t1"].
+
+
+# Pawn Move Validation
+# Option 1: Pawn has not moved
+# Option 2: Pawn has moved one space forward
+# Option 3: Pawn has moved one space forward diagonally and has captured a piece
+# Option 4: Pawn has been captured
+:PawnMove
+    a sh:NodeShape ;
+    sh:targetClass :Pawn;
+    sh:message "Invalid pawn move";
+    sh:or(
+          [sh:property :PieceNotMoved ]
+          [
+              # Option 2: Pawn has moved one space in front and did not capture any piece
+              sh:property [
+                              sh:path (:occupiesPosition  :above );
+                              sh:equals :occupiesPosition_t1 ;
+                          ];
+              sh:property [
+                              sh:path :occupiesPosition_t1 ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition ];
+                                          sh:maxCount 0;
+                                      ]
+                          ];
+          ]
+
+          [
+              # Option 3: Pawn has moved one space in front diagonally and captured a piece
+              sh:or(
+                       [
+                           sh:property [
+                                           sh:path (:occupiesPosition  :tr );
+                                           sh:class :tile;
+                                           sh:equals :occupiesPosition_t1 ;
+                                       ];
+                       ]
+                       [
+                           sh:property [
+                                           sh:path (:occupiesPosition  :tl );
+                                           sh:class :tile;
+                                           sh:equals :occupiesPosition_t1 ;
+                                       ];
+                       ]
+                   );
+              sh:property [
+                       sh:path :occupiesPosition_t1 ;
+                       sh:property [
+                                   sh:path [sh:inversePath :occupiesPosition ];
+                                   sh:minCount 1;
+                                   sh:property [
+                                               sh:path :occupiesPosition_t1 ;
+                                               sh:hasValue :out;]
+                               ]
+                   ]
+          ]
+          [
+              # Option 4: Pawn is captured
+              sh:node :hasBeenCaptured ;
+          ]
+      )
+.
+
+
+:PieceNotMoved
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition ;
+    sh:equals :occupiesPosition_t1 .
+
+# Piece can either have captured a piece or not
+:CapturedPiece
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t1 ;
+    sh:or(
+          [
+              # There was no piece captured
+              # This works
+              sh:path [sh:inversePath :occupiesPosition ];
+              sh:maxCount 0;
+          ]
+          [
+              # There was a piece captured
+              # this works
+              sh:property [
+                              sh:path[sh:inversePath :occupiesPosition ];
+                              sh:minCount 1;
+                              sh:property [
+                                         sh:path :occupiesPosition_t1 ;
+                                         sh:hasValue :out;]
+                          ]
+          ]
+      ).
+
+:hasBeenCaptured
+    a sh:NodeShape ;
+    sh:property [
+          sh:path :occupiesPosition_t1 ;
+          sh:hasValue :out;
+      ];
+    sh:property [
+          sh:path :occupiesPosition ;
+          sh:property [
+                      sh:path [sh:inversePath :occupiesPosition_t1 ];
+                      sh:minCount 1;
+                  ]
+      ].
+

@@ -6,7 +6,7 @@ import org.apache.jena.shacl.ShaclValidator;
 import org.apache.jena.shacl.Shapes;
 import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.shacl.lib.ShLib;
-import org.example.Chess.loadData;
+import org.example.Chess.utils.loadData;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,7 +16,7 @@ public class Type1_halfBoard {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         System.out.println("Hello world!");
 
-        Graph dataGraph = loadData.initAndLoadModelFromResource("halfChessBoard.ttl", Lang.TURTLE).union(loadData.initAndLoadModelFromResource("t1PositionsHalf.ttl", Lang.TURTLE)).union(loadData.initAndLoadModelFromResource("t2PositionsHalf.ttl", Lang.TURTLE)).getGraph();
+        Graph dataGraph = loadData.initAndLoadModelFromResource("unused/halfChessBoard.ttl", Lang.TURTLE).union(loadData.initAndLoadModelFromResource("unused/t1PositionsHalf.ttl", Lang.TURTLE)).union(loadData.initAndLoadModelFromResource("unused/t2PositionsHalf.ttl", Lang.TURTLE)).getGraph();
         //Graph shapesGraph = loadData.initAndLoadModelFromResource("tempExShape.ttl", Lang.TURTLE).getGraph();
         Graph shapesGraph = loadData.initAndLoadModelFromFolder("src/main/java/org/example/Chess/type1/multipleTilesShapes.ttl", Lang.TURTLE).getGraph();
         Shapes shapes = Shapes.parse(shapesGraph);

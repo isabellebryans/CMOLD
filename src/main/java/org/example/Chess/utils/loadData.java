@@ -1,4 +1,4 @@
-package org.example.Chess;
+package org.example.Chess.utils;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class loadData {
+    public static Model initAndLoadMode;
+
     public static Model initAndLoadModelFromFolder(String filename, Lang lang) throws IOException {
         // Turn file into input stream to be read
         File newFile = new File(filename);

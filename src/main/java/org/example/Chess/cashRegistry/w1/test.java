@@ -1,4 +1,4 @@
-package org.example.Chess.cashRegistry;
+package org.example.Chess.cashRegistry.w1;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
@@ -13,13 +13,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 
-public class cashRegistry2 {
+public class test {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         System.out.println("Hello world!");
 
-        Graph dataGraph = loadData.initAndLoadModelFromResource("chessBoardStructure.ttl", Lang.TURTLE).union(loadData.initAndLoadModelFromFolder("src/main/java/org/example/Chess/type2/ChessMove_type1.ttl", Lang.TURTLE)).getGraph();
+        Graph dataGraph = loadData.initAndLoadModelFromResource("chessBoardStructure.ttl", Lang.TURTLE).union(loadData.initAndLoadModelFromFolder("src/main/java/org/example/Chess/cashRegistry/w1/test.ttl", Lang.TURTLE)).getGraph();
         //Graph shapesGraph = loadData.initAndLoadModelFromResource("tempExShape.ttl", Lang.TURTLE).getGraph();
-        Graph shapesGraph = loadData.initAndLoadModelFromFolder("src/main/java/org/example/Chess/type2/chessMove1Shapes.ttl", Lang.TURTLE).getGraph();
+        Graph shapesGraph = loadData.initAndLoadModelFromFolder("src/main/java/org/example/Chess/cashRegistry/w1/testShapes.ttl", Lang.TURTLE).getGraph();
         Shapes shapes = Shapes.parse(shapesGraph);
 
         ValidationReport report = ShaclValidator.get().validate(shapes, dataGraph);

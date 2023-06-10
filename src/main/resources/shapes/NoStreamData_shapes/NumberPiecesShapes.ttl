@@ -1,0 +1,119 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/shapes/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+
+
+# Validates that there are always exactly two kings in the game.
+# Validates that there must be one white king and one black king.
+shape:TwoKings
+    a sh:NodeShape ;
+    sh:targetNode :King;
+    sh:property [
+          sh:message "Not exactly 1 white king and 1 black king on the board";
+          sh:path [sh:inversePath rdf:type ];
+          sh:minCount 2;
+          sh:maxCount 2;
+          sh:qualifiedValueShape [
+                         sh:path :hasColour ;
+                         sh:hasValue :white;] ;
+          sh:qualifiedMaxCount 1;
+          sh:qualifiedMinCount 1;
+      ].
+
+
+# Validates there are always 32 chess pieces in the game, exactly 16 white and 16 black
+shape:NumberOfChessPieces
+    a sh:NodeShape ;
+    sh:targetNode :ChessPiece;
+    sh:property [
+          sh:path [sh:inversePath rdf:type ];
+          sh:message "wrong number of chess pieces on the board";
+          sh:minCount 32;
+          sh:maxCount 32;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :white;] ;
+          sh:qualifiedMaxCount 16;
+          sh:qualifiedMinCount 16].
+
+shape:NumberOfPawns
+    a sh:NodeShape ;
+    sh:targetNode :Pawn;
+    sh:property [
+          sh:path [sh:inversePath rdf:type ];
+          sh:maxCount 16;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :white;] ;
+          sh:qualifiedMaxCount 8;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :black;] ;
+          sh:qualifiedMaxCount 8;].
+
+shape:NumberOfQueens
+    a sh:NodeShape ;
+    sh:targetNode :Queen;
+    sh:property [
+          sh:path [sh:inversePath rdf:type ];
+          sh:minCount 2;
+          sh:maxCount 18;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :white;] ;
+          sh:qualifiedMaxCount 9;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :black;] ;
+          sh:qualifiedMaxCount 9;].
+
+shape:NumberOfBishops
+    a sh:NodeShape ;
+    sh:targetNode :Bishop ;
+    sh:property [
+          sh:path [sh:inversePath rdf:type ];
+          sh:minCount 2;
+          sh:maxCount 18;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :white;] ;
+          sh:qualifiedMaxCount 9;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :black;] ;
+          sh:qualifiedMaxCount 9;].
+
+shape:NumberOfRooks
+    a sh:NodeShape ;
+    sh:targetNode :Rook ;
+    sh:property [
+          sh:path [sh:inversePath rdf:type ];
+          sh:minCount 2;
+          sh:maxCount 18;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :white;] ;
+          sh:qualifiedMaxCount 9;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :black;] ;
+          sh:qualifiedMaxCount 9;].
+
+shape:NumberOfKnights
+    a sh:NodeShape ;
+    sh:targetNode :Knight  ;
+    sh:property [
+          sh:path [sh:inversePath rdf:type ];
+          sh:minCount 2;
+          sh:maxCount 18;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :white;] ;
+          sh:qualifiedMaxCount 9;
+          sh:qualifiedValueShape [
+                      sh:path :hasColour;
+                      sh:hasValue :black;] ;
+          sh:qualifiedMaxCount 9;].

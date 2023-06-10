@@ -6,7 +6,7 @@ import org.apache.jena.shacl.ShaclValidator;
 import org.apache.jena.shacl.Shapes;
 import org.apache.jena.shacl.ValidationReport;
 import org.apache.jena.shacl.lib.ShLib;
-import org.example.Chess.loadData;
+import org.example.Chess.utils.loadData;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
