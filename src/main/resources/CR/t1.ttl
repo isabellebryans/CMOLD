@@ -3,4 +3,4 @@
 @prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/chess/>.
 
-:P2 :to :f6.
+:P2 :movesTo :e1.
