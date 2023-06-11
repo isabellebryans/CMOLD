@@ -5,9 +5,9 @@
 @prefix : <http://example.org/chess/>.
 @prefix shape: <http://example.org/chess/CR-shapes/>.
 
-# Need to do: pawn moves two on first move
-# Pawn move
-# colour, change pawn move
+# Need to do: pawn moves two on first move - > done
+# Pawn move -> done
+# colour, change pawn move -> done
 # moved to cant be king -> done
 
 # Knowing
@@ -35,8 +35,12 @@
     sh:node shape:cantCaptureKing ;
     sh:xone (
           [
-              # Pawn was moved
-              sh:node shape:PawnMove ;
+              # white Pawn was moved
+              sh:node shape:PawnMoveWhite ;
+          ]
+          [
+              # black Pawn was moved
+              sh:node shape:PawnMoveBlack ;
           ]
           [
               # Rook was moved
@@ -145,20 +149,42 @@ shape:KnightMove
 # Option 1: Pawn has moved one space forward
 # Option 2: Pawn has moved one space forward diagonally and has captured a piece
 # Option 3: Pawn has been captured
-shape:PawnMove
+shape:PawnMoveWhite
     a sh:NodeShape ;
     sh:class :Pawn;
-    sh:message "Invalid pawn move";
+    sh:property [
+                sh:path :hasColour ;
+                sh:hasValue :white ;
+                ];
+    sh:message "Invalid white pawn move";
     sh:or(
             [
+                    # Pawn either moved up one space, or two spaces and its in the second row, didn't capture anything
+                sh:or(
+                        [
+                            sh:property [
+                                         sh:path (:occupiesPosition  :above );
+                                         sh:equals :movesTo  ;
+                                         sh:class :tile;
+                                     ];
+                        ]
+                        [
+                            sh:property [
+                                        sh:path :occupiesPosition ;
+                                        sh:property [
+                                                    sh:path :row;
+                                                    sh:hasValue "2";
+                                                    ]
+                                        ];
+                            sh:property [
+                                            sh:path (:occupiesPosition :above :above );
+                                            sh:equals :movesTo  ;
+                                            sh:class :tile;
+                                        ];
+                        ]
 
-                # Pawn has moved one space in front and did not capture any piece
-                sh:property shape:moveToTile ;
-                sh:property [
-                                sh:path (:occupiesPosition  :above );
-                                sh:equals :movesTo  ;
-                                sh:class :tile;
-                            ];
+                );
+                # Pawn did not capture any piece
                 sh:property [
                                 sh:path :movesTo  ;
                                 sh:property [
@@ -194,6 +220,78 @@ shape:PawnMove
                      ]
             ]
          ).
+
+shape:PawnMoveBlack
+    a sh:NodeShape ;
+    sh:class :Pawn;
+    sh:property [
+          sh:path :hasColour ;
+          sh:hasValue :black ;
+      ];
+    sh:message "Invalid black pawn move";
+    sh:or(
+          [
+              # Pawn either moved up one space, or two spaces and its in the second row, didn't capture anything
+              sh:or(
+                       [
+                           sh:property [
+                                           sh:path (:occupiesPosition  :below );
+                                           sh:equals :movesTo  ;
+                                           sh:class :tile;
+                                       ];
+                       ]
+                       [
+                           sh:property [
+                                           sh:path :occupiesPosition ;
+                                           sh:property [
+                                                       sh:path :row;
+                                                       sh:hasValue "7";
+                                                   ]
+                                       ];
+                           sh:property [
+                                           sh:path (:occupiesPosition :below :below );
+                                           sh:equals :movesTo  ;
+                                           sh:class :tile;
+                                       ];
+                       ]
+
+                   );
+              # Pawn did not capture any piece
+              sh:property [
+                       sh:path :movesTo  ;
+                       sh:property [
+                                   sh:path [sh:inversePath :occupiesPosition ];
+                                   sh:maxCount 0;
+                               ]
+                   ];
+          ]
+          [
+              # Pawn moved diagonal, and captured piece
+              sh:or(
+                       [
+                           sh:property [
+                                           sh:path (:occupiesPosition  :br );
+                                           sh:class :tile;
+                                           sh:equals :movesTo ;
+                                       ];
+                       ]
+                       [
+                           sh:property [
+                                           sh:path (:occupiesPosition  :bl );
+                                           sh:class :tile;
+                                           sh:equals :movesTo ;
+                                       ];
+                       ]
+                   );
+              sh:property [
+                       sh:path :movesTo ;
+                       sh:property [
+                                   sh:path [sh:inversePath :occupiesPosition ];
+                                   sh:minCount 1;
+                               ]
+                   ]
+          ]
+      ).
 
 
 shape:MoveAdjStraight

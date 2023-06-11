@@ -33,23 +33,52 @@ shape:PawnMove
     sh:targetClass :Pawn;
     sh:message "Invalid pawn move";
     sh:or(
-          [sh:property shape:PieceNotMoved ]
+          [ sh:property shape:PieceNotMoved ]
           [
-              # Option 2: Pawn has moved one space in front and did not capture any piece
+                  # white pawn
               sh:property [
-                              sh:path (:occupiesPosition  :above );
-                              sh:equals :occupiesPosition_t1 ;
+                              sh:path :hasColour ;
+                              sh:hasValue :white ;
                           ];
-              sh:property [
-                              sh:path :occupiesPosition_t1 ;
-                              sh:property [
-                                          sh:path [sh:inversePath :occupiesPosition ];
-                                          sh:maxCount 0;
-                                      ]
-                          ];
-          ]
+              # Pawn either moved up one space, or two spaces and its in the second row, didn't capture anything
+              sh:or(
+                       [
+                           sh:property [
+                                           sh:path (:occupiesPosition  :above );
+                                           sh:equals :occupiesPosition_t1   ;
+                                           sh:class :tile;
+                                       ];
+                       ]
+                       [
+                           sh:property [
+                                           sh:path :occupiesPosition ;
+                                           sh:property [
+                                                       sh:path :row;
+                                                       sh:hasValue "2";
+                                                   ]
+                                       ];
+                           sh:property [
+                                           sh:path (:occupiesPosition :above :above );
+                                           sh:equals :occupiesPosition_t1   ;
+                                           sh:class :tile;
+                                       ];
+                       ]
 
+                   );
+              # Pawn did not capture any piece
+              sh:property [
+                       sh:path :occupiesPosition_t1   ;
+                       sh:property [
+                                   sh:path [sh:inversePath :occupiesPosition ];
+                                   sh:maxCount 0;
+                               ]
+                   ];
+          ]
           [
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :white ;
+                          ];
               # Option 3: Pawn has moved one space in front diagonally and captured a piece
               sh:or(
                        [
@@ -78,12 +107,86 @@ shape:PawnMove
                                ]
                    ]
           ]
+          # Black pawn
+          [
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :black ;
+                          ];
+              # Pawn either moved up one space, or two spaces and its in the second row, didn't capture anything
+              sh:or(
+                              [
+                                  sh:property [
+                                                  sh:path (:occupiesPosition  :below );
+                                                  sh:equals :occupiesPosition_t1   ;
+                                                  sh:class :tile;
+                                              ];
+                              ]
+                              [
+                                  sh:property [
+                                                  sh:path :occupiesPosition ;
+                                                  sh:property [
+                                                              sh:path :row;
+                                                              sh:hasValue "7";
+                                                          ]
+                                              ];
+                                  sh:property [
+                                                  sh:path (:occupiesPosition :below :below );
+                                                  sh:equals :occupiesPosition_t1   ;
+                                                  sh:class :tile;
+                                              ];
+                              ]
+
+                          );
+              # Pawn did not capture any piece
+              sh:property [
+                              sh:path :occupiesPosition_t1   ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition ];
+                                          sh:maxCount 0;
+                                      ]
+                          ];
+          ]
+          [
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :black ;
+                          ];
+              # Option 3: Pawn has moved one space in front diagonally and captured a piece
+              sh:or(
+                              [
+                                  sh:property [
+                                                  sh:path (:occupiesPosition  :br );
+                                                  sh:class :tile;
+                                                  sh:equals :occupiesPosition_t1 ;
+                                              ];
+                              ]
+                              [
+                                  sh:property [
+                                                  sh:path (:occupiesPosition  :bl );
+                                                  sh:class :tile;
+                                                  sh:equals :occupiesPosition_t1 ;
+                                              ];
+                              ]
+                          );
+              sh:property [
+                              sh:path :occupiesPosition_t1 ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition ];
+                                          sh:minCount 1;
+                                          sh:property [
+                                                      sh:path :occupiesPosition_t1 ;
+                                                      sh:hasValue :out;]
+                                      ]
+                          ]
+          ]
           [
               # Option 4: Pawn is captured
               sh:node shape:hasBeenCaptured ;
           ]
       )
 .
+
 
 # Knight move validation
 # Option 1: Move tl, then above or left

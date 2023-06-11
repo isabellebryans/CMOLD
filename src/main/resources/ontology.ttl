@@ -35,6 +35,10 @@
 :out a owl:Class ;
       rdfs:subClassOf :position .
 
+:row a owl:ObjectProperty .
+:column a owl:ObjectProperty .
+:colNo a owl:ObjectProperty .
+
 
 :ChessPiece a owl:Class .
 
