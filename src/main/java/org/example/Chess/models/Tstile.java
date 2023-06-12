@@ -5,24 +5,24 @@ import org.apache.jena.riot.Lang;
 import org.example.Chess.utils.SHACLValidation;
 import org.example.Chess.utils.loadData;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class TS {
+public class Tstile {
     private static Graph setDataGraph() throws IOException {
 
-        return loadData.initAndLoadModelFromResource("TS/boardStatusT1.ttl", Lang.TURTLE)
+        return loadData.initAndLoadModelFromResource("Tstile/move_t1.ttl", Lang.TURTLE)
                 .union(loadData.initAndLoadModelFromResource("chessBoardStructure.ttl", Lang.TURTLE))
-                .union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
+                //.union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
                 .union(loadData.initAndLoadModelFromResource("piecesInfo.ttl", Lang.TURTLE))
                 .getGraph();
     }
     private static Graph setShapesGraph() throws IOException {
-
-        return loadData.initAndLoadModelFromResource("shapes/TS_shapes/TS_shapes_everything.ttl", Lang.TURTLE).getGraph();
+        Graph shapesGraph_everything = loadData.initAndLoadModelFromResource("shapes/Tstile_shapes/Tstile_shapes_everything.ttl", Lang.TURTLE).getGraph();
+        Graph shapesGraph_noStatus = loadData.initAndLoadModelFromResource("shapes/Tstile_shapes/Tstile_shapes_noStatus.ttl", Lang.TURTLE).getGraph();
+        return shapesGraph_noStatus;
     }
-    public static void handle_TS_validation() throws IOException {
-        System.out.println("Validating on Time Series Model");
+    public static void handle_TT_validation() throws IOException {
+        System.out.println("Validating on Turn Table Model");
         Graph dataGraph = setDataGraph();
         Graph shapesGraph = setShapesGraph();
 

@@ -8,9 +8,9 @@
 
 
 # To do:
-# - can't capture king
+# - can't capture king -> done
 # Piece promotion
-# captured piece
+# captured piece -> done
 # if piece is captured, must be other colour to capturer (need sparql)
 
 # Knowing
@@ -24,7 +24,7 @@
 # find out what was moved
 # General move
 # the piece moved must adhere to exactly one of the piece move shapes
-:GeneralMoveShape
+shape:GeneralMoveShape
     a sh:NodeShape ;
     sh:targetSubjectsOf :occupiesPosition_t1;
     sh:message "Invalid move";
@@ -175,6 +175,7 @@ shape:KnightMove
 shape:PawnMoveWhite
     a sh:NodeShape ;
     sh:class :Pawn;
+    sh:node shape:PawnPromotion ;
     sh:property [
           sh:path :hasColour ;
           sh:hasValue :white ;
@@ -516,7 +517,7 @@ shape:MoveDiagonal
                     :colNo ?col2 .
 
 
-            FILTER ((xs:integer(?row1) - xs:integer(?row2)) != (xs:integer(?col1) - xs:integer(?col2)))
+            FILTER (((xs:integer(?row1) - xs:integer(?row2)) != (xs:integer(?col1) - xs:integer(?col2))) && ((xs:integer(?row2) - xs:integer(?row1)) != (xs:integer(?col1) - xs:integer(?col2))))
         }
     """ ];
     sh:sparql [
@@ -600,8 +601,11 @@ shape:MoveDiagonal
                   }
             """ ].
 
+
+
 shape:hasBeenCaptured
     a sh:NodeShape ;
+    sh:node shape:CaptureOtherColour ;
     sh:property [
                 sh:path :occupiesPosition_t1 ;
                 sh:hasValue :out;
@@ -614,9 +618,112 @@ shape:hasBeenCaptured
                             ];
                 ].
 
-# Piece can either have captured a piece or not
-# NOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+shape:PawnPromotion
+    a sh:NodeShape ;
+    sh:or(
+          [
+              # Black pawn
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :black ;
+                          ];
+              sh:or(
+                              [
+                                  sh:property [
+                                                  sh:path (:occupiesPosition_t1 :row );
+                                                  sh:hasValue "1";
+                                              ];
+                                  sh:or(
+                                                  [ sh:class :Queen ]
+                                                  [ sh:class :Bishop ]
+                                                  [ sh:class :Rook ]
+                                                  [ sh:class :Knight ]
+                                              )
+                              ]
+                              [
+                                  sh:not[
+                                            sh:property [
+                                                            sh:path (:occupiesPosition_t1 :row );
+                                                            sh:hasValue "1";
+                                                        ]
+                                        ]
+                              ]
+                          )
+          ]
+          [
+              # White pawn
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :white ;
+                          ];
+              sh:or(
+                              [
+                                  sh:property [
+                                                  sh:path (:occupiesPosition_t1 :row );
+                                                  sh:hasValue "8";
+                                              ];
+                                  sh:or(
+                                                  [ sh:class :Queen ]
+                                                  [ sh:class :Bishop ]
+                                                  [ sh:class :Rook ]
+                                                  [ sh:class :Knight ]
+                                              )
+                              ]
+                              [
+                                  sh:not[
+                                            sh:property [
+                                                            sh:path (:occupiesPosition_t1 :row );
+                                                            sh:hasValue "8";
+                                                        ]
+                                        ]
+                              ]
+                          )
+          ]
+      ).
 
+shape:CaptureOtherColour
+    a sh:NodeShape ;
+    sh:or (
+          [
+              # white can only capture black
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :white;
+                          ];
+              sh:property [
+                              sh:path :occupiesPosition_t0 ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition_t1 ];
+                                          sh:property [
+                                                      sh:path :hasColour ;
+                                                      sh:hasValue :black;
+                                                  ]
+                                      ]
+                          ];
+          ]
+          [
+              # black can only capture white
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :black;
+                          ];
+              sh:property [
+                              sh:path :occupiesPosition_t0 ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition_t1 ];
+                                          sh:property [
+                                                      sh:path :hasColour ;
+                                                      sh:hasValue :white;
+                                                  ]
+                                      ]
+                          ];
+          ]
+
+      ).
+
+
+
+# Piece can either have captured a piece or not
 shape:CapturedPiece
     a sh:PropertyShape ;
     sh:path :occupiesPosition_t1 ;

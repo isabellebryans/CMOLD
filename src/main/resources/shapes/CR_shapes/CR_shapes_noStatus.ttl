@@ -1,0 +1,98 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/CR-shapes/>.
+
+
+# Piece on tile or out
+shape:pieceInPosition
+    a sh:NodeShape ;
+    sh:targetClass :ChessPiece ;
+    sh:message "Piece in nonexistent position";
+    sh:property [
+                    sh:path :occupiesPosition_t1 ;
+                    sh:class :tile;
+                ].
+
+# Pawn must not be at either end of board
+# It can't be on its own end, can't move backwards
+# If it is at opposite end, then it is promoted
+shape:PawnAtEnds
+    a sh:NodeShape ;
+    sh:targetClass :Pawn;
+    sh:or(
+             [
+                     # Black pawn
+                 sh:property [
+                                 sh:path :hasColour ;
+                                 sh:hasValue :black ;
+                             ];
+                 sh:not[
+                                 sh:message "Pawn is at the its own end of the board";
+                                 sh:property [
+                                                sh:path (:occupiesPosition_t1 :row );
+                                                sh:hasValue "8";
+                                            ]
+                             ];
+                 sh:or(
+                                 [
+                                     sh:property [
+                                                     sh:path (:occupiesPosition_t1 :row );
+                                                     sh:hasValue "1";
+                                                 ];
+                                     sh:or(
+                                                     [ sh:class :Queen ]
+                                                     [ sh:class :Bishop ]
+                                                     [ sh:class :Rook ]
+                                                     [ sh:class :Knight ]
+                                                 )
+                                 ]
+                                 [
+                                     sh:not[
+                                               sh:property [
+                                                               sh:path (:occupiesPosition_t1 :row );
+                                                               sh:hasValue "1";
+                                                           ]
+                                           ]
+                                 ]
+                             )
+             ]
+            [
+                    # White pawn
+                sh:property [
+                                sh:path :hasColour ;
+                                sh:hasValue :white ;
+                            ];
+                sh:not[
+                          sh:message "Pawn is at the its own end of the board";
+                          sh:property [
+                                         sh:path (:occupiesPosition_t1 :row );
+                                         sh:hasValue "1";
+                                     ]
+                      ];
+                sh:or(
+                         [
+                             sh:property [
+                                             sh:path (:occupiesPosition_t1 :row );
+                                             sh:hasValue "8";
+                                         ];
+                             sh:or(
+                                             [ sh:class :Queen ]
+                                             [ sh:class :Bishop ]
+                                             [ sh:class :Rook ]
+                                             [ sh:class :Knight ]
+                                         )
+                         ]
+                         [
+                             sh:not[
+                                       sh:property [
+                                                       sh:path (:occupiesPosition_t1 :row );
+                                                       sh:hasValue "8";
+                                                   ]
+                                   ]
+                         ]
+                     )
+            ]
+         ).

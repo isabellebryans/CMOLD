@@ -5,6 +5,8 @@
 @prefix shape: <http://example.org/chess/shapes/>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 
+# To implement :
+# - pan can't be at the oppoite lat ro
 
 shape:atMostOne
     a sh:NodeShape ;
@@ -53,3 +55,27 @@ shape:pieceInPosition
                         [ sh:hasValue :out; ]
                      )
                 ].
+
+# Pawn must not be at either end of board
+# It can't be on its own end, can't move backwards
+# It can't be on opposite end, then it is promoted
+shape:PawnAtEnd
+    a sh:NodeShape ;
+    sh:targetClass :Pawn;
+    sh:message "Pawn is at the end of the board";
+    sh:not[
+            sh:or(
+                    [
+                        sh:property [
+                                       sh:path (:occupiesPosition :row );
+                                        sh:hasValue "8";
+                                   ]
+                    ]
+                    [
+                        sh:property [
+                                        sh:path (:occupiesPosition :row );
+                                        sh:hasValue "1";
+                                    ]
+                    ]
+                 )
+          ].

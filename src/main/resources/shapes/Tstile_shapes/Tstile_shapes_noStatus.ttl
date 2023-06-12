@@ -1,0 +1,522 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/TT-shapes/>.
+
+# ue time erie model
+
+# Can validate:
+# - Queen, King, Bishop, Knight, Rook, King moves and can capture a piece or not
+# - If pawn moves diagonal it has to have captured a piece
+# - Moves to tile if not captured
+
+# Can't validate:
+# - Queen, Bishop, Rook can't overtake another piece
+# - Two kings beside eachother
+# - Only max one piece per tile / If a piece is moved into a tile with another piece in it, that piece must be captured and go out / can't validate that there is no piece in the tile its going into
+# - That the piece moved is moving from the correct position wrt the current board status
+
+shape:QueenShape
+    a sh:NodeShape ;
+    sh:targetClass :Queen;
+    sh:message "Invalid queen move";
+    sh:or(
+            [ sh:node shape:hasBeenCaptured ]
+            [ sh:node shape:MoveStraight ]
+            [ sh:node shape:MoveDiagonal ]
+         ).
+
+shape:BishopShape
+    a sh:NodeShape ;
+    sh:targetClass :Bishop;
+    sh:message "Invalid bishop move";
+    sh:or(
+          [ sh:node shape:hasBeenCaptured ]
+          [ sh:node shape:MoveDiagonal ]
+      ).
+
+shape:RookShape
+    a sh:NodeShape ;
+    sh:targetClass :Rook;
+    sh:message "Invalid rook move";
+    sh:or(
+          [ sh:node shape:hasBeenCaptured ]
+          [ sh:node shape:MoveStraight ]
+      ).
+
+shape:KingShape
+    a sh:NodeShape ;
+    sh:message "Invalid king move";
+    sh:targetClass :King;
+    sh:node shape:MoveAdjacent .
+
+shape:KnightMove
+    a sh:NodeShape ;
+    sh:targetClass :Knight ;
+    sh:message "Invalid knight move";
+    sh:property shape:moveToTile ;
+    sh:or(
+          [
+              sh:property shape:CapturedPiece;
+              sh:or(
+                              [
+                                  sh:path (:occupiesPosition_t0  :tr :above);
+                                  sh:equals :occupiesPosition_t1 ;
+                              ]
+                              [
+                                  sh:path (:occupiesPosition_t0  :tr :right);
+                                  sh:equals :occupiesPosition_t1 ;
+                              ]
+                              [
+                                  sh:path (:occupiesPosition_t0  :tl :above);
+                                  sh:equals :occupiesPosition_t1 ;
+                              ]
+                              [
+                                  sh:path (:occupiesPosition_t0  :tl :left);
+                                  sh:equals :occupiesPosition_t1 ;
+                              ]
+                              [
+                                  sh:path (:occupiesPosition_t0  :bl :below);
+                                  sh:equals :occupiesPosition_t1 ;
+                              ]
+                              [
+                                  sh:path (:occupiesPosition_t0  :bl :left);
+                                  sh:equals :occupiesPosition_t1 ;
+                              ]
+                              [
+                                  sh:path (:occupiesPosition_t0  :br :below);
+                                  sh:equals :occupiesPosition_t1 ;
+                              ]
+                              [
+                                  sh:path (:occupiesPosition_t0  :br :right);
+                                  sh:equals :occupiesPosition_t1 ;
+                              ]
+                          )
+          ]
+          [ sh:node shape:hasBeenCaptured ]
+      ).
+
+shape:PawnMoveShape
+     a sh:NodeShape ;
+        sh:targetClass :Pawn ;
+        sh:message "Invalid Pawn move";
+        sh:or(
+                [ sh:node shape:hasBeenCaptured ]
+               # black pan
+               [
+                   sh:property [
+                                   sh:path :hasColour ;
+                                   sh:hasValue :black ;
+                               ];
+                   sh:or(
+                            [
+                                # Pawn either moved up one space, or two spaces and its in the second row, didn't capture anything
+                                sh:or(
+                                         [
+                                             sh:property [
+                                                             sh:path (:occupiesPosition_t0  :below );
+                                                             sh:equals :occupiesPosition_t1  ;
+                                                             sh:class :tile;
+                                                         ];
+                                         ]
+                                         [
+                                             sh:property [
+                                                             sh:path :occupiesPosition_t0 ;
+                                                             sh:property [
+                                                                         sh:path :row;
+                                                                         sh:hasValue "7";
+                                                                     ]
+                                                         ];
+                                             sh:property [
+                                                             sh:path (:occupiesPosition_t0 :below :below );
+                                                             sh:equals :occupiesPosition_t1  ;
+                                                             sh:class :tile;
+                                                         ];
+                                         ]
+
+                                     );
+                                # Pawn did not capture any piece
+                                sh:property [
+                                         sh:path :occupiesPosition_t1  ;
+                                         sh:property [
+                                                     sh:path [sh:inversePath :occupiesPosition_t0 ];
+                                                     sh:maxCount 0;
+                                                 ]
+                                     ];
+                            ]
+                            [
+                                # Pawn moved diagonal, and captured piece
+                                sh:or(
+                                         [
+                                             sh:property [
+                                                             sh:path (:occupiesPosition_t0  :br );
+                                                             sh:class :tile;
+                                                             sh:equals :occupiesPosition_t1 ;
+                                                         ];
+                                         ]
+                                         [
+                                             sh:property [
+                                                             sh:path (:occupiesPosition_t0  :bl );
+                                                             sh:class :tile;
+                                                             sh:equals :occupiesPosition_t1 ;
+                                                         ];
+                                         ]
+                                     );
+                                sh:property [
+                                         sh:path :occupiesPosition_t1 ;
+                                         sh:property [
+                                                     sh:path [sh:inversePath :occupiesPosition_t0 ];
+                                                     sh:minCount 1;
+                                                 ]
+                                     ]
+                            ]
+                        )
+               ]
+               # hite pan
+               [
+                   sh:property [
+                                   sh:path :hasColour ;
+                                   sh:hasValue :white ;
+                               ];
+                   sh:or(
+                            [
+                                # Pawn either moved up one space, or two spaces and its in the second row, didn't capture anything
+                                sh:or(
+                                         [
+                                             sh:property [
+                                                             sh:path (:occupiesPosition_t0  :above );
+                                                             sh:equals :occupiesPosition_t1  ;
+                                                             sh:class :tile;
+                                                         ];
+                                         ]
+                                         [
+                                             sh:property [
+                                                             sh:path :occupiesPosition_t0 ;
+                                                             sh:property [
+                                                                         sh:path :row;
+                                                                         sh:hasValue "2";
+                                                                     ]
+                                                         ];
+                                             sh:property [
+                                                             sh:path (:occupiesPosition_t0 :above :above );
+                                                             sh:equals :occupiesPosition_t1  ;
+                                                             sh:class :tile;
+                                                         ];
+                                         ]
+
+                                     );
+                                # Pawn did not capture any piece
+                                sh:property [
+                                         sh:path :occupiesPosition_t1  ;
+                                         sh:property [
+                                                     sh:path [sh:inversePath :occupiesPosition_t0 ];
+                                                     sh:maxCount 0;
+                                                 ]
+                                     ];
+                            ]
+                            [
+                                # Pawn moved diagonal, and captured piece
+                                sh:or(
+                                         [
+                                             sh:property [
+                                                             sh:path (:occupiesPosition_t0  :tr );
+                                                             sh:class :tile;
+                                                             sh:equals :occupiesPosition_t1 ;
+                                                         ];
+                                         ]
+                                         [
+                                             sh:property [
+                                                             sh:path (:occupiesPosition_t0  :tl );
+                                                             sh:class :tile;
+                                                             sh:equals :occupiesPosition_t1 ;
+                                                         ];
+                                         ]
+                                     );
+                                sh:property [
+                                         sh:path :occupiesPosition_t1 ;
+                                         sh:property [
+                                                     sh:path [sh:inversePath :occupiesPosition_t0 ];
+                                                     sh:minCount 1;
+                                                 ]
+                                     ]
+                            ])
+               ]
+             ).
+
+shape:MoveAdjacent
+    a sh:NodeShape ;
+    sh:property shape:CapturedPiece ;
+    sh:property shape:moveToTile ;
+    sh:or(
+             [
+                 sh:path (:occupiesPosition_t0 :above );
+                 sh:equals :occupiesPosition_t1;
+             ]
+             [
+                 sh:path (:occupiesPosition_t0 :below );
+                 sh:equals :occupiesPosition_t1;
+             ]
+             [
+                 sh:path (:occupiesPosition_t0 :left );
+                 sh:equals :occupiesPosition_t1;
+             ]
+             [
+                 sh:path (:occupiesPosition_t0 :right );
+                 sh:equals :occupiesPosition_t1;
+             ]
+             [
+                 sh:path (:occupiesPosition_t0 :tl );
+                 sh:equals :occupiesPosition_t1;
+             ]
+             [
+                 sh:path (:occupiesPosition_t0 :tr );
+                 sh:equals :occupiesPosition_t1;
+             ]
+             [
+                 sh:path (:occupiesPosition_t0 :bl );
+                 sh:equals :occupiesPosition_t1;
+             ]
+             [
+                 sh:path (:occupiesPosition_t0 :br );
+                 sh:equals :occupiesPosition_t1;
+             ]
+         ).
+
+shape:MoveStraight
+    a sh:NodeShape ;
+    sh:property shape:moveToTile ;
+    sh:property shape:CapturedPiece;
+    sh:sparql [
+                  a sh:SPARQLConstraint ;
+                  sh:message  "Invalid move: not on same row." ;
+                  sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                             sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                                sh:declare [ sh:prefix "rdf" ;
+                                             sh:namespace
+                                                       "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                  sh:select   """
+      SELECT $this
+      WHERE {
+        $this :occupiesPosition_t0 ?current ;
+              :occupiesPosition_t1 ?target .
+        ?current :row ?row1.
+        ?current :column ?col1.
+        ?target :row ?row2.
+        ?target :column ?col2.
+
+        FILTER (?row1 != ?row2 && ?col1 != ?col2)
+      }
+    """ ].
+
+
+shape:MoveDiagonal
+    a sh:NodeShape ;
+    sh:property shape:moveToTile ;
+    sh:property shape:CapturedPiece;
+    sh:sparql [
+                  a sh:SPARQLConstraint ;
+                  sh:message  "Invalid move: not on same row." ;
+                  sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                             sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                                sh:declare [ sh:prefix "rdf" ;
+                                             sh:namespace
+                                                       "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ];
+                                sh:declare [ sh:prefix "xs" ;
+                                             sh:namespace
+                                                       "http://www.w3.org/2001/XMLSchema#"^^xs:anyURI ; ]] ;
+                  sh:select """
+        SELECT $this
+        WHERE {
+            $this :occupiesPosition_t0 ?current ;
+                  :occupiesPosition_t1 ?target .
+            ?current :row ?row1 ;
+                     :colNo ?col1 .
+            ?target :row ?row2 ;
+                    :colNo ?col2 .
+
+
+            FILTER (((xs:integer(?row1) - xs:integer(?row2)) != (xs:integer(?col1) - xs:integer(?col2))) && ((xs:integer(?row2) - xs:integer(?row1)) != (xs:integer(?col1) - xs:integer(?col2))))
+        }
+    """ ].
+
+# Piece can either have captured a piece or not
+shape:CapturedPiece
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t1 ;
+    sh:or(
+          [
+              sh:property [
+                              # There was a piece captured
+                              sh:path[sh:inversePath :occupiesPosition_t0];
+                              sh:minCount  1;
+
+                              sh:property [
+                                         sh:path :occupiesPosition_t1 ;
+                                         sh:hasValue :out;
+                                         sh:minCount 1;
+                                     ]]
+          ]
+          [
+              sh:property [
+                              # There was no piece captured
+                              sh:path[sh:inversePath :occupiesPosition_t0];
+                              sh:maxCount 0;
+                          ]
+          ]
+      ).
+
+# Pawn must not be at either end of board
+# It can't be on its own end, can't move backwards
+# If it is at opposite end, then it is promoted
+shape:PawnAtEnds
+    a sh:NodeShape ;
+    sh:targetClass :Pawn;
+    sh:or(
+          [
+              # Black pawn
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :black ;
+                          ];
+              sh:not[
+                              sh:message "Pawn is at the its own end of the board";
+                              sh:property [
+                                             sh:path (:occupiesPosition_t1 :row );
+                                             sh:hasValue "8";
+                                         ]
+                          ];
+              sh:or(
+                              [
+                                  sh:property [
+                                                  sh:path (:occupiesPosition_t1 :row );
+                                                  sh:hasValue "1";
+                                              ];
+                                  sh:or(
+                                                  [ sh:class :Queen ]
+                                                  [ sh:class :Bishop ]
+                                                  [ sh:class :Rook ]
+                                                  [ sh:class :Knight ]
+                                              )
+                              ]
+                              [
+                                  sh:not[
+                                            sh:property [
+                                                            sh:path (:occupiesPosition_t1 :row );
+                                                            sh:hasValue "1";
+                                                        ]
+                                        ]
+                              ]
+                          )
+          ]
+          [
+              # White pawn
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :white ;
+                          ];
+              sh:not[
+                              sh:message "Pawn is at the its own end of the board";
+                              sh:property [
+                                             sh:path (:occupiesPosition_t1 :row );
+                                             sh:hasValue "1";
+                                         ]
+                          ];
+              sh:or(
+                              [
+                                  sh:property [
+                                                  sh:path (:occupiesPosition_t1 :row );
+                                                  sh:hasValue "8";
+                                              ];
+                                  sh:or(
+                                                  [ sh:class :Queen ]
+                                                  [ sh:class :Bishop ]
+                                                  [ sh:class :Rook ]
+                                                  [ sh:class :Knight ]
+                                              )
+                              ]
+                              [
+                                  sh:not[
+                                            sh:property [
+                                                            sh:path (:occupiesPosition_t1 :row );
+                                                            sh:hasValue "8";
+                                                        ]
+                                        ]
+                              ]
+                          )
+          ]
+      ).
+
+shape:moveToTile
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t1;
+    sh:class :tile.
+
+
+shape:CaptureOtherColour
+    a sh:NodeShape ;
+    sh:or (
+            [
+                    # white can only capture black
+                    sh:property [
+                                sh:path :hasColour ;
+                                sh:hasValue :white;
+                                ];
+                    sh:property [
+                                sh:path :occupiesPosition_t0 ;
+                                sh:property [
+                                            sh:path [sh:inversePath :occupiesPosition_t1 ];
+                                            sh:property [
+                                                        sh:path :hasColour ;
+                                                        sh:hasValue :black;
+                                                        ]
+                                            ]
+                                ];
+            ]
+            [
+                    # black can only capture white
+                sh:property [
+                                sh:path :hasColour ;
+                                sh:hasValue :black;
+                            ];
+                sh:property [
+                                sh:path :occupiesPosition_t0 ;
+                                sh:property [
+                                            sh:path [sh:inversePath :occupiesPosition_t1 ];
+                                            sh:property [
+                                                        sh:path :hasColour ;
+                                                        sh:hasValue :white;
+                                                    ]
+                                        ]
+                            ];
+            ]
+
+          ).
+
+
+
+shape:hasBeenCaptured
+    a sh:NodeShape ;
+    sh:property [
+          sh:path :occupiesPosition_t1 ;
+          sh:hasValue :out;
+      ];
+    sh:node shape:CaptureOtherColour ;
+    sh:property [
+          sh:path :occupiesPosition_t0 ;
+          sh:property [
+                      sh:path [sh:inversePath :occupiesPosition_t1 ];
+                      sh:minCount 1;
+                  ];
+      ].
+
+# If triple added, must have a matching deleted triple
+# if a piece is moved, it must have a triple with previous position (to delete) and new position (to add)
+shape:tripleHasPair
+    a sh:NodeShape  ;
+    sh:targetSubjectsOf :occupiesPosition_t1  ;
+    sh:property [
+                    sh:path :occupiesPosition_t0 ;
+                    sh:minCount 1;
+                ].

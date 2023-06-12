@@ -3,5 +3,17 @@
 @prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/chess/>.
 
-:P9 :occupiesPosition_t1 :b3.
+:P2  :occupiesPosition_t0 :b2 .
+:P2  :occupiesPosition_t1 :b7 .
+
+:P32 :occupiesPosition_t0 :b7.
+:P32 :occupiesPosition_t1 :out.
+
+
+
+
+
+
+
+
 

@@ -13,6 +13,9 @@
 # - Pawn can promote into a different piece when it reaches other side
 # - The poition it move to mut be a tile if not captured -> done
 
+# to do :
+# - captureOtherColour (need to do for ts as well)
+
 ## Extends shape:atMostOne for :occupiesPosition_t1
 shape:atMostOne_t1
     a sh:NodeShape ;
@@ -80,6 +83,7 @@ shape:PawnMove
                               sh:path :hasColour ;
                               sh:hasValue :white ;
                           ];
+              sh:node shape:CaptureOtherColour;
               # Option 3: Pawn has moved one space in front diagonally and captured a piece
               sh:or(
                        [
@@ -149,6 +153,7 @@ shape:PawnMove
                           ];
           ]
           [
+              sh:node shape:CaptureOtherColour;
               sh:property [
                               sh:path :hasColour ;
                               sh:hasValue :black ;
@@ -238,6 +243,7 @@ shape:KnightMove
                        ]
                    );
                   sh:property shape:CapturedPiece ;
+              sh:node shape:CaptureOtherColour;
               sh:property shape:moveToTile;
           ]
           [ sh:node shape:hasBeenCaptured; ]
@@ -265,6 +271,7 @@ shape:KingMove
               # Has the option to have captured a piece or not
               sh:property shape:CapturedPiece ;
               sh:property shape:moveToTile;
+              sh:node shape:CaptureOtherColour;
           ]
       ).
 
@@ -285,6 +292,7 @@ shape:RookShape
                 );
                 sh:property shape:CapturedPiece ;
                 sh:property shape:moveToTile;
+                sh:node shape:CaptureOtherColour;
             ]
       ).
 
@@ -304,6 +312,7 @@ shape:BishopShape
                    );
               sh:property shape:CapturedPiece ;
               sh:property shape:moveToTile;
+              sh:node shape:CaptureOtherColour;
           ]
       ).
 
@@ -326,6 +335,7 @@ shape:QueenShape
                    );
               sh:property shape:CapturedPiece ;
               sh:property shape:moveToTile;
+              sh:node shape:CaptureOtherColour;
           ]
       ).
 
@@ -607,11 +617,118 @@ shape:MoveAdjDiagonal
              ]
          ) .
 
+# Piece promotion
+# If pawn moved to opposite end of board, it must be promoted
+# If it is at opposite end, then it is promoted
+shape:PawnAtEnds
+    a sh:NodeShape ;
+    sh:or(
+          [
+              # Black pawn
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :black ;
+                          ];
+              sh:or(
+                              [
+                                  sh:property [
+                                                  sh:path (:occupiesPosition_t1 :row );
+                                                  sh:hasValue "1";
+                                              ];
+                                  sh:or(
+                                                  [ sh:class :Queen ]
+                                                  [ sh:class :Bishop ]
+                                                  [ sh:class :Rook ]
+                                                  [ sh:class :Knight ]
+                                              )
+                              ]
+                              [
+                                  sh:not[
+                                            sh:property [
+                                                            sh:path (:occupiesPosition_t1 :row );
+                                                            sh:hasValue "1";
+                                                        ]
+                                        ]
+                              ]
+                          )
+          ]
+          [
+              # White pawn
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :white ;
+                          ];
+              sh:or(
+                              [
+                                  sh:property [
+                                                  sh:path (:occupiesPosition_t1 :row );
+                                                  sh:hasValue "8";
+                                              ];
+                                  sh:or(
+                                                  [ sh:class :Queen ]
+                                                  [ sh:class :Bishop ]
+                                                  [ sh:class :Rook ]
+                                                  [ sh:class :Knight ]
+                                              )
+                              ]
+                              [
+                                  sh:not[
+                                            sh:property [
+                                                            sh:path (:occupiesPosition_t1 :row );
+                                                            sh:hasValue "8";
+                                                        ]
+                                        ]
+                              ]
+                          )
+          ]
+      ).
+
 
 shape:PieceNotMoved
     a sh:PropertyShape ;
     sh:path :occupiesPosition ;
     sh:equals :occupiesPosition_t1 .
+
+# if it moves and there is something there before, it must be the opposite colour
+shape:CaptureOtherColour
+    a sh:NodeShape ;
+    sh:or (
+          [
+              # white can only capture black
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :white;
+                          ];
+              sh:property [
+                              sh:path :occupiesPosition_t1 ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition ];
+                                          sh:property [
+                                                      sh:path :hasColour ;
+                                                      sh:hasValue :black;
+                                                  ]
+                                      ]
+                          ];
+          ]
+          [
+              # black can only capture white
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :black;
+                          ];
+              sh:property [
+                              sh:path :occupiesPosition_t1 ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition ];
+                                          sh:property [
+                                                      sh:path :hasColour ;
+                                                      sh:hasValue :white;
+                                                  ]
+                                      ]
+                          ];
+          ]
+
+      ).
 
 
 # Piece can either have captured a piece or not

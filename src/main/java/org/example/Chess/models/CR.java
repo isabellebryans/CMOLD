@@ -17,8 +17,9 @@ public class CR {
                 .getGraph();
     }
     private static Graph setShapesGraph() throws IOException {
-
-        return loadData.initAndLoadModelFromResource("shapes/CR_shapes/CR_shapes_everything.ttl", Lang.TURTLE).getGraph();
+        Graph shapesGraph_everything = loadData.initAndLoadModelFromResource("shapes/CR_shapes/CR_shapes_everything.ttl", Lang.TURTLE).getGraph();
+        Graph shapesGraph_noStatus = loadData.initAndLoadModelFromResource("shapes/CR_shapes/CR_shapes_noStatus.ttl", Lang.TURTLE).getGraph();;
+        return shapesGraph_everything;
     }
     public static void handle_CR_validation() throws IOException {
         System.out.println("Validating on Cash Registry Model");
