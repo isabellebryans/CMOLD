@@ -11,6 +11,7 @@
 # - Only one piece moved at a time ( or two if one was captured ) -> can't do this
 # - Pawn can move more than one space first move
 # - Pawn can promote into a different piece when it reaches other side
+# - The poition it move to mut be a tile if not captured
 
 ## Extends shape:atMostOne for :occupiesPosition_t1
 shape:atMostOne_t1
@@ -236,7 +237,7 @@ shape:KnightMove
                            sh:equals :occupiesPosition_t1 ;
                        ]
                    );
-                  sh:node shape:CapturedPiece ;
+                  sh:property shape:CapturedPiece ;
           ]
           [ sh:node shape:hasBeenCaptured; ]
       ).
@@ -261,7 +262,7 @@ shape:KingMove
                       [ sh:node shape:MoveAdjDiagonal ]
                    );
               # Has the option to have captured a piece or not
-              sh:node shape:CapturedPiece ;
+              sh:property shape:CapturedPiece ;
           ]
       ).
 
@@ -280,7 +281,7 @@ shape:RookShape
                     [ sh:node shape:MoveSideways ]
                     [ sh:node shape:MoveUpDown ]
                 );
-                sh:node shape:CapturedPiece ;
+                sh:property shape:CapturedPiece ;
             ]
       ).
 
@@ -298,7 +299,7 @@ shape:BishopShape
                      [ sh:node shape:MoveAdjDiagonal  ]
                      [ sh:node shape:MoveDiagonal ]
                    );
-              sh:node shape:CapturedPiece ;
+              sh:property shape:CapturedPiece ;
           ]
       ).
 
@@ -319,7 +320,7 @@ shape:QueenShape
                        [ sh:node shape:MoveSideways  ]
                        [ sh:node shape:MoveDiagonal ]
                    );
-              sh:node shape:CapturedPiece ;
+              sh:property shape:CapturedPiece ;
           ]
       ).
 
@@ -607,28 +608,33 @@ shape:PieceNotMoved
     sh:path :occupiesPosition ;
     sh:equals :occupiesPosition_t1 .
 
+
 # Piece can either have captured a piece or not
 shape:CapturedPiece
-    a sh:NodeShape  ;
-    sh:or(
-             [
-                 # There was no piece captured
-                 # This works
-                 sh:path [sh:inversePath :occupiesPosition_t1];
-                 sh:maxCount 0;
-             ]
-             [
-                 # There was a piece captured
-                 # this works
-                 sh:property [
-                                 sh:path[sh:inversePath :occupiesPosition_t1];
-                                 sh:minCount 1;
-                                 sh:property [
-                                            sh:path :occupiesPosition_t1 ;
-                                            sh:hasValue :out;]
-                             ]
-             ]
-         ).
+    a sh:PropertyShape ;
+          sh:path :occupiesPosition_t1 ;
+          sh:or(
+                      [
+                          sh:property [
+                                          # There was a piece captured
+                                          sh:path[sh:inversePath :occupiesPosition];
+                                          sh:minCount  1;
+
+                                          sh:property [
+                                                     sh:path :occupiesPosition_t1 ;
+                                                     sh:hasValue :out;
+                                                     sh:minCount 1;
+                                                 ]]
+                      ]
+                      [
+                          sh:property [
+                                          # There was a piece captured
+                                          sh:path[sh:inversePath :occupiesPosition];
+                                          sh:maxCount 0;
+                                      ]
+                      ]
+                  ).
+
 
 shape:hasBeenCaptured
     a sh:NodeShape ;

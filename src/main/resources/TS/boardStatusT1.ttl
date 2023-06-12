@@ -54,7 +54,7 @@ ns1:P32 ns1:occupiesPosition_t1 ns1:h7 .
 
 ns1:P4 ns1:occupiesPosition_t1 ns1:f1 .
 
-ns1:P5 ns1:occupiesPosition_t1 ns1:c3 .
+ns1:P5 ns1:occupiesPosition_t1 ns1:b1 .
 
 ns1:P6 ns1:occupiesPosition_t1 ns1:g1 .
 
