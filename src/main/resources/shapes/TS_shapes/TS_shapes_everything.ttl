@@ -6,12 +6,12 @@
 @prefix shape: <http://example.org/chess/TS-shapes/>.
 
 # Still to implement:
-# - if white piece captures a piece, it must be black
+# - if white piece captures a piece, it must be black -> can do ith parql
 # - queen, bishop, rook can move as many spaces as long as there are no pieces in the way -> done
-# - Only one piece moved at a time ( or two if one was captured ) -> can't do this
-# - Pawn can move more than one space first move
+# - Only one piece moved at a time ( or two if one was captured ) -> can't do this, not even ith parqql
+# - Pawn can move more than one space first move -> done
 # - Pawn can promote into a different piece when it reaches other side
-# - The poition it move to mut be a tile if not captured
+# - The poition it move to mut be a tile if not captured -> done
 
 ## Extends shape:atMostOne for :occupiesPosition_t1
 shape:atMostOne_t1
@@ -238,6 +238,7 @@ shape:KnightMove
                        ]
                    );
                   sh:property shape:CapturedPiece ;
+              sh:property shape:moveToTile;
           ]
           [ sh:node shape:hasBeenCaptured; ]
       ).
@@ -263,6 +264,7 @@ shape:KingMove
                    );
               # Has the option to have captured a piece or not
               sh:property shape:CapturedPiece ;
+              sh:property shape:moveToTile;
           ]
       ).
 
@@ -282,6 +284,7 @@ shape:RookShape
                     [ sh:node shape:MoveUpDown ]
                 );
                 sh:property shape:CapturedPiece ;
+                sh:property shape:moveToTile;
             ]
       ).
 
@@ -300,6 +303,7 @@ shape:BishopShape
                      [ sh:node shape:MoveDiagonal ]
                    );
               sh:property shape:CapturedPiece ;
+              sh:property shape:moveToTile;
           ]
       ).
 
@@ -321,6 +325,7 @@ shape:QueenShape
                        [ sh:node shape:MoveDiagonal ]
                    );
               sh:property shape:CapturedPiece ;
+              sh:property shape:moveToTile;
           ]
       ).
 
@@ -635,6 +640,10 @@ shape:CapturedPiece
                       ]
                   ).
 
+shape:moveToTile
+    a sh:PropertyShape ;
+        sh:path :occupiesPosition_t1 ;
+        sh:class :tile.
 
 shape:hasBeenCaptured
     a sh:NodeShape ;
