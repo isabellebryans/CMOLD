@@ -1,0 +1,35 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/TT-shapes/>.
+
+shape:StatusShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :occupiesPosition_t1 ;
+    sh:property shape:sameAsBoardStatus ;
+    sh:node shape:notSamePosition ;
+    sh:property shape:tripleHasPair .
+
+# The previous position (ie. triple to delete) is the same position as board status
+shape:sameAsBoardStatus
+    a sh:PropertyShape ;
+    sh:message "Triple to be deleted is not in the board status";
+    sh:path :occupiesPosition_t0 ;
+    sh:equals :occupiesPosition.
+
+shape:notSamePosition
+    a sh:NodeShape ;
+    sh:message "Triple to add can't be the same as triple to be deleted";
+    sh:not[
+          sh:property [
+                          sh:path :occupiesPosition_t0  ;
+                          sh:equals :occupiesPosition_t1  ;
+                      ]
+      ].
+
+shape:tripleHasPair
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t0 ;
+    sh:minCount 1.

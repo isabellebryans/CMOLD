@@ -350,14 +350,13 @@ shape:PieceMoved
           sh:property shape:PieceNotMoved ;
       ].
 
-shape:moveToTile
-    a sh:PropertyShape ;
-    sh:path :occupiesPosition_t1;
-    sh:class :tile.
-
 
 shape:PieceNotMoved
     a sh:PropertyShape ;
     sh:path :occupiesPosition ;
     sh:equals :occupiesPosition_t1 .
 
+shape:moveToTile
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t1;
+    sh:class :tile.
