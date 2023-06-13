@@ -11,7 +11,7 @@ shape:KingNeverOut
     sh:targetClass :King;
     sh:not[
           sh:path :occupiesPosition ;
-            sh:hasValue :out;
+            sh:hasValue :offBoard;
           ].
 
 shape:atMostOne
@@ -22,7 +22,7 @@ shape:atMostOne
           [
               # either it is out
               sh:path :occupiesPosition ;
-              sh:hasValue :out;
+              sh:hasValue :offBoard;
           ]
           [
               # or it is in a position by itself

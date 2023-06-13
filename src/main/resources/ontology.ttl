@@ -33,7 +33,7 @@
 
 :tile a owl:Class ;
       rdfs:subClassOf :position .
-:out a owl:Class ;
+:offBoard a owl:Class ;
       rdfs:subClassOf :position .
 
 :row a owl:ObjectProperty .

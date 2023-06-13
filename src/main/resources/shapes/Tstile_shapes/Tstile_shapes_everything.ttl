@@ -608,7 +608,7 @@ shape:hasBeenCaptured
     sh:node shape:CaptureOtherColour ;
     sh:property [
                 sh:path :occupiesPosition_t1 ;
-                sh:hasValue :out;
+                sh:hasValue :offBoard;
                 ];
     sh:property [
                 sh:path :occupiesPosition_t0 ;
@@ -736,7 +736,7 @@ shape:CapturedPiece
 
                                      sh:property [
                                                 sh:path :occupiesPosition_t1 ;
-                                                sh:hasValue :out;
+                                                sh:hasValue :offBoard;
                                                 sh:minCount 1;
                                             ]]
                  ]

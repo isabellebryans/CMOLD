@@ -380,7 +380,7 @@ shape:hasBeenCaptured
     a sh:NodeShape ;
     sh:property [
           sh:path :occupiesPosition_t1 ;
-          sh:hasValue :out;
+          sh:hasValue :offBoard;
       ];
     sh:property [
           sh:path :occupiesPosition ;
@@ -403,7 +403,7 @@ shape:CapturedPiece
 
                               sh:property [
                                          sh:path :occupiesPosition_t1 ;
-                                         sh:hasValue :out;
+                                         sh:hasValue :offBoard;
                                          sh:minCount 1;
                                      ]]
           ]
@@ -420,7 +420,7 @@ shape:CapturedPiece
 # Done by checking that the number of pieces in "out" is less than 30
 shape:numberOfPieces
     a sh:NodeShape ;
-    sh:targetNode :out;
+    sh:targetNode :offBoard;
     sh:property [
                 sh:path [sh:inversePath :occupiesPosition ];
                 sh:maxCount 29;

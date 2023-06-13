@@ -54,7 +54,7 @@ shape:pieceInPosition
                 sh:path :occupiesPosition ;
                 sh:or(
                         [ sh:class :tile; ]
-                        [ sh:hasValue :out; ]
+                        [ sh:hasValue :offBoard; ]
                      )
                 ].
 

@@ -108,7 +108,7 @@ shape:PawnMove
                                    sh:minCount 1;
                                    sh:property [
                                                sh:path :occupiesPosition_t1 ;
-                                               sh:hasValue :out;]
+                                               sh:hasValue :offBoard;]
                                ]
                    ]
           ]
@@ -182,7 +182,7 @@ shape:PawnMove
                                           sh:minCount 1;
                                           sh:property [
                                                       sh:path :occupiesPosition_t1 ;
-                                                      sh:hasValue :out;]
+                                                      sh:hasValue :offBoard;]
                                       ]
                           ]
           ]
@@ -745,7 +745,7 @@ shape:CapturedPiece
 
                                           sh:property [
                                                      sh:path :occupiesPosition_t1 ;
-                                                     sh:hasValue :out;
+                                                     sh:hasValue :offBoard;
                                                      sh:minCount 1;
                                                  ]]
                       ]
@@ -767,7 +767,7 @@ shape:hasBeenCaptured
     a sh:NodeShape ;
     sh:property [
           sh:path :occupiesPosition_t1 ;
-          sh:hasValue :out;
+          sh:hasValue :offBoard;
       ];
     sh:property [
           sh:path :occupiesPosition ;

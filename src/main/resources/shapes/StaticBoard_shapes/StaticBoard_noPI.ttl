@@ -15,12 +15,12 @@ shape:pieceInPosition
     sh:message "Piece in a non-existing position";
     sh:or(
               [ sh:class :tile; ]
-              [ sh:hasValue :out; ]
+              [ sh:hasValue :offBoard; ]
           ) .
 
 shape:numberOfPieces
     a sh:NodeShape ;
-    sh:targetNode :out;
+    sh:targetNode :offBoard;
     sh:property [
           sh:path [sh:inversePath :occupiesPosition ];
           sh:maxCount 29;
