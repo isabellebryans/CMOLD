@@ -2,6 +2,9 @@ import rdflib
 from rdflib import URIRef, Namespace
 
 g = rdflib.Graph()
+gT1 = rdflib.Graph()
+gT2 = rdflib.Graph()
+gT3 = rdflib.Graph()
 
 ns = Namespace("http://example.org/chess/")
 
@@ -29,6 +32,9 @@ for i in range(16):
         current_position = URIRef(ns[cols[i - 8] + "2"])
 
     g.add((current_piece, ns.occupiesPosition, current_position))
+    gT1.add((current_piece, ns.occupiesPosition_t1, current_position))
+    gT2.add((current_piece, ns.occupiesPosition_t2, current_position))
+    gT3.add((current_piece, ns.occupiesPosition_t3, current_position))
 
 for i in range(16):
     current_piece = URIRef(ns["P" + str(i + 17)])
@@ -52,6 +58,12 @@ for i in range(16):
         current_position = URIRef(ns[cols[i - 8] + "7"])
 
     g.add((current_piece, ns.occupiesPosition, current_position))
+    gT1.add((current_piece, ns.occupiesPosition_t1, current_position))
+    gT2.add((current_piece, ns.occupiesPosition_t2, current_position))
+    gT3.add((current_piece, ns.occupiesPosition_t3, current_position))
 
 print(g.serialize(format="turtle"))
 g.serialize(destination="../boardStatus.ttl")
+gT1.serialize(destination="../TSeries/boardStatusT1.ttl")
+gT2.serialize(destination="../TSeries/boardStatusT2.ttl")
+gT3.serialize(destination="../TSeries/boardStatusT3.ttl")

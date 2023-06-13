@@ -23,8 +23,11 @@
 
 
 :occupiesPosition a owl:ObjectProperty .
-:occupiesPosition_t1 a owl:ObjectProperty .
 :occupiesPosition_t0 a owl:ObjectProperty .
+:occupiesPosition_t1 a owl:ObjectProperty .
+:occupiesPosition_t2 a owl:ObjectProperty .
+:occupiesPosition_t3 a owl:ObjectProperty .
+
 
 :movesTo a owl:ObjectProperty .
 

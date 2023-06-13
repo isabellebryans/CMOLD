@@ -15,11 +15,11 @@ public class StaticBoard {
                 //.union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
                 .getGraph();
 
-        Graph shapesGraph = loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/oneBoardShapes.ttl", Lang.TURTLE)
+        Graph shapesGraph = loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/StaticBoard_BS_PI_status.ttl", Lang.TURTLE)
                 .union(loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/NumberPiecesShapes.ttl", Lang.TURTLE))
                 .getGraph();
 
-        Graph shapesGraph_noBS = loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/StaticBoard_noBS.ttl", Lang.TURTLE)
+        Graph shapesGraph_noBS = loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/StaticBoard_status_PI.ttl", Lang.TURTLE)
                 .union(loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/NumberPiecesShapes.ttl", Lang.TURTLE))
                 .getGraph();
 

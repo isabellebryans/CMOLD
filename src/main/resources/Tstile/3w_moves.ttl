@@ -1,0 +1,13 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/chess/>.
+
+:P12 :occupiesPosition_t0 :d2.
+:P12 :occupiesPosition_t1 :d4.
+
+:P28 :occupiesPosition_t1 :d7.
+:P28 :occupiesPosition_t2 :d5.
+
+:P3 :occupiesPosition_t2 :c1.
+:P3 :occupiesPosition_t3 :f4.

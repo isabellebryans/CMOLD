@@ -19,10 +19,10 @@ public class Main {
         //TSeries.handle_TS_validation();
 
         // Run validation on Cash Registry model
-        //CR.handle_CR_validation();
+        CR.handle_CR_validation();
 
         // Run validation on Turn Table model
-        Tstile.handle_TT_validation();
+        //Tstile.handle_TT_validation();
 
 
     }
