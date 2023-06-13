@@ -500,7 +500,8 @@ shape:MoveDiagonal
                     :colNo ?col2 .
 
 
-            FILTER ((xs:integer(?row1) - xs:integer(?row2)) != (xs:integer(?col1) - xs:integer(?col2)))
+            FILTER (((xs:integer(?row1) - xs:integer(?row2)) != (xs:integer(?col1) - xs:integer(?col2))) && ((xs:integer(?row2) - xs:integer(?row1)) != (xs:integer(?col1) - xs:integer(?col2))))
+
         }
     """ ];
     sh:sparql [

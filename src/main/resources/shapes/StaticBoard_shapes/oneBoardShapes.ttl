@@ -20,6 +20,8 @@ shape:atMostOne
 
 
 
+
+
 # Kings always on a tile
 # Kings not beside eachother
 shape:KingOnBoard

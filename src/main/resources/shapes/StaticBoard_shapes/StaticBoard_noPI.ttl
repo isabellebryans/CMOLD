@@ -1,0 +1,27 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/shapes/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+
+
+
+## Every piece is on a tile or out
+# Piece must be in a position that exists
+shape:pieceInPosition
+    a sh:NodeShape ;
+    sh:targetObjectsOf :occupiesPosition ;
+    sh:message "Piece in a non-existing position";
+    sh:or(
+              [ sh:class :tile; ]
+              [ sh:hasValue :out; ]
+          ) .
+
+shape:numberOfPieces
+    a sh:NodeShape ;
+    sh:targetNode :out;
+    sh:property [
+          sh:path [sh:inversePath :occupiesPosition ];
+          sh:maxCount 29;
+      ].

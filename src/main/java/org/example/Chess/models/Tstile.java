@@ -12,14 +12,16 @@ public class Tstile {
 
         return loadData.initAndLoadModelFromResource("Tstile/move_t1.ttl", Lang.TURTLE)
                 .union(loadData.initAndLoadModelFromResource("chessBoardStructure.ttl", Lang.TURTLE))
-                //.union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
-                .union(loadData.initAndLoadModelFromResource("piecesInfo.ttl", Lang.TURTLE))
+                .union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
+                //.union(loadData.initAndLoadModelFromResource("piecesInfo.ttl", Lang.TURTLE))
                 .getGraph();
     }
     private static Graph setShapesGraph() throws IOException {
         Graph shapesGraph_everything = loadData.initAndLoadModelFromResource("shapes/Tstile_shapes/Tstile_shapes_everything.ttl", Lang.TURTLE).getGraph();
         Graph shapesGraph_noStatus = loadData.initAndLoadModelFromResource("shapes/Tstile_shapes/Tstile_shapes_noStatus.ttl", Lang.TURTLE).getGraph();
-        return shapesGraph_noStatus;
+        Graph shapesGraph_noPI = loadData.initAndLoadModelFromResource("shapes/Tstile_shapes/Tstile_shapes_noPI.ttl", Lang.TURTLE).union(loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/StaticBoard_noPI.ttl", Lang.TURTLE)).getGraph();
+
+        return shapesGraph_noPI;
     }
     public static void handle_TT_validation() throws IOException {
         System.out.println("Validating on Turn Table Model");

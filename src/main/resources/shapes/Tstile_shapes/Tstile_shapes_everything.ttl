@@ -400,7 +400,7 @@ shape:MoveUpDown
         $this :occupiesPosition_t0 ?current ;
               :occupiesPosition_t1 ?target .
         ?piece2 rdf:type :ChessPiece.
-        ?piece2 :occupiesPosition_t0 ?tile.
+        ?piece2 :occupiesPosition ?tile.
         ?current :above+ ?intermediate .
         ?intermediate :above* ?target .
         FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
@@ -420,7 +420,7 @@ shape:MoveUpDown
         $this :occupiesPosition_t0 ?current ;
               :occupiesPosition_t1 ?target .
         ?piece2 rdf:type :ChessPiece.
-        ?piece2 :occupiesPosition_t0 ?tile.
+        ?piece2 :occupiesPosition ?tile.
         ?current :below+ ?intermediate .
         ?intermediate :below* ?target .
         FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
@@ -464,7 +464,7 @@ shape:MoveSideways
                     $this :occupiesPosition_t0 ?current ;
                           :occupiesPosition_t1 ?target .
                     ?piece2 rdf:type :ChessPiece.
-                    ?piece2 :occupiesPosition_t0 ?tile.
+                    ?piece2 :occupiesPosition ?tile.
                     ?current :right+ ?intermediate .
                     ?intermediate :right* ?target .
                     FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
@@ -484,7 +484,7 @@ shape:MoveSideways
                     $this :occupiesPosition_t0 ?current ;
                           :occupiesPosition_t1 ?target .
                     ?piece2 rdf:type :ChessPiece.
-                    ?piece2 :occupiesPosition_t0 ?tile.
+                    ?piece2 :occupiesPosition ?tile.
                     ?current :left+ ?intermediate .
                     ?intermediate :left* ?target .
                     FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
@@ -534,7 +534,7 @@ shape:MoveDiagonal
                     $this :occupiesPosition_t0 ?current ;
                           :occupiesPosition_t1 ?target .
                     ?piece2 rdf:type :ChessPiece.
-                    ?piece2 :occupiesPosition_t0 ?tile.
+                    ?piece2 :occupiesPosition ?tile.
                     ?current :tr+ ?intermediate .
                     ?intermediate :tr* ?target .
                     FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
@@ -554,7 +554,7 @@ shape:MoveDiagonal
                     $this :occupiesPosition_t0 ?current ;
                           :occupiesPosition_t1 ?target .
                     ?piece2 rdf:type :ChessPiece.
-                    ?piece2 :occupiesPosition_t0 ?tile.
+                    ?piece2 :occupiesPosition ?tile.
                     ?current :tl+ ?intermediate .
                     ?intermediate :tl* ?target .
                     FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
@@ -574,7 +574,7 @@ shape:MoveDiagonal
                     $this :occupiesPosition_t0 ?current ;
                           :occupiesPosition_t1 ?target .
                     ?piece2 rdf:type :ChessPiece.
-                    ?piece2 :occupiesPosition_t0 ?tile.
+                    ?piece2 :occupiesPosition ?tile.
                     ?current :br+ ?intermediate .
                     ?intermediate :br* ?target .
                     FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
@@ -594,7 +594,7 @@ shape:MoveDiagonal
                     $this :occupiesPosition_t0 ?current ;
                           :occupiesPosition_t1 ?target .
                     ?piece2 rdf:type :ChessPiece.
-                    ?piece2 :occupiesPosition_t0 ?tile.
+                    ?piece2 :occupiesPosition ?tile.
                     ?current :bl+ ?intermediate .
                     ?intermediate :bl* ?target .
                     FILTER ($this != ?piece2 && ?tile = ?intermediate && ?tile != ?target)
