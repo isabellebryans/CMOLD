@@ -1,0 +1,20 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/CR-shapes/>.
+
+# anything that occupies a position is a chesspiece
+shape:chessPiecePosition
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :occupiesPosition_t1 ;
+    sh:class :ChessPiece .
+
+shape:KingNeverCaptured
+    a sh:NodeShape ;
+    sh:targetClass :King;
+    sh:not[
+          sh:path :occupiesPosition_t1 ;
+          sh:hasValue :offBoard ;
+      ].

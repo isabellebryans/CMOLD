@@ -1,0 +1,32 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/chess/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix shape: <http://example.org/chess/TS-shapes/>.
+
+## Extends shape:atMostOne for :occupiesPosition_t1
+shape:atMostOne_t1
+    a sh:NodeShape ;
+    sh:targetClass :tile;
+    sh:property [
+          sh:path [sh:inversePath :occupiesPosition_t1 ];
+          sh:maxCount 1;
+          sh:class :ChessPiece ;
+          sh:message "two chess pieces occupy same tile at t1"].
+#
+shape:min2Pieces
+    a sh:NodeShape ;
+    sh:targetNode :offBoard ;
+    sh:property [
+                sh:path [sh:inversePath :occupiesPosition_t1 ];
+            sh:maxCount 30;
+                ].
+
+shape:chessPiecePosition
+    a sh:NodeShape ;
+    sh:targetObjectsOf :occupiesPosition_t1 ;
+    sh:or(
+            [ sh:class :tile ]
+            [ sh:hasValue :offBoard ]
+         ).

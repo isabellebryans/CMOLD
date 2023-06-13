@@ -1,0 +1,232 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/TT-shapes/>.
+
+
+# Piece moved must have moved in a valid chess move
+# Use queen and knight moves only
+shape:PieceShape
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :occupiesPosition_t1 ;
+    sh:node shape:PieceMoved ;
+    sh:or(
+          [ sh:node shape:QueenMove ]
+          [ sh:node shape:KnightMove ]
+          [ sh:node shape:hasBeenCaptured ]
+      ).
+
+shape:QueenMove
+    a sh:NodeShape ;
+    sh:message "Invalid queen move";
+    sh:property shape:moveToTile ;
+    sh:property shape:CapturedPiece ;
+    sh:or(
+          [ sh:node shape:MoveStraight ]
+          [ sh:node shape:MoveDiagonal ]
+          [ sh:node shape:MoveAdjacent ]
+      ).
+
+shape:KnightMove
+    a sh:NodeShape ;
+    sh:message "Invalid knight move";
+    sh:property shape:moveToTile ;
+    sh:property shape:CapturedPiece;
+    sh:or(
+          [
+              sh:path (:occupiesPosition_t0  :tr :above);
+              sh:equals :occupiesPosition_t1 ;
+          ]
+          [
+              sh:path (:occupiesPosition_t0  :tr :right);
+              sh:equals :occupiesPosition_t1 ;
+          ]
+          [
+              sh:path (:occupiesPosition_t0  :tl :above);
+              sh:equals :occupiesPosition_t1 ;
+          ]
+          [
+              sh:path (:occupiesPosition_t0  :tl :left);
+              sh:equals :occupiesPosition_t1 ;
+          ]
+          [
+              sh:path (:occupiesPosition_t0  :bl :below);
+              sh:equals :occupiesPosition_t1 ;
+          ]
+          [
+              sh:path (:occupiesPosition_t0  :bl :left);
+              sh:equals :occupiesPosition_t1 ;
+          ]
+          [
+              sh:path (:occupiesPosition_t0  :br :below);
+              sh:equals :occupiesPosition_t1 ;
+          ]
+          [
+              sh:path (:occupiesPosition_t0  :br :right);
+              sh:equals :occupiesPosition_t1 ;
+          ]
+      ).
+
+shape:MoveAdjacent
+    a sh:NodeShape ;
+    sh:property shape:CapturedPiece ;
+    sh:property shape:moveToTile ;
+    sh:or(
+          [
+              sh:path (:occupiesPosition_t0 :above );
+              sh:equals :occupiesPosition_t1;
+          ]
+          [
+              sh:path (:occupiesPosition_t0 :below );
+              sh:equals :occupiesPosition_t1;
+          ]
+          [
+              sh:path (:occupiesPosition_t0 :left );
+              sh:equals :occupiesPosition_t1;
+          ]
+          [
+              sh:path (:occupiesPosition_t0 :right );
+              sh:equals :occupiesPosition_t1;
+          ]
+          [
+              sh:path (:occupiesPosition_t0 :tl );
+              sh:equals :occupiesPosition_t1;
+          ]
+          [
+              sh:path (:occupiesPosition_t0 :tr );
+              sh:equals :occupiesPosition_t1;
+          ]
+          [
+              sh:path (:occupiesPosition_t0 :bl );
+              sh:equals :occupiesPosition_t1;
+          ]
+          [
+              sh:path (:occupiesPosition_t0 :br );
+              sh:equals :occupiesPosition_t1;
+          ]
+      ).
+
+shape:MoveStraight
+    a sh:NodeShape ;
+    sh:property shape:moveToTile ;
+    sh:property shape:CapturedPiece;
+    sh:sparql [
+          a sh:SPARQLConstraint ;
+          sh:message  "Invalid move: not on same row." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+      SELECT $this
+      WHERE {
+        $this :occupiesPosition_t0 ?current ;
+              :occupiesPosition_t1 ?target .
+        ?current :row ?row1.
+        ?current :column ?col1.
+        ?target :row ?row2.
+        ?target :column ?col2.
+
+        FILTER (?row1 != ?row2 && ?col1 != ?col2)
+      }
+    """ ].
+
+
+shape:MoveDiagonal
+    a sh:NodeShape ;
+    sh:property shape:moveToTile ;
+    sh:property shape:CapturedPiece;
+    sh:sparql [
+          a sh:SPARQLConstraint ;
+          sh:message  "Invalid move: not on same row." ;
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ];
+                        sh:declare [ sh:prefix "xs" ;
+                                     sh:namespace
+                                               "http://www.w3.org/2001/XMLSchema#"^^xs:anyURI ; ]] ;
+          sh:select """
+        SELECT $this
+        WHERE {
+            $this :occupiesPosition_t0 ?current ;
+                  :occupiesPosition_t1 ?target .
+            ?current :row ?row1 ;
+                     :colNo ?col1 .
+            ?target :row ?row2 ;
+                    :colNo ?col2 .
+
+
+            FILTER (((xs:integer(?row1) - xs:integer(?row2)) != (xs:integer(?col1) - xs:integer(?col2))) && ((xs:integer(?row2) - xs:integer(?row1)) != (xs:integer(?col1) - xs:integer(?col2))))
+        }
+    """ ].
+
+shape:hasBeenCaptured
+    a sh:NodeShape ;
+    sh:property [
+          sh:path :occupiesPosition_t1 ;
+          sh:hasValue :offBoard;
+      ];
+    sh:node shape:CaptureOtherColour ;
+    sh:property [
+          sh:path :occupiesPosition_t0 ;
+          sh:property [
+                      sh:path [sh:inversePath :occupiesPosition_t1 ];
+                      sh:minCount 1;
+                  ];
+      ].
+
+shape:moveToTile
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t1;
+    sh:class :tile.
+
+# Piece can either have captured a piece or not
+shape:CapturedPiece
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t1 ;
+    sh:or(
+          [
+              sh:property [
+                              # There was a piece captured
+                              sh:path[sh:inversePath :occupiesPosition_t0];
+                              sh:minCount  1;
+
+                              sh:property [
+                                         sh:path :occupiesPosition_t1 ;
+                                         sh:hasValue :offBoard;
+                                         sh:minCount 1;
+                                     ]]
+          ]
+          [
+              sh:property [
+                              # There was no piece captured
+                              sh:path[sh:inversePath :occupiesPosition_t0];
+                              sh:maxCount 0;
+                          ]
+          ]
+      ).
+
+shape:PieceMoved
+    a sh:NodeShape ;
+    sh:not[
+          sh:property shape:PieceNotMoved ;
+      ].
+
+
+shape:PieceNotMoved
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t0 ;
+    sh:equals :occupiesPosition_t1 .
+
+shape:tripleHasPair
+    a sh:NodeShape  ;
+    sh:targetSubjectsOf :occupiesPosition_t1  ;
+    sh:property [
+          sh:path :occupiesPosition_t0 ;
+          sh:minCount 1;
+      ].

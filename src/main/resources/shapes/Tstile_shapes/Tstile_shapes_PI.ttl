@@ -1,0 +1,85 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/TT-shapes/>.
+
+# Piece moved ( in stream data) can't have same position
+shape:notSamePosition
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :occupiesPosition_t1 ;
+    sh:property shape:tripleHasPair ;
+    sh:property shape:CaptureMaxOne ;
+    sh:node shape:CaptureOtherColour ;
+    sh:class :ChessPiece ;
+    sh:message "Triple to add can't be the same as triple to be deleted";
+    sh:not[
+          sh:property [
+                          sh:path :occupiesPosition_t0  ;
+                          sh:equals :occupiesPosition_t1  ;
+                      ]
+      ].
+
+# If triple added, must have a matching deleted triple
+# if a piece is moved, it must have a triple with previous position (to delete) and new position (to add)
+shape:tripleHasPair
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t0 ;
+    sh:minCount 1.
+
+shape:KingNeverCaptured
+    a sh:NodeShape ;
+    sh:targetClass :King;
+    sh:not[
+          sh:path :occupiesPosition_t1 ;
+          sh:hasValue :offBoard ;
+      ].
+
+shape:CaptureMaxOne
+    a sh:PropertyShape ;
+    sh:path :occupiesPosition_t1 ;
+    sh:property [
+                sh:path [sh:inversePath :occupiesPosition_t0 ];
+                sh:maxCount 1;
+                ].
+
+shape:CaptureOtherColour
+    a sh:NodeShape ;
+    sh:or (
+          [
+              # white can only capture black
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :white;
+                          ];
+              sh:property [
+                              sh:path :occupiesPosition_t0 ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition_t1 ];
+                                          sh:property [
+                                                      sh:path :hasColour ;
+                                                      sh:hasValue :black;
+                                                  ]
+                                      ]
+                          ];
+          ]
+          [
+              # black can only capture white
+              sh:property [
+                              sh:path :hasColour ;
+                              sh:hasValue :black;
+                          ];
+              sh:property [
+                              sh:path :occupiesPosition_t0 ;
+                              sh:property [
+                                          sh:path [sh:inversePath :occupiesPosition_t1 ];
+                                          sh:property [
+                                                      sh:path :hasColour ;
+                                                      sh:hasValue :white;
+                                                  ]
+                                      ]
+                          ];
+          ]
+
+      ).

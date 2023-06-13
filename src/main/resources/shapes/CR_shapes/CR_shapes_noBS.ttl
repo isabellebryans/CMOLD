@@ -1,71 +1,41 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
-@prefix : <http://example.org/chess/>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix shape: <http://example.org/chess/TS-shapes/>.
-
-# Can't validate piece move
-# Have to assume that it is valid
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/CR-shapes/>.
 
 # General shape:
 shape:GeneralShape
     a sh:NodeShape ;
-    sh:targetClass :ChessPiece ;
-    sh:or(
-            [ sh:property shape:PieceNotMoved ]
-            [ sh:node shape:PieceMoved ]
-         ).
+    sh:targetSubjectsOf :occupiesPosition_t1  ;
+    sh:node shape:notSamePosition ;
+    sh:node shape:cantCaptureKing;
+    sh:node shape:CaptureOtherColour.
 
-shape:PieceNotMoved
-    a sh:PropertyShape ;
-    sh:path :occupiesPosition ;
-    sh:equals :occupiesPosition_t1 .
 
-shape:PieceMoved
+shape:notSamePosition
     a sh:NodeShape ;
     sh:not[
-            sh:property shape:PieceNotMoved ;
-          ];
-    sh:property shape:CapturedPiece .
+          sh:property [
+                          sh:path :occupiesPosition ;
+                          sh:equals :occupiesPosition_t1 ;
+                      ]
+      ].
 
-# Piece can either have captured a piece or not
-# works
-shape:CapturedPiece
-    a sh:PropertyShape ;
-    sh:path :occupiesPosition_t1 ;
-    sh:or(
-          [
-              sh:property [
-                              # There was a piece captured
-                              sh:path[sh:inversePath :occupiesPosition];
-                              sh:minCount  1;
-
-                              sh:property [
-                                         sh:path :occupiesPosition_t1 ;
-                                         sh:hasValue :offBoard;
-                                         sh:minCount 1;
-                                     ]]
-          ]
-          [
-              sh:property [
-                              # There was a piece captured
-                              sh:path[sh:inversePath :occupiesPosition];
-                              sh:maxCount 0;
-                          ]
-          ]
-      ).
-
-shape:CantCaptureKing
-    a sh:NodeShape ;
+shape:cantCaptureKing
+    a sh:NodeShape  ;
     sh:not[
-          sh:path :occupiesPosition_t1;
-            sh:property [
-                        sh:path [ sh:inversePath :occupiesPosition ];
-                        sh:class :King;
-                        ]
-          ].
-
+          sh:property [
+                          sh:path :occupiesPosition_t1 ;
+                          sh:property [
+                                      sh:path [sh:inversePath :occupiesPosition ];
+                                      sh:class :King;
+                                      sh:minCount 1;
+                                  ]
+                      ];
+      ].
+# if it moves and there is something there before, it must be the opposite colour
 shape:CaptureOtherColour
     a sh:NodeShape ;
     sh:or (

@@ -2,6 +2,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/shapes/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
 
-:P9 :occupiesPosition_t1 :b5.
 

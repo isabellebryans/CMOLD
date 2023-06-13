@@ -9,7 +9,7 @@
 # Pawn move -> done
 # colour, change pawn move -> done
 # moved to cant be king -> done
-# if piece captured, it must be the other colour to the capturer piece
+# if piece captured, it must be the other colour to the capturer piece -> done
 
 
 # to do :

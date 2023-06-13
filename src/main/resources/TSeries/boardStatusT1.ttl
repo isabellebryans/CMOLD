@@ -20,9 +20,9 @@ ns1:P17 ns1:occupiesPosition_t1 ns1:e8 .
 
 ns1:P18 ns1:occupiesPosition_t1 ns1:d8 .
 
-ns1:P19 ns1:occupiesPosition_t1 ns1:c8 .
+ns1:P19 ns1:occupiesPosition_t1 ns1:offBoard .
 
-ns1:P2 ns1:occupiesPosition_t1 ns1:d6 .
+ns1:P2 ns1:occupiesPosition_t1 ns1:d5 .
 
 ns1:P20 ns1:occupiesPosition_t1 ns1:f8 .
 

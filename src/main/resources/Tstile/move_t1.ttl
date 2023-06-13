@@ -4,7 +4,9 @@
 @prefix : <http://example.org/chess/>.
 
 :P2  :occupiesPosition_t0 :d4 .
-:P2  :occupiesPosition_t1 :d3.
+:P2  :occupiesPosition_t1 :b3.
+
+
 
 
 

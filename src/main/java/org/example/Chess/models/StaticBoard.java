@@ -12,7 +12,7 @@ public class StaticBoard {
         System.out.println("Validating on Time Series Model");
         Graph dataGraph = loadData.initAndLoadModelFromResource("piecesInfo.ttl", Lang.TURTLE)
                 //.union(loadData.initAndLoadModelFromResource("chessBoardStructure.ttl", Lang.TURTLE))
-                .union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
+                //.union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
                 .getGraph();
 
         Graph shapesGraph = loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/oneBoardShapes.ttl", Lang.TURTLE)
@@ -23,6 +23,8 @@ public class StaticBoard {
                 .union(loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/NumberPiecesShapes.ttl", Lang.TURTLE))
                 .getGraph();
 
-        SHACLValidation.validation(dataGraph, shapesGraph_noBS);
+        Graph shapesGraph_PI = loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/StaticBoard_PI.ttl", Lang.TURTLE).getGraph();
+
+        SHACLValidation.validation(dataGraph, shapesGraph_PI);
     }
 }

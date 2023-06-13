@@ -12,7 +12,7 @@ public class CR {
 
         return loadData.initAndLoadModelFromResource("CR/t1.ttl", Lang.TURTLE)
                 .union(loadData.initAndLoadModelFromResource("chessBoardStructure.ttl", Lang.TURTLE))
-                .union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
+                //.union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
                 //.union(loadData.initAndLoadModelFromResource("piecesInfo.ttl", Lang.TURTLE))
                 .getGraph();
     }
@@ -20,8 +20,11 @@ public class CR {
         Graph shapesGraph_everything = loadData.initAndLoadModelFromResource("shapes/CR_shapes/CR_shapes_everything.ttl", Lang.TURTLE).getGraph();
         Graph shapesGraph_noStatus = loadData.initAndLoadModelFromResource("shapes/CR_shapes/CR_shapes_noStatus.ttl", Lang.TURTLE).getGraph();;
         Graph shapesGraph_noPI = loadData.initAndLoadModelFromResource("shapes/CR_shapes/CR_shapes_noPI.ttl", Lang.TURTLE).getGraph();;
+        Graph shapesGraph_noBS = loadData.initAndLoadModelFromResource("shapes/CR_shapes/CR_shapes_noBS.ttl", Lang.TURTLE).getGraph();;
+        Graph shapesGraph_PI = loadData.initAndLoadModelFromResource("shapes/CR_shapes/CR_shapes_PI.ttl", Lang.TURTLE).union(loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/StaticBoard_PI.ttl", Lang.TURTLE)).getGraph();;
+        Graph shapesGraph_BS = loadData.initAndLoadModelFromResource("shapes/CR_shapes/CR_shapes_BS.ttl", Lang.TURTLE).union(loadData.initAndLoadModelFromResource("shapes/StaticBoard_shapes/StaticBoard_BS.ttl", Lang.TURTLE)).getGraph();;
 
-        return shapesGraph_noPI;
+        return shapesGraph_BS;
     }
     public static void handle_CR_validation() throws IOException {
         System.out.println("Validating on Cash Registry Model");
