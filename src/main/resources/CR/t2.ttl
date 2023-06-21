@@ -3,11 +3,4 @@
 @prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/chess/>.
 
-:P6 :movesFrom_t1 :d1.
-:P6 :movesTo_t1 :b3   .
-
-:P5 :movesFrom_t2 :d7.
-:P5 :movesTo_t2 :d5.
-
-:P6 :movesFrom_t3 :b3 ;
-    :movesTo_t3 :offBoard .
+:P1 :movesTo_t2 :d1.

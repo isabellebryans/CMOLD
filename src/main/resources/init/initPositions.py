@@ -65,5 +65,7 @@ for i in range(16):
 print(g.serialize(format="turtle"))
 g.serialize(destination="../boardStatus.ttl")
 gT1.serialize(destination="../TSeries/boardStatusT1.ttl")
+gT1.serialize(destination="../w2_boardStatus.ttl")
 gT2.serialize(destination="../TSeries/boardStatusT2.ttl")
+gT2.serialize(destination="../w3_boardStatus.ttl")
 gT3.serialize(destination="../TSeries/boardStatusT3.ttl")

@@ -1,0 +1,91 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/shapes/>.
+
+# if off board at w1, must be off board at w3
+shape:cantBeRevived
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :occupiesPosition ;
+    sh:message "Piece can't be brought back onto the board";
+    sh:not[
+          sh:property [
+                          sh:path :occupiesPosition ;
+                          sh:hasValue :offBoard ;
+                      ];
+          sh:or(
+                          [
+                              sh:property [
+                                              sh:path :occupiesPosition_t1 ;
+                                              sh:class :tile ;
+                                          ]
+                          ]
+                          [
+                              sh:property [
+                                              sh:path :occupiesPosition_t2 ;
+                                              sh:class :tile;
+                                          ]
+                          ]
+                      )
+      ].
+
+
+# If piece is on the board at w3, must have always been on the board
+shape:cantBeRevived1
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :occupiesPosition ;
+    sh:message "Piece can't have been previously off board if now on board";
+    sh:not[
+          sh:property [
+                          sh:path :occupiesPosition_t2 ;
+                          sh:class :tile ;
+                      ];
+          sh:or(
+                          [
+                              sh:property [
+                                              sh:path :occupiesPosition ;
+                                              sh:hasValue :offBoard ;
+                                          ]
+                          ]
+                          [
+                              sh:property [
+                                              sh:path :occupiesPosition_t1 ;
+                                              sh:hasValue :offBoard;
+                                          ]
+                          ]
+                      )
+      ].
+
+# Number of chess piece on the board always decreasing
+shape:numberOfPiecesOnBoard
+    a sh:NodeShape ;
+    sh:targetNode :offBoard ;
+    sh:sparql [
+          a           sh:SPARQLConstraint ;
+          sh:message "Can't have more pieces on the board at a later timestamp";
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                        SELECT $this
+                        WHERE {
+                            {
+                            SELECT (COUNT(?c) as ?count1)
+                                WHERE {
+                                ?c :occupiesPosition $this .
+                                }
+                            }
+                            {
+                            SELECT (COUNT(?c) as ?count2)
+                                WHERE {
+                                ?c :occupiesPosition_t2 $this .
+                                }
+                            }
+                            FILTER(?count1>?count2)
+
+                        }
+                            """ ].

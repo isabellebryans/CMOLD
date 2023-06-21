@@ -1,0 +1,32 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/shapes/>.
+
+shape:PieceCantDisappear
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :occupiesPosition ;
+    sh:message "Piece can't be in game at window 1 and not in window 3";
+    sh:property [
+            sh:path :occupiesPosition_t1  ;
+            sh:minCount 1;
+                ];
+    sh:property [
+            sh:path :occupiesPosition_t2  ;
+            sh:minCount 1;
+    ].
+
+shape:PieceCantReappear
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :occupiesPosition_t2 ;
+    sh:message "Piece can't be in game at window 3 and not in window 1";
+    sh:property [
+          sh:path :occupiesPosition_t1  ;
+          sh:minCount 1;
+      ];
+    sh:property [
+          sh:path :occupiesPosition  ;
+          sh:minCount 1;
+      ].

@@ -1,0 +1,171 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix : <http://example.org/chess/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix shape: <http://example.org/chess/TS-shapes/>.
+
+# If piece is off board at t0, can't be on the board at t1, t2, t3
+shape:cantBeRevived
+    a sh:NodeShape ;
+    sh:targetClass :ChessPiece ;
+    sh:message "Piece cannot be brought back onto the board";
+    sh:not[
+            sh:property [
+                        sh:path :occupiesPosition ;
+                        sh:hasValue :offBoard ;
+                        ];
+          sh:or(
+                  [
+                  sh:property [
+                              sh:path :occupiesPosition_t1 ;
+                            sh:class :tile ;
+                              ]
+                  ]
+                  [
+                  sh:property [
+                              sh:path :occupiesPosition_t2 ;
+                            sh:class :tile;
+                              ]
+                  ]
+                  [
+                  sh:property [
+                      sh:path :occupiesPosition_t3 ;
+                      sh:class :tile ;
+                                ]
+                  ]
+               )
+          ].
+
+# If piece is on the board at t3, it must also have been on the board in all previous windows
+shape:cantBeRevived1
+    a sh:NodeShape ;
+    sh:targetClass :ChessPiece ;
+    sh:message "Piece on the board can't have previously been off board";
+    sh:not[
+          sh:property [
+                          sh:path :occupiesPosition_t3 ;
+                          sh:class :tile ;
+                      ];
+          sh:or(
+                          [
+                              sh:property [
+                                              sh:path :occupiesPosition ;
+                                              sh:hasValue :offBoard  ;
+                                          ]
+                          ]
+                          [
+                              sh:property [
+                                              sh:path :occupiesPosition_t1 ;
+                                              sh:hasValue :offBoard ;
+                                          ]
+                          ]
+                          [
+                              sh:property [
+                                              sh:path :occupiesPosition_t2 ;
+                                              sh:hasValue :offBoard  ;
+                                          ]
+                          ]
+                      )
+      ].
+
+
+# Pawn can only move forward
+# like for a time series example: If a pawn is in row x in the first window, it must be in the same row or a row above in the third (or 4th+) window because they can only move forwards
+shape:PawnCantMoveBackwards
+    a sh:NodeShape ;
+    sh:targetClass :Pawn;
+    sh:message "Pawn moved backwards";
+    # either they're white and haven't moved down, or black and haven't moved up
+    sh:or(
+            [
+                sh:property [
+                            sh:path :hasColour ;
+                            sh:hasValue :white ;
+                            ];
+                sh:sparql [
+                              a           sh:SPARQLConstraint ;
+                            sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                                       sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                                          sh:declare [ sh:prefix "rdf" ;
+                                                       sh:namespace
+                                                                 "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                            sh:select   """
+                              SELECT $this
+                              WHERE {
+                                $this :occupiesPosition ?pos_t0 ;
+                                      :occupiesPosition_t1 ?pos_t1 ;
+                                      :occupiesPosition_t2 ?pos_t2;
+                                      :occupiesPosition_t3 ?pos_t3.
+                                ?pos_t0 :row ?row0.
+                                ?pos_t1 :row ?row1.
+                                ?pos_t2 :row ?row2.
+                                ?pos_t3 :row ?row3.
+                                FILTER (?row3 < ?row1)
+                              }
+                            """ ]
+            ]
+            [
+                sh:property [
+                                sh:path :hasColour ;
+                                sh:hasValue :black ;
+                            ];
+                sh:sparql [
+                                a           sh:SPARQLConstraint ;
+                                sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                                           sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                                              sh:declare [ sh:prefix "rdf" ;
+                                                           sh:namespace
+                                                                     "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                                sh:select   """
+                              SELECT $this
+                              WHERE {
+                                $this :occupiesPosition ?pos_t0 ;
+                                      :occupiesPosition_t1 ?pos_t1 ;
+                                      :occupiesPosition_t2 ?pos_t2;
+                                      :occupiesPosition_t3 ?pos_t3.
+                                ?pos_t0 :row ?row0.
+                                ?pos_t1 :row ?row1.
+                                ?pos_t2 :row ?row2.
+                                ?pos_t3 :row ?row3.
+                                FILTER (?row3 > ?row1)
+                              }
+                            """ ]
+            ]
+         ) .
+
+
+# Number of chess piece on the board always decreasing
+shape:numberOfPiecesOnBoard
+    a sh:NodeShape ;
+    sh:targetNode :offBoard ;
+    sh:sparql [
+                  a           sh:SPARQLConstraint ;
+                  sh:message "Can't have more pieces on the board at a later timestamp";
+                  sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                             sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                                sh:declare [ sh:prefix "rdf" ;
+                                             sh:namespace
+                                                       "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                  sh:select   """
+                        SELECT $this
+                        WHERE {
+                            {
+                            SELECT (COUNT(?c) as ?count1)
+                                WHERE {
+                                ?c :occupiesPosition_t1 $this .
+                                }
+                            }
+                            {
+                            SELECT (COUNT(?c) as ?count2)
+                                WHERE {
+                                ?c :occupiesPosition_t3 $this .
+                                }
+                            }
+                            FILTER(?count1<?count2)
+
+                        }
+
+
+                            """ ].
+

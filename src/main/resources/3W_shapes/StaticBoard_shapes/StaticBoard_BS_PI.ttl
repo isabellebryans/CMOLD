@@ -1,0 +1,78 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/shapes/>.
+
+# Can only have more queens, bishops, knights, rooks at later window
+# Can only have less pawns at later window
+
+shape:MoreSpecialPieces
+    a sh:NodeShape ;
+    sh:targetNode :Queen, :Bishop, :Rook, :Knight ;
+    sh:message "Can't have less queens, bishops, knights or rooks in game at a later timestamp";
+    sh:sparql [
+          a           sh:SPARQLConstraint ;
+          sh:message "Can't have less queens in game at a later timestamp";
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                        SELECT $this
+                        WHERE {
+                            {
+                            SELECT (COUNT(?c) as ?count1)
+                                WHERE {
+                                ?c rdf:type $this .
+                                }
+                            }
+                            {
+                            SELECT (COUNT(?c) as ?count2)
+                                WHERE {
+                                ?c :type_t2 $this .
+                                }
+                            }
+                            FILTER(?count1>?count2)
+
+                        }
+
+
+                            """ ].
+
+
+shape:LessPawns
+    a sh:NodeShape ;
+    sh:targetNode :Pawn ;
+    sh:message "Can't have more pawns in game at a later timestamp";
+    sh:sparql [
+          a           sh:SPARQLConstraint ;
+          sh:message "Can't have less queens in game at a later timestamp";
+          sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                     sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                        sh:declare [ sh:prefix "rdf" ;
+                                     sh:namespace
+                                               "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+          sh:select   """
+                        SELECT $this
+                        WHERE {
+                            {
+                            SELECT (COUNT(?c) as ?count1)
+                                WHERE {
+                                ?c rdf:type $this .
+                                }
+                            }
+                            {
+                            SELECT (COUNT(?c) as ?count2)
+                                WHERE {
+                                ?c :type_t2 $this .
+                                }
+                            }
+                            FILTER(?count1<?count2)
+
+                        }
+
+
+                            """ ].

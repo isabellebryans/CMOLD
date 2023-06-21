@@ -29,8 +29,13 @@
 :occupiesPosition_t3 a owl:ObjectProperty .
 
 
-:movesTo a owl:ObjectProperty .
+:movesTo_t1 a owl:ObjectProperty .
+:movesTo_t2 a owl:ObjectProperty .
+:movesTo_t3 a owl:ObjectProperty .
 
+:movesFrom_t1 a owl:ObjectProperty .
+:movesFrom_t2 a owl:ObjectProperty .
+:movesFrom_t3 a owl:ObjectProperty .
 
 :position a owl:Class .
 

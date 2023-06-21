@@ -1,0 +1,129 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/TT-shapes/>.
+
+
+
+# If a pawn is moved two spaces in window 1, it can't be moved again two spaces in window 3, or window 5
+# Need:
+# - Piece info
+# - Streaming data
+# - Board structure
+shape:PawnMove
+    a sh:NodeShape ;
+    sh:targetClass :Pawn;
+    sh:message "Pawn moved two spaces twice";
+    sh:not[
+              sh:property [
+                              sh:path (:movesFrom_t1 :below :below);
+                              sh:minCount 1;
+                              sh:equals :movesTo_t1  ;
+                          ];
+              sh:property [
+                              sh:path (:movesFrom_t3 :below :below);
+                              sh:minCount 1;
+                              sh:equals :movesTo_t3 ;
+                          ]
+          ];
+    sh:not[
+              sh:property [
+                              sh:path (:movesFrom_t1 :above :above);
+                              sh:equals :movesTo_t1 ;
+                              sh:minCount 1;
+                          ];
+              sh:property [
+                              sh:path (:movesFrom_t3 :above :above);
+                              sh:equals :movesTo_t3 ;
+                              sh:minCount 1;
+                          ]
+          ] .
+
+# If piece is off board at t0, can't be on the board at t1, t2, t3
+shape:cantBeRevived
+    a sh:NodeShape ;
+    sh:targetClass :ChessPiece ;
+    sh:message "Piece cannot be brought back onto the board";
+    sh:not[
+          sh:property [
+                          sh:path :occupiesPosition ;
+                          sh:hasValue :offBoard ;
+                      ];
+          sh:or(
+                          [
+                              sh:property [
+                                              sh:path :occupiesPosition_t1 ;
+                                              sh:class :tile ;
+                                          ]
+                          ]
+                          [
+                              sh:property [
+                                              sh:path :occupiesPosition_t2 ;
+                                              sh:class :tile;
+                                          ]
+                          ]
+                      )
+      ].
+
+# If piece is captured at t1, it must be off board in 2nd window and 3rd window
+# Need :
+# - Streaming data
+# - Board structure
+# - status
+shape:PieceCapturedT1
+     a sh:NodeShape ;
+     sh:targetSubjectsOf :movesTo_t1 ;
+     sh:not[
+           sh:property [
+                       sh:path :movesTo_t1 ;
+                        sh:hasValue :offBoard ;
+                        sh:minCount 1;
+                       ];
+           sh:or(
+                   [
+                       sh:property [
+                                       sh:path :occupiesPosition_t1 ;
+                                       sh:class :tile;
+                                   ]
+                   ]
+                   [
+                       sh:property [
+                                       sh:path :occupiesPosition_t2 ;
+                                       sh:class :tile;
+                                   ]
+                   ]
+                )
+           ].
+
+
+# If piece is moved at t3, it must've been on the board at t1
+# Need :
+# - Streaming data
+# - Board structure
+# - status
+shape:PieceOnBoard
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :movesTo_t3;
+    sh:not[
+              sh:property [
+                              sh:path :movesTo_t3 ;
+                              sh:minCount 1;
+                          ];
+              sh:or(
+                              [
+                                  sh:property [
+                                                  sh:path :occupiesPosition ;
+                                                  sh:class :offBoard;
+                                              ]
+                              ]
+                              [
+                                  sh:property [
+                                                  sh:path :occupiesPosition_t1 ;
+                                                  sh:class :offBoard;
+                                              ]
+                              ]
+                          )
+          ].
+

@@ -1,0 +1,116 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/CR-shapes/>.
+
+# Pawn promotion
+shape:PawnPromotion
+    a sh:NodeShape ;
+    sh:targetClass :Pawn;
+    sh:or(
+            [
+                sh:property [
+                                sh:path (:movesTo_t1 :row);
+                                sh:hasValue "1";
+                            ];
+                sh:not[
+                                sh:property [
+                                                sh:path :type_t2 ;
+                                                sh:hasValue :Pawn;
+
+                                            ]
+                            ];
+            ]
+            [
+                sh:not[
+                          sh:property [
+                                          sh:path (:movesTo_t1 :row);
+                                          sh:hasValue "1";
+                                      ];
+                      ]
+            ]
+         );
+    sh:or(
+            [
+                sh:property [
+                                sh:path (:movesTo_t1 :row);
+                                sh:hasValue "8";
+                            ];
+                sh:not[
+                                sh:property [
+                                                sh:path :type_t2 ;
+                                                sh:class :Pawn;
+                                            ]
+                            ]
+            ]
+            [
+                sh:not[
+                          sh:property [
+                                          sh:path (:movesTo_t1 :row);
+                                          sh:hasValue "8";
+                                      ];
+                      ]
+            ]
+         ) .
+
+# Can't move twice in a row except if captured
+shape:MoveTwiceT1
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :movesTo_t1 ;
+    sh:message "Piece moved twice in a row";
+    sh:not[
+          sh:property [
+                          sh:path :movesTo_t2 ;
+                          sh:class :tile;
+                          sh:minCount 1;
+                      ]
+      ].
+
+# Can't move twice in a row except if captured
+shape:MoveTwiceT2
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :movesTo_t2 ;
+    sh:message "Piece moved twice in a row";
+    sh:not[
+          sh:property [
+                          sh:path :movesTo_t3 ;
+                          sh:class :tile;
+                          sh:minCount 1;
+                      ]
+      ].
+
+
+# If white piece moves, then black piece must move
+shape:OrderOfColour
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :movesTo_t1 ;
+    sh:message "Player can't move twice in a row";
+    sh:sparql [
+                  a           sh:SPARQLConstraint ;
+                  sh:message "Player can't move twice in a row";
+                  sh:prefixes [ sh:declare [ sh:prefix    "" ;
+                                             sh:namespace "http://example.org/chess/"^^xs:anyURI ; ] ;
+                                sh:declare [ sh:prefix "rdf" ;
+                                             sh:namespace
+                                                       "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xs:anyURI ; ] ] ;
+                  sh:select   """
+                        SELECT $this
+                        WHERE {
+                            $this :hasColour ?colour1.
+                            ?secondMove :movesTo_t2 ?x;
+                                        :hasColour ?colour2.
+                            ?thirdMove :movesTo_t3 ?y;
+                                        :hasColour ?colour3.
+
+                            FILTER(?colour1 = ?colour2 || ?colour1 != ?colour3)
+                        }
+
+
+                            """ ].
+
+# If a piece is moved into a position x, and in the next window another piece is moved into that pos x, the first piece can't move again
+
+
+

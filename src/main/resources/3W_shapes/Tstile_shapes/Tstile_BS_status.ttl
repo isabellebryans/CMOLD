@@ -1,0 +1,40 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/TT-shapes/>.
+
+
+# If piece is moved off the board at window 1, the board status must be updated and it can't be moved again
+# Needs three windows
+shape:MovedOffBoard
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :movesTo_t1 ;
+    sh:message "Piece that was captured must go off board and cannot be moved again";
+    sh:or(
+          [
+              sh:property [
+                            sh:path :movesTo_t1 ;
+                            sh:hasValue :offBoard ;
+                        ];
+            sh:property [
+                        sh:path :occupiesPosition_t1 ;
+                        sh:hasValue :offBoard ;
+                        ];
+            sh:property [
+                          sh:path :occupiesPosition_t2 ;
+                          sh:hasValue :offBoard ;
+                        ];
+            sh:property [
+                            sh:path :movesTo_t3 ;
+                            sh:maxCount 0;
+                        ]
+          ]
+          [
+              sh:property [
+                              sh:path :movesTo_t1 ;
+                              sh:class :tile;
+                          ]
+          ]
+      ).

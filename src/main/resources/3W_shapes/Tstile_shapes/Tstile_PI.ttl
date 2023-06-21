@@ -1,0 +1,37 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/TT-shapes/>.
+
+# King can't be moved twice in a row, bc then it would be captured
+shape:KingMoveTwice
+    a sh:NodeShape ;
+    sh:targetClass :King;
+    sh:message "King can't move twice, because then its captured";
+    sh:not [
+            sh:or (
+                    [
+                        sh:property [
+                                        sh:path :movesTo_t1 ;
+                                        sh:minCount 1 ;
+                                    ];
+                        sh:property [
+                                        sh:path :movesTo_t2 ;
+                                        sh:minCount 1 ;
+                                    ]
+                    ]
+                    [
+                        sh:property [
+                                        sh:path :movesTo_t2 ;
+                                        sh:minCount 1 ;
+                                    ];
+                        sh:property [
+                                        sh:path :movesTo_t3 ;
+                                        sh:minCount 1 ;
+                                    ]
+                    ]
+
+                  )
+           ].

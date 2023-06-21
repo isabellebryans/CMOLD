@@ -1,0 +1,150 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/TT-shapes/>.
+
+# If piece moves in knight move in window 1, if moved in window 3, it must also be knight move
+shape:KnightMoveOnce
+    a sh:NodeShape;
+    sh:targetSubjectsOf :movesTo_t1 ;
+    sh:message "Invalid move, first moved as a knight, then differently";
+    sh:not[
+          sh:node shape:KnightMove1 ;
+          sh:not[ sh:node shape:KnightMove2 ];
+      ].
+
+
+shape:KnightMove1
+    a sh:NodeShape ;
+    sh:message "Invalid knight move";
+    sh:or(
+          [
+              sh:path (:movesFrom_t1 :tr :above);
+              sh:equals :movesTo_t1 ;
+          ]
+          [
+              sh:path (:movesFrom_t1 :tr :right);
+              sh:equals :movesTo_t1 ;
+          ]
+          [
+              sh:path (:movesFrom_t1 :tl :above);
+              sh:equals :movesTo_t1 ;
+          ]
+          [
+              sh:path (:movesFrom_t1 :tl :left);
+              sh:equals :movesTo_t1 ;
+          ]
+          [
+              sh:path (:movesFrom_t1 :bl :below);
+              sh:equals :movesTo_t1 ;
+          ]
+          [
+              sh:path (:movesFrom_t1 :bl :left);
+              sh:equals :movesTo_t1 ;
+          ]
+          [
+              sh:path (:movesFrom_t1 :br :below);
+              sh:equals :movesTo_t1 ;
+          ]
+          [
+              sh:path (:movesFrom_t1 :br :right);
+              sh:equals :movesTo_t1 ;
+          ]
+      ).
+
+shape:KnightMove2
+    a sh:NodeShape ;
+    sh:or(
+          [
+              sh:path :movesTo_t3 ;
+              sh:maxCount 0;
+          ]
+          [
+              sh:path (:movesFrom_t3  :tr :above);
+              sh:equals :movesTo_t3 ;
+          ]
+          [
+              sh:path (:movesFrom_t3  :tr :right);
+              sh:equals :movesTo_t3 ;
+          ]
+          [
+              sh:path (:movesFrom_t3  :tl :above);
+              sh:equals :movesTo_t3 ;
+          ]
+          [
+              sh:path (:movesFrom_t3  :tl :left);
+              sh:equals :movesTo_t3 ;
+          ]
+          [
+              sh:path (:movesFrom_t3  :bl :below);
+              sh:equals :movesTo_t3 ;
+          ]
+          [
+              sh:path (:movesFrom_t3  :bl :left);
+              sh:equals :movesTo_t3 ;
+          ]
+          [
+              sh:path (:movesFrom_t3  :br :below);
+              sh:equals :movesTo_t3 ;
+          ]
+          [
+              sh:path (:movesFrom_t3  :br :right);
+              sh:equals :movesTo_t3 ;
+          ]
+      ).
+
+shape:cantMoveTwice
+    a sh:NodeShape ;
+    sh:not [
+            sh:or (
+                    [
+                        sh:property [
+                                        sh:path :movesTo_t1 ;
+                                        sh:minCount 1 ;
+                                    ];
+                        sh:property [
+                                        sh:path :movesTo_t2 ;
+                                        sh:minCount 1 ;
+                                        sh:class :tile;
+                                    ]
+                    ]
+                    [
+                        sh:property [
+                                        sh:path :movesTo_t2 ;
+                                        sh:minCount 1 ;
+                                    ];
+                        sh:property [
+                                        sh:path :movesTo_t3 ;
+                                        sh:minCount 1 ;
+                                        sh:class :tile;
+                                    ]
+                    ]
+
+            )
+           ].
+
+shape:CapturedCantMove
+    a sh:NodeShape ;
+    sh:targetSubjectsOf :movesTo_t1 ;
+    sh:not[
+          sh:property [
+                      sh:path :movesTo_t1 ;
+                      sh:hasValue :offBoard ;
+                      ];
+            sh:or(
+                    [
+                        sh:property [
+                                        sh:path :movesTo_t2 ;
+                                        sh:minCount 1;
+                                    ]
+                    ]
+                    [
+                        sh:property [
+                                        sh:path :movesTo_t3 ;
+                                        sh:minCount 1;
+                                    ]
+                    ]
+                 )
+          ].

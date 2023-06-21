@@ -1,0 +1,98 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix : <http://example.org/chess/>.
+@prefix shape: <http://example.org/chess/CR-shapes/>.
+
+
+
+# if piece moves as a knight in first window, if it moves again in third window it must be a knight too
+shape:KnightMoveOnce
+    a sh:NodeShape;
+    sh:targetSubjectsOf :movesTo_t1 ;
+    sh:message "Invalid move, first moved as a knight, then differently";
+    sh:not[
+          sh:node shape:KnightMove1 ;
+            sh:not[ sh:node shape:KnightMove2 ];
+          ].
+
+
+shape:KnightMove1
+    a sh:NodeShape ;
+    sh:message "Invalid knight move";
+    sh:or(
+           [
+               sh:path (:occupiesPosition  :tr :above);
+               sh:equals :movesTo_t1 ;
+           ]
+           [
+               sh:path (:occupiesPosition  :tr :right);
+               sh:equals :movesTo_t1 ;
+           ]
+           [
+               sh:path (:occupiesPosition  :tl :above);
+               sh:equals :movesTo_t1 ;
+           ]
+           [
+               sh:path (:occupiesPosition  :tl :left);
+               sh:equals :movesTo_t1 ;
+           ]
+           [
+               sh:path (:occupiesPosition  :bl :below);
+               sh:equals :movesTo_t1 ;
+           ]
+           [
+               sh:path (:occupiesPosition  :bl :left);
+               sh:equals :movesTo_t1 ;
+           ]
+           [
+               sh:path (:occupiesPosition  :br :below);
+               sh:equals :movesTo_t1 ;
+           ]
+           [
+               sh:path (:occupiesPosition  :br :right);
+               sh:equals :movesTo_t1 ;
+           ]
+         ).
+
+shape:KnightMove2
+    a sh:NodeShape ;
+    sh:or(
+            [
+                sh:path :movesTo_t3 ;
+                sh:maxCount 0;
+            ]
+             [
+                 sh:path (:occupiesPosition_t2  :tr :above);
+                 sh:equals :movesTo_t3 ;
+             ]
+             [
+                 sh:path (:occupiesPosition_t2  :tr :right);
+                 sh:equals :movesTo_t3 ;
+             ]
+             [
+                 sh:path (:occupiesPosition_t2  :tl :above);
+                 sh:equals :movesTo_t3 ;
+             ]
+             [
+                 sh:path (:occupiesPosition_t2  :tl :left);
+                 sh:equals :movesTo_t3 ;
+             ]
+             [
+                 sh:path (:occupiesPosition_t2  :bl :below);
+                 sh:equals :movesTo_t3 ;
+             ]
+             [
+                 sh:path (:occupiesPosition_t2  :bl :left);
+                 sh:equals :movesTo_t3 ;
+             ]
+             [
+                 sh:path (:occupiesPosition_t2  :br :below);
+                 sh:equals :movesTo_t3 ;
+             ]
+             [
+                 sh:path (:occupiesPosition_t2  :br :right);
+                 sh:equals :movesTo_t3 ;
+             ]
+         ).
