@@ -12,7 +12,7 @@ shape:atMostOne
     a sh:NodeShape ;
     sh:targetClass :tile;
     sh:property [
-                sh:path [sh:inversePath :occupiesPosition ];
+                sh:path [sh:inversePath :occupiesPosition_t0 ];
                 sh:maxCount 1;
                 sh:class :ChessPiece ;
                 sh:message "Two chesspieces occupy same tile."

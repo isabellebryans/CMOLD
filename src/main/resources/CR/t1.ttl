@@ -3,5 +3,5 @@
 @prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix : <http://example.org/chess/>.
 
-:P13 :movesTo_t1 :d1.
+:P13 :movesTo_t1 :e5.
 

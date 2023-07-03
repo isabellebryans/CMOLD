@@ -11,31 +11,31 @@ import java.io.IOException;
 public class CR {
     private static Graph setDataGraph() throws IOException {
 
-         Graph oneWindow_dataGraph = loadData.initAndLoadModelFromResource("CR/1_window.ttl", Lang.TURTLE)
+         Graph oneWindow_dataGraph = loadData.initAndLoadModelFromResource("CR/t1.ttl", Lang.TURTLE)
                 .union(loadData.initAndLoadModelFromResource("chessBoardStructure.ttl", Lang.TURTLE))
-                //.union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
+                .union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
                 .union(loadData.initAndLoadModelFromResource("piecesInfo.ttl", Lang.TURTLE)).getGraph();
 
         // 1st window
         Model w1_dataGraph = loadData.initAndLoadModelFromResource("CR/t1.ttl", Lang.TURTLE)
-                //.union(loadData.initAndLoadModelFromResource("chessBoardStructure.ttl", Lang.TURTLE));
-                .union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE));
-                //.union(loadData.initAndLoadModelFromResource("piecesInfo.ttl", Lang.TURTLE));
+                .union(loadData.initAndLoadModelFromResource("chessBoardStructure.ttl", Lang.TURTLE))
+                .union(loadData.initAndLoadModelFromResource("boardStatus.ttl", Lang.TURTLE))
+                .union(loadData.initAndLoadModelFromResource("piecesInfo.ttl", Lang.TURTLE));
 
         // 2nd window
         Model w2_dataGraph = loadData.initAndLoadModelFromResource("CR/t2.ttl", Lang.TURTLE)
-        .union(loadData.initAndLoadModelFromResource("w2_boardStatus.ttl", Lang.TURTLE));
-        //.union(loadData.initAndLoadModelFromResource("w2_piecesInfo.ttl", Lang.TURTLE));
+        .union(loadData.initAndLoadModelFromResource("w2_boardStatus.ttl", Lang.TURTLE))
+        .union(loadData.initAndLoadModelFromResource("w2_piecesInfo.ttl", Lang.TURTLE));
 
         // 3rd window
         Model w3_dataGraph = loadData.initAndLoadModelFromResource("CR/t3.ttl", Lang.TURTLE)
-        .union(loadData.initAndLoadModelFromResource("w3_boardStatus.ttl", Lang.TURTLE));
-        //.union(loadData.initAndLoadModelFromResource("w3_piecesInfo.ttl", Lang.TURTLE));
+        .union(loadData.initAndLoadModelFromResource("w3_boardStatus.ttl", Lang.TURTLE))
+        .union(loadData.initAndLoadModelFromResource("w3_piecesInfo.ttl", Lang.TURTLE));
 
 
         Graph threeWindows_dataGraph = w1_dataGraph.union(w2_dataGraph).union(w3_dataGraph).getGraph();
 
-        return threeWindows_dataGraph;
+        return oneWindow_dataGraph;
     }
     private static Graph setShapesGraph() throws IOException {
         // one data item at a time
@@ -56,7 +56,7 @@ public class CR {
         Graph W_shapesGraph_status = loadData.initAndLoadModelFromResource("3W_shapes/CashReg_shapes/CashReg_status.ttl", Lang.TURTLE).getGraph();
 
 
-        return W_shapesGraph_status;
+        return shapesGraph_everything;
     }
     public static void handle_CR_validation() throws IOException {
         System.out.println("Validating on Cash Registry Model");

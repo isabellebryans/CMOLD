@@ -40,6 +40,6 @@ public class StaticBoard {
         Graph w3_shapesGraph_BS_status = loadData.initAndLoadModelFromResource("3W_shapes/StaticBoard_shapes/StaticBoard_BS_status.ttl", Lang.TURTLE).getGraph();
         Graph w3_shapesGraph_status = loadData.initAndLoadModelFromResource("3W_shapes/StaticBoard_shapes/StaticBoard_status.ttl", Lang.TURTLE).getGraph();
 
-        SHACLValidation.validation(w3_dataGraph, w3_shapesGraph_status);
+        SHACLValidation.validation(dataGraph, shapesGraph_PI);
     }
 }
